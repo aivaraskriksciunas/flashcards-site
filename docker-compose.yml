@@ -1,0 +1,28 @@
+version: '3'
+services:
+  server:
+    build: ./flashcards
+    ports: 
+      - "8000:8000"
+    volumes:
+      - ./flashcards:/var/www
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: flashcards_db
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8008:80
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: admin 
+
+volumes:
+  flashcards:

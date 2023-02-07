@@ -1,0 +1,55 @@
+@import './variables.scss';
+@import 'bootstrap';
+@import './auth/auth.scss';
+@import './components/buttons.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
+
+body {
+    font-family: 'Roboto';
+    font-weight: 300;
+    color: #fafafa;
+    background-color: #171214;
+}
+
+#_page_content {
+    background-color: #242424;
+    border-radius: 10px;
+    box-shadow: 0 3px 20px rgba( 0, 0, 0, 0.2 );
+    padding: 2.5em 3em;
+}
+
+.navbar {
+    background-color: #242424;
+}
+
+#_page_menu {
+    padding: 1em;
+    color: #DDDDDD;
+
+    #_menu_title {
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 1.7em;
+        color: rgba( 255, 255, 255, 0.5 );
+        margin-bottom : 0.6em;
+    }
+
+    ._menu_item {
+        display: block;
+        padding: 15px 0;
+        color: rgba( 255, 255, 255, 0.9 );
+        font-size: 1.1em;
+        text-decoration: none;
+        font-weight: 300;
+    }
+
+    ._menu_item:hover {
+        color: lighten( $color: $primaryNeon, $amount: 1.2 );
+    }
+
+    .is-active {
+        font-weight: 500;
+        color: $primaryNeon;
+    }
+}
