@@ -1,5 +1,6 @@
 <script setup>
 import { useFormElement } from './composables/FormElement'
+import FieldErrors from './_FieldErrors.vue'
 
 /**
  * Element Properties
@@ -25,6 +26,8 @@ const { data, error } = useFormElement( props.name )
             <slot/>
         </label>
 
-        <input class='form-control' v-model='data' type='{{ props.type }}' name='{{ props.name }}'>
+        <input class='form-control' v-model='data' :type='props.type' :name='props.name'>
+
+        <FieldErrors :errors="error"></FieldErrors>
     </div>
 </template>

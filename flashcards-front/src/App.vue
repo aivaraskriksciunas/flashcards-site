@@ -1,9 +1,12 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import ServerConnectionWrapper from './components/wrappers/ServerConnectionWrapper.vue';
 </script>
 
 <template>
-  <RouterView />
+  <ServerConnectionWrapper>
+    <RouterView />
+  </ServerConnectionWrapper>
 </template>
 
 <style scoped>

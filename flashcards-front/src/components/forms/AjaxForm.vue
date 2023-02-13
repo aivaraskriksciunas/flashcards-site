@@ -1,14 +1,23 @@
 <script setup>
-import { provide } from 'vue'
+import { provide, ref } from 'vue'
 import { FormDiscovery } from '../../keys'
+import axios from 'axios'
 
 /**
  * Init
  */
 const props = defineProps({
-    
+    method: {
+        type: String,
+        default: 'POST'
+    },
+    action: {
+        type: String,
+    }
 })
-defineEmits( 'submit' )
+const emit = defineEmits( 'submit' )
+
+const formErrorMessage = ref( '' )
 
 /**
  * 
@@ -26,8 +35,48 @@ provide( FormDiscovery, registerFormElement )
  * Methods
  */
 function onFormSubmit( ev ) {
-
     ev.preventDefault();
+
+    let data = {}
+    for ( const name in formItems ) {
+        data[name] = formItems[name].getValue()
+    }
+
+    if ( props.action == null ) return;
+
+    const availableRequestMethods = [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ]
+    if ( !availableRequestMethods.includes( props.method.toUpperCase() ) ) {
+        return;
+    }
+
+    axios({
+        url: props.action,
+        method: props.method.toLocaleLowerCase(),
+        data
+    })
+    .then( ( response ) => {
+        console.log( "here" )
+        console.log( response )
+        emit( 'submit', response.data )
+    })
+    .catch( ( error ) => {
+        const data = error.response.data 
+        
+        if ( data.message ) {
+            formErrorMessage.value = data.message
+        }
+        
+        if ( data.errors ) {
+            for ( const field in formItems ) {
+                if ( field in data.errors ) {
+                    formItems[field].setError( data.errors[field] )
+                }
+                else {
+                    formItems[field].setError([])
+                }
+            }
+        }
+    })
 }
 
 </script>
@@ -35,6 +84,10 @@ function onFormSubmit( ev ) {
 <template>
     <form @submit='onFormSubmit'>
         
+        <div v-if="formErrorMessage" class="alert alert-error">
+            {{ formErrorMessage }}
+        </div>
+
         <slot></slot>
 
         <input type='submit'/>

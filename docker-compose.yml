@@ -7,6 +7,13 @@ services:
     volumes:
       - ./flashcards:/var/www
 
+  # frontend:
+  #   build: ./flashcards-front
+  #   ports:
+  #     - "4200:8000"
+  #   volumes:
+  #     - ./flashcards-front:/home/node/app
+
   db:
     image: mariadb
     restart: always
@@ -26,3 +33,4 @@ services:
 
 volumes:
   flashcards:
+  flashcards-front:
