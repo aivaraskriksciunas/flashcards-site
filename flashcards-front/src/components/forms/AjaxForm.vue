@@ -15,7 +15,7 @@ const props = defineProps({
         type: String,
     }
 })
-const emit = defineEmits( 'submit' )
+const emit = defineEmits( 'success' )
 
 const formErrorMessage = ref( '' )
 
@@ -55,9 +55,7 @@ function onFormSubmit( ev ) {
         data
     })
     .then( ( response ) => {
-        console.log( "here" )
-        console.log( response )
-        emit( 'submit', response.data )
+        emit( 'success', response.data )
     })
     .catch( ( error ) => {
         const data = error.response.data 

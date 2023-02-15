@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1 {
+    @apply my-4;
+    font-size: 2em;
+    font-weight: 700;
+}
+
