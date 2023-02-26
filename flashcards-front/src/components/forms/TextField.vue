@@ -14,9 +14,23 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    value: {
+        type: String,
+        default: '',
+    }
 })
 
+const emits = defineEmits([ 'change' ])
+
 const { data, error } = useFormElement( props.name )
+
+if ( props.value ) {
+    data.value = props.value
+}
+
+const onChange = ( ev ) => {
+    emits( 'change', data.value )
+}
 
 </script>
 
@@ -26,7 +40,11 @@ const { data, error } = useFormElement( props.name )
             <slot/>
         </label>
 
-        <input class='form-control' v-model='data' :type='props.type' :name='props.name'>
+        <input class='form-control' 
+            v-model='data' 
+            :type='props.type' 
+            :name='props.name'
+            @change="onChange">
 
         <FieldErrors :errors="error"></FieldErrors>
     </div>

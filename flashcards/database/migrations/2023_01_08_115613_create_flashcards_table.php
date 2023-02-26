@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger( 'deck_id' )->nullable( false );
 
-            $table->dateTime( 'last_review' );
+            $table->dateTime( 'last_review' )->nullable()->default( null );
 
             $table->timestamps();
 

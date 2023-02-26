@@ -1,6 +1,6 @@
 <script setup>
 import { provide, ref } from 'vue'
-import { FormDiscovery } from '../../keys'
+import { FormDiscovery, FormDeregister } from '../../keys'
 import axios from 'axios'
 
 /**
@@ -15,7 +15,7 @@ const props = defineProps({
         type: String,
     }
 })
-const emit = defineEmits( 'success' )
+const emit = defineEmits([ 'success' ])
 
 const formErrorMessage = ref( '' )
 
@@ -29,18 +29,17 @@ const formItems = {}
 const registerFormElement = ( name, elementControl ) => {
     formItems[name] = elementControl
 }
+const deregisterFormElement = ( name ) => {
+    delete formItems[name]
+}
 provide( FormDiscovery, registerFormElement )
+provide( FormDeregister, deregisterFormElement )
 
 /**
  * Methods
  */
 function onFormSubmit( ev ) {
     ev.preventDefault();
-
-    let data = {}
-    for ( const name in formItems ) {
-        data[name] = formItems[name].getValue()
-    }
 
     if ( props.action == null ) return;
 
@@ -52,7 +51,7 @@ function onFormSubmit( ev ) {
     axios({
         url: props.action,
         method: props.method.toLocaleLowerCase(),
-        data
+        data: getFormData()
     })
     .then( ( response ) => {
         emit( 'success', response.data )
@@ -75,6 +74,28 @@ function onFormSubmit( ev ) {
             }
         }
     })
+}
+
+function createNestedData( base, names, value ) {
+    let lastName = names.pop()
+
+    for ( let i = 0; i < names.length; i++ ) {
+        base = base[ names[i] ] = base[ names[i] ] || {}
+    }
+
+    base[lastName] = value
+}
+
+function getFormData() {
+    let data = {}
+
+    for ( const name in formItems ) {
+        // Support for complex field names allowing nested content 
+        // E.g. name like parent.child=1 will be parsed as { parent: { child: 1 }}
+        createNestedData( data, name.split( '.' ), formItems[name].getValue() )
+    }
+
+    return data
 }
 
 </script>

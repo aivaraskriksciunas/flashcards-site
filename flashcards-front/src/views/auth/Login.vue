@@ -5,7 +5,11 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function onLogin() {
+function onLogin( data ) {
+    if ( data.token ) {
+        localStorage.setItem( 'api_key', data.token )
+    }
+    
     router.push({ name: 'home' })
 }
 

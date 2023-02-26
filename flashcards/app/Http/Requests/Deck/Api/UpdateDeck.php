@@ -4,7 +4,7 @@ namespace App\Http\Requests\Deck\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDeck extends FormRequest
+class UpdateDeck extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +25,7 @@ class CreateDeck extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:100',
+            'cards.*.id' => 'nullable|numeric',
             'cards.*.question' => 'required|max:200',
             'cards.*.answer' => 'required|max:200',
         ];

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Deck extends Model
+class Library extends Model
 {
     use HasFactory;
 
@@ -13,18 +13,19 @@ class Deck extends Model
         'name'
     ];
 
-    public $timestamps = true;
-
-    public function user() {
+    public function user() 
+    {
         return $this->belongsTo( User::class );
     }
 
-    public function cards() {
-        return $this->hasMany( Flashcard::class );
-    }
+    // public function libraries() 
+    // {
+    //     return $this->hasMany( Library::class );
+    // }
 
-    public function libraries() {
-        return $this->belongsToMany( Library::class, 'library_decks' )
+    public function decks() 
+    {
+        return $this->belongsToMany( Deck::class, 'library_decks' )
             ->withPivot( 'created_at', 'last_view_at' );
     }
 }

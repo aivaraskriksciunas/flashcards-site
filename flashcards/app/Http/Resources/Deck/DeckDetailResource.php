@@ -4,7 +4,7 @@ namespace App\Http\Resources\Deck;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DeckResource extends JsonResource
+class DeckDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +17,21 @@ class DeckResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'card_count' => $this->get_card_count(),
+            'cards' => $this->getCards(),
         ];
     }
 
-    private function get_card_count() {
-        return $this->cards()->count();
+    private function getCards() 
+    {
+        $cards = [];
+        foreach ( $this->cards as $card ) {
+            $cards[] = [
+                'id' => $card->id,
+                'question' => $card->question,
+                'answer' => $card->answer,
+            ];
+        }
+
+        return $cards;
     }
 }

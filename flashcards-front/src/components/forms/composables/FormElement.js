@@ -1,5 +1,5 @@
-import { ref, inject } from "vue"
-import { FormDiscovery } from '../../../keys'
+import { ref, inject, onUnmounted } from "vue"
+import { FormDiscovery, FormDeregister } from '../../../keys'
 
 export function useFormElement( name ) {
 
@@ -14,8 +14,15 @@ export function useFormElement( name ) {
 
     // Attach itself to a form
     const register = inject( FormDiscovery )
+    const deregister = inject( FormDeregister )
     if ( register != null ) {
         register( name, elementModifier )
+    }
+
+    if ( deregister != null ) {
+        onUnmounted( () => {
+            deregister( name )
+        })
     }
 
     return { data, error }

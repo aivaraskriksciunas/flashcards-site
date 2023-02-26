@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string( 'name', 100 );
             $table->unsignedBigInteger( 'user_id' )->nullable( false );
 
-            $table->dateTime( 'created_at' );
+            $table->timestamps();
 
             $table->foreign( 'user_id' )->references( 'id' )->on( 'users' );
         });

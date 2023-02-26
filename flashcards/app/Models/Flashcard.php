@@ -10,7 +10,7 @@ class Flashcard extends Model
     use HasFactory;
 
     protected $fillable = [
-        'question', 'response', 'last_review'
+        'question', 'answer', 'last_review'
     ];
 
     public $timestamps = true;

@@ -12,10 +12,23 @@ const router = createRouter({
             component: BaseTemplate, 
             children: [
                 {
-                    path: '/',
+                    path: '',
                     name: 'home',
                     component: Dashboard
-                }
+                },
+
+                { 
+                    path: '/decks/new',
+                    name: 'create-deck',
+                    component: () => import( '../views/decks/CreateDeck.vue' )
+                },
+
+                { 
+                    path: '/decks/edit/:id',
+                    name: 'edit-deck',
+                    component: () => import( '../views/decks/EditDeck.vue' )
+                },
+
             ]
         },
         

@@ -18,4 +18,8 @@ axios.defaults.withCredentials = true
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.defaults.headers.common['Accept'] = 'application/json'
 
+if ( localStorage.getItem( 'api_key') ) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem( 'api_key')}`;
+}
+
 app.mount('#app')
