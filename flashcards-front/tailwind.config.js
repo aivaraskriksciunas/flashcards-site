@@ -8,6 +8,11 @@ module.exports = {
     extend: {},
     container: {
       center: true,
+    },
+    fontWeight: {
+      light: 300,
+      normal: 400,
+      bold: 500,
     }
   },
   plugins: [],

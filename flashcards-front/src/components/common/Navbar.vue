@@ -7,7 +7,7 @@ const { user } = useUserStore()
 
 <template>
     
-<nav class="main-navbar border-b">
+<nav class="main-navbar">
     <div class="container flex py-4">
         <div class="navbar-logo flex-grow">
             Flashcards
