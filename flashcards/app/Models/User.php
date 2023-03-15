@@ -40,6 +40,10 @@ class User extends Model implements AuthenticatableContract
         return $this->hasMany( Deck::class );
     }
 
+    public function quizzes() {
+        return $this->hasMany( Quiz::class );
+    }
+
     public function getLibrary() 
     {
         return Library::where( 'user_id', $this->id )

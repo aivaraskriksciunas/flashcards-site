@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/auth/Login.vue'
 import AuthTemplate from '../views/templates/AuthTemplate.vue'
 import BaseTemplate from '../views/templates/BaseTemplate.vue'
+import ViewDeck from '../views/decks/ViewDeck.vue'
 import Dashboard from '../views/dashboard/Dashboard.vue'
 
 const router = createRouter({
@@ -22,7 +23,11 @@ const router = createRouter({
                     name: 'create-deck',
                     component: () => import( '../views/decks/CreateDeck.vue' )
                 },
-
+                {
+                    path: '/decks/:id',
+                    name: 'view-deck',
+                    component: ViewDeck
+                },
                 { 
                     path: '/decks/edit/:id',
                     name: 'edit-deck',

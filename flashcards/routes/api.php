@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\ApiDeckController;
 use App\Http\Controllers\Api\ApiLibraryController;
+use App\Http\Controllers\Api\ApiQuizController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,14 @@ Route::middleware( 'auth:sanctum' )->group( function() {
     Route::post( '/decks', [ ApiDeckController::class, 'create' ] );
     Route::patch( '/decks/{deck}', [ ApiDeckController::class, 'update' ] )
         ->middleware( 'can:update,deck');
+
+    /**
+     * Quiz endpoints
+     */
+    Route::get( '/decks/{deck}/quiz', [ ApiQuizController::class, 'get' ] );
+    Route::post( '/cards/{card}/progress', [ ApiQuizController::class, 'report_card_progress' ]);
+    Route::post( '/quiz/item/{quizItem}/progress', [ ApiQuizController::class, 'report_quiz_item_progress' ]);
+
 
     Route::get( '/library', [ ApiLibraryController::class, 'index' ]);
 

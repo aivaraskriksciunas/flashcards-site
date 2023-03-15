@@ -1,5 +1,5 @@
 <script setup>
-import EditForm from './_EditForm.vue'
+import EditForm from './components/_EditForm.vue'
 import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue';
 import { useRoute } from 'vue-router';
 import { ref } from 'vue';

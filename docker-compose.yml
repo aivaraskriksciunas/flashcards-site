@@ -16,14 +16,12 @@ services:
 
   db:
     image: mariadb
-    restart: always
     environment:
       MARIADB_ROOT_PASSWORD: admin
       MARIADB_DATABASE: flashcards_db
 
   phpmyadmin:
     image: phpmyadmin
-    restart: always
     ports:
       - 8008:80
     environment:

@@ -23,6 +23,10 @@ class Deck extends Model
         return $this->hasMany( Flashcard::class );
     }
 
+    public function quizzes() {
+        return $this->hasMany( Quiz::class );
+    }
+
     public function libraries() {
         return $this->belongsToMany( Library::class, 'library_decks' )
             ->withPivot( 'created_at', 'last_view_at' );

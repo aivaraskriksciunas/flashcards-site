@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import AjaxForm from '../../components/forms/AjaxForm.vue';
-import TextField from '../../components/forms/TextField.vue';
-import HiddenField from '../../components/forms/HiddenField.vue';
+import AjaxForm from '../../../components/forms/AjaxForm.vue';
+import TextField from '../../../components/forms/TextField.vue';
+import HiddenField from '../../../components/forms/HiddenField.vue';
 
 const props = defineProps({
     deck: {

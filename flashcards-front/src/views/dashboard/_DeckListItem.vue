@@ -1,4 +1,5 @@
 <script setup>
+import Card from '../../components/ui/Card.vue';
 
 const { deck } = defineProps({
     deck: {
@@ -9,29 +10,17 @@ const { deck } = defineProps({
 </script>
 
 <template>
-    <div class="deck-list-item">
-        <router-link :to="{ name: 'edit-deck', params: { id: deck.id } }">
+    <Card hover>
+        <router-link :to="{ name: 'view-deck', params: { id: deck.id } }">
             <div class="deck-name">{{ deck.name }}</div>
         </router-link>
         <div class="deck-details">
             <p>Cards: {{ deck.card_count }}</p>
         </div>
-    </div>
+    </Card>
 </template>
 
 <style scoped>
-
-.deck-list-item {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: var( --color-white );
-    box-shadow: 3px 3px 0 var( --color-shadow );
-}
-
-.deck-list-item:hover {
-    box-shadow: none;
-    background-color: var( --color-shadow );
-}
 
 .deck-name {
     font-size: 1.5em;
