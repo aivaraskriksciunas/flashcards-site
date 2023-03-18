@@ -10,11 +10,12 @@ const { user } = useUserStore()
 <nav class="main-navbar">
     <div class="container flex py-4">
         <div class="navbar-logo flex-grow">
-            Flashcards
+            Preview version
         </div>
 
         <div class="">
             {{ user.name }}
+            <router-link :to="{ name: 'logout' }">Log out</router-link>
         </div>
     </div>
 </nav>

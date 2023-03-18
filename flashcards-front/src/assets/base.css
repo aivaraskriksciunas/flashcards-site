@@ -64,3 +64,12 @@ input {
     border: 1px solid black;
     padding: 2px 6px;
 }
+
+a { 
+    cursor: pointer;
+    color: var( --color-primary-text );
+}
+
+a:hover {
+    color: var( --color-primary-text-active );
+}

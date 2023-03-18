@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function onLogin( data ) {
+function onRegister( data ) {
     if ( data.token ) {
         localStorage.setItem( 'api_key', data.token )
     }
@@ -17,11 +17,13 @@ function onLogin( data ) {
 
 <template>
 
-    <AjaxForm action="/api/login" @success="onLogin">
+    <AjaxForm action="/api/register" @success="onRegister">
+        <TextField type="text" name="name">Your name:</TextField>
         <TextField type="email" name="email">Email:</TextField>
         <TextField type="password" name="password">Password:</TextField>
+        <TextField type="password" name="password_confirmation">Confirm password:</TextField>
     </AjaxForm>
 
-    <small>Don't have an account? <router-link :to="{ name: 'register' }">Register</router-link></small>
+    <small>Already have an account? <router-link :to="{ name: 'login' }">Log in</router-link></small>
 
 </template>

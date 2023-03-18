@@ -11,7 +11,6 @@ const { isLoggedIn, setCurrentUser } = useUserStore()
 if ( isLoggedIn ) {
     state.value = 'loaded'
 }
-
 else {
     // User information is not stored, retrieve it from the server
     axios.get( '/api/user' )
@@ -28,7 +27,6 @@ else {
 </script>
 
 <template>
-
 <div v-if="state == 'loading'">Loading user information...</div>
 
 <div v-else-if="state == 'loaded'">

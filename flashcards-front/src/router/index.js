@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/auth/Login.vue'
+import RegisterView from '../views/auth/Register.vue'
+import LogoutView from '../views/auth/Logout.vue'
 import AuthTemplate from '../views/templates/AuthTemplate.vue'
 import BaseTemplate from '../views/templates/BaseTemplate.vue'
 import ViewDeck from '../views/decks/ViewDeck.vue'
@@ -48,10 +50,20 @@ const router = createRouter({
             component: AuthTemplate,
             children: [
                 {
+                    path: '/register',
+                    name: 'register',
+                    component: RegisterView
+                },
+                {
                     path: '/login',
                     name: 'login',
                     component: LoginView
-                }
+                },
+                {
+                    path: '/logout',
+                    name: 'logout',
+                    component: LogoutView,
+                },
             ]
         },
 
