@@ -11,7 +11,7 @@ const emit = defineEmits([ 'click' ])
 
 
 <template>
-    <div class="card-component" :class="{ 'card-component-hover': props.hover }">
+    <div class="card-component" :class="{ 'card-component-hover': props.hover }" @click="() => emit( 'click' )">
         <slot></slot>
     </div>
 </template>

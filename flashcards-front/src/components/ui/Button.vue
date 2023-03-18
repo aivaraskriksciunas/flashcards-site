@@ -33,6 +33,7 @@ const onClick = () => {
     padding: 8px 18px;
     color: white;
     user-select: none;
+    font-weight: 500;
 }
 
 .button:hover {

@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import Card from '../../../components/ui/Card.vue';
 import PlainButton from '../../../components/ui/PlainButton.vue';
+import FlashcardContent from './_FlashcardContent.vue';
 
 const props = defineProps([ 'cards' ])
 
@@ -30,13 +31,7 @@ const prevCard = () => {
 
 <div v-if="props.cards">
     <Card>
-        <div class="deck-content">
-            <div class="deck-question">{{ card.question }}</div>
-            <div class="divider"></div>
-            <div class="deck-answer">{{ card.answer }}</div>
-
-            
-        </div>
+        <FlashcardContent :card="card"></FlashcardContent>
 
         <div class="controls">
             <PlainButton @click="prevCard">
@@ -58,26 +53,6 @@ const prevCard = () => {
 
 
 <style scoped>
-.deck-content {
-    text-align: center;
-    padding-top: 1em;
-}
-
-.deck-question {
-    font-size: 3em;
-    font-weight: 500;
-}
-
-.deck-answer {
-    font-size: 2em;
-}
-
-.divider {
-    display: inline-block;
-    background-color: var(--color-shadow);
-    height: 1px;
-    width: 60%;
-}
 
 .controls {
     margin-top: 4em;

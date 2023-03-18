@@ -4,6 +4,7 @@ import AuthTemplate from '../views/templates/AuthTemplate.vue'
 import BaseTemplate from '../views/templates/BaseTemplate.vue'
 import ViewDeck from '../views/decks/ViewDeck.vue'
 import Dashboard from '../views/dashboard/Dashboard.vue'
+import ReviseDeck from '../views/decks/ReviseDeck.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,11 @@ const router = createRouter({
                     path: '/decks/:id',
                     name: 'view-deck',
                     component: ViewDeck
+                },
+                {
+                    path: '/decks/:id/revise',
+                    name: 'revise-deck',
+                    component: ReviseDeck,
                 },
                 { 
                     path: '/decks/edit/:id',
