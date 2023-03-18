@@ -9,7 +9,7 @@ const props = defineProps({
 })
 
 const state = ref( 'loading' )
-const emit = defineEmits( 'load' )
+const emit = defineEmits([ 'load' ])
 
 axios.get( props.url )
 .then( ( response ) => {

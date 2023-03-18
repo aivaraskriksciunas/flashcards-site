@@ -17,10 +17,14 @@
     --color-content-bg: #F5F5F5;
     --color-shadow: #E8E2E2;
     --color-hover: #E8E2E2;
+    --color-accent: var( --color-text-light );
 
     --color-white: #FFFFFF;
     --color-danger: #D93329;
     --color-success: var( --color-primary-text );
+
+    --color-bg-form-control: var( --color-white );
+    --color-bg-form-control-focus: #FBFBFB;
 }
 
 .theme-dark {
@@ -33,10 +37,14 @@
     --color-content-bg: #333333;
     --color-shadow: #252525;
     --color-hover: #252525;
+    --color-accent: #707070;
 
     --color-white: #393939;
     --color-danger: #D93329;
     --color-success: var( --color-primary-text );
+
+    --color-bg-form-control: var( --color-white );
+    --color-bg-form-control-focus: #303030;
 }
 
 body {
