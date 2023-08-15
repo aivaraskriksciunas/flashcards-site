@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker-compose build --no-cache --force-rm --file docker-compose.cicd.yml
+      run: docker-compose build --no-cache --force-rm -f docker-compose.cicd.yml
   test:
     runs-on: ubuntu-latest
     steps:
