@@ -24,5 +24,5 @@ COPY . /var/www
 WORKDIR /var/www
 
 RUN composer update
-RUN npx webpack build --mode production
+RUN npm install && npx webpack build --mode production
 
