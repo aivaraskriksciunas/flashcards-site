@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker-compose build --no-cache --force-rm 
+      run: docker-compose -f docker-compose.cicd.yml build --no-cache --force-rm 
   test:
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +24,7 @@ jobs:
         with:
           run: docker-compose stop
       - name: Setup docker
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose.cicd.yml up -d
       - name: Debug
         run: |
           sleep 5
