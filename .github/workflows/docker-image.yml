@@ -27,7 +27,7 @@ jobs:
         run: docker-compose up -d --file docker-compose.cicd.yml
       - name: Debug
         run: |
-          sleep 3
+          sleep 5
           docker ps -a
           docker exec aktulibre-flashcards_server_1 bash -c "ls -la"
       - name: Composer update
