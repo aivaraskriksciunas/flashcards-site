@@ -29,8 +29,8 @@ jobs:
         run: |
           sleep 3
           docker ps -a
-          docker exec flashcards-site_server bash -c "ls -la"
+          docker exec flashcards-site_server_1 bash -c "ls -la"
       - name: Composer update
-        run: docker exec flashcards-site_server bash -c "composer update"
+        run: docker exec flashcards-site_server_1 bash -c "composer update"
       - name: Run tests
-        run: docker exec flashcards-site_server bash -c "php artisan test"
+        run: docker exec flashcards-site_server_1 bash -c "php artisan test"
