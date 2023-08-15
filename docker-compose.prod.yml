@@ -8,8 +8,7 @@ services:
       - ./flashcards:/var/www/
       - ./logs:/var/log/nginx/
     depends_on:
-      php:
-        condition: service_started
+      - php
 
   php:
     build: 
@@ -21,9 +20,6 @@ services:
       - ./flashcards:/var/www/
     extra_hosts:
       - host.docker.internal:host-gateway
-    depends_on: 
-      db:
-        condition: service_started
 
   # frontend:
   #   build: ./flashcards-front
@@ -32,20 +28,18 @@ services:
   #   volumes:
   #     - ./flashcards-front:/home/node/app
 
-  db:
-    image: mariadb
-    environment:
-      MARIADB_ROOT_PASSWORD: admin
-      MARIADB_DATABASE: flashcards_db
-
   phpmyadmin:
     image: phpmyadmin
     ports:
       - 8008:80
     environment:
-      PMA_HOST: db
+      PMA_HOST: host.docker.internal
       PMA_USER: root
       PMA_PASSWORD: admin 
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
 
 volumes:
   flashcards:
