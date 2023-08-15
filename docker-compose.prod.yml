@@ -12,7 +12,9 @@ services:
         condition: service_started
 
   php:
-    build: ./flashcards
+    build: 
+        context: ./flashcards
+        dockerfile: Dockerfile.prod
     ports:
       - "9003:9003"
     volumes:

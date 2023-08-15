@@ -3,7 +3,7 @@ services:
   server:
     build: 
       context: ./flashcards
-      dockerfile: cicd.Dockerfile        
+      dockerfile: Dockerfile.cicd       
     ports: 
       - "8000:8000"
     volumes:
