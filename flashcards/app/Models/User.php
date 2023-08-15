@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Model implements AuthenticatableContract
 {
-    use Authenticatable, HasFactory, HasApiTokens;
+    use Authenticatable, Authorizable, HasFactory, HasApiTokens;
 
     protected $fillable = [
         'name', 'email', 'password'
@@ -42,6 +43,18 @@ class User extends Model implements AuthenticatableContract
 
     public function quizzes() {
         return $this->hasMany( Quiz::class );
+    }
+
+    public function notifications() {
+        return $this->hasMany( Notification::class );
+    }
+
+    public function forumPosts() {
+        return $this->hasMany( ForumPost::class );
+    }
+
+    public function forumComments() {
+        return $this->hasMany( ForumComment::class );
     }
 
     public function getLibrary() 

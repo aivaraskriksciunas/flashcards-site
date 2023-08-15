@@ -2,6 +2,8 @@
 import { provide, ref } from 'vue'
 import { FormDiscovery, FormDeregister } from '../../keys'
 import axios from 'axios'
+import { MESSAGE_TYPE, useStatusMessageService } from '../../services/StatusMessageService';
+import Button from '../ui/Button.vue';
 
 /**
  * Init
@@ -13,11 +15,30 @@ const props = defineProps({
     },
     action: {
         type: String,
-    }
+    },
+    showStatusMessage: {
+        type: Boolean,
+        default: false,
+    },
+    clearOnSubmit: {
+        type: Boolean,
+        default: false,
+    },
+    submitText: {
+        type: String,
+        default: 'Submit'
+    },
+    multipart: {
+        type: Boolean,
+        default: false,
+    },
 })
 const emit = defineEmits([ 'success' ])
 
 const formErrorMessage = ref( '' )
+const isLoading = ref( false )
+
+const statusMessage = useStatusMessageService()
 
 /**
  * 
@@ -48,19 +69,43 @@ function onFormSubmit( ev ) {
         return;
     }
 
+    isLoading.value = true;
+
+    let data = {};
+    if ( props.multipart ) {
+        data = getMultipartFormData();
+    }
+    else {
+        data = getFormData();
+    }
+
     axios({
         url: props.action,
         method: props.method.toLocaleLowerCase(),
-        data: getFormData()
+        data
     })
     .then( ( response ) => {
         emit( 'success', response.data )
+
+        if ( props.clearOnSubmit ) {
+            clearForm();
+        }
+
+        if ( props.showStatusMessage ) {
+            if ( response.status == 201 ) {
+                statusMessage.addStatusMessage( "Item was created successfully", "", MESSAGE_TYPE.SUCCESS );
+            }
+            else if ( response.status == 200 ) {
+                statusMessage.addStatusMessage( "Changes saved.", "Item has been updated succesfully.", MESSAGE_TYPE.SUCCESS );
+            }
+        }
     })
     .catch( ( error ) => {
         const data = error.response.data 
         
         if ( data.message ) {
-            formErrorMessage.value = data.message
+            // formErrorMessage.value = data.message
+            statusMessage.addStatusMessage( 'Action was not successful', data.message )
         }
         
         if ( data.errors ) {
@@ -73,6 +118,9 @@ function onFormSubmit( ev ) {
                 }
             }
         }
+    })
+    .finally( () => {
+        isLoading.value = false;
     })
 }
 
@@ -98,18 +146,49 @@ function getFormData() {
     return data
 }
 
+function createNestedMultipartData( base, names, value ) {
+    let key = names[0];
+    
+    if ( typeof value == "boolean" ) value = value ? 1 : 0;
+
+    for ( let i = 1; i < names.length; i++ ) {
+        key += `[${names[i]}]`
+    }
+
+    base.append( key, value );
+}
+
+function getMultipartFormData() {
+    let data = new FormData();
+
+    for ( const name in formItems ) {
+        createNestedMultipartData( data, name.split( '.' ), formItems[name].getValue() )
+    }
+
+    return data
+}
+
+function clearForm() {
+    for ( const name in formItems ) {
+        formItems[name].setValue( '' ); 
+    }
+}
+
 </script>
 
 <template>
     <form @submit='onFormSubmit'>
-        
-        <div v-if="formErrorMessage" class="alert alert-error">
-            {{ formErrorMessage }}
-        </div>
 
         <slot></slot>
 
-        <input type='submit'/>
+        <button type="submit" v-if="!isLoading">
+            <slot name="submit">
+                <Button>{{ props.submitText }}</Button>
+            </slot>
+        </button>
+        <div v-else="isLoading">
+            Loading...
+        </div>
 
     </form>
 </template>

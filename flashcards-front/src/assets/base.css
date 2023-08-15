@@ -10,6 +10,7 @@
 .theme-light {
     --color-text: #343434;
     --color-text-light: #707070;
+    --color-text-lighter: #aaaaaa;
 
     --color-primary-text: #298533;
     --color-primary-text-active: #3CD44D;
@@ -21,7 +22,9 @@
 
     --color-white: #FFFFFF;
     --color-danger: #D93329;
+    --color-danger-hover: #FF554B;
     --color-success: var( --color-primary-text );
+    --color-success-hover: #3dbf4b;
 
     --color-bg-form-control: var( --color-white );
     --color-bg-form-control-focus: #FBFBFB;
@@ -30,6 +33,7 @@
 .theme-dark {
     --color-text: #E1E1E1;
     --color-text-light: #AFAFAF;
+    --color-text-lighter: #6c6c6c;
 
     --color-primary-text: #3BC14A;
     --color-primary-text-active: #49DC5A;
@@ -41,7 +45,9 @@
 
     --color-white: #393939;
     --color-danger: #D93329;
+    --color-danger-hover: #FF554B;
     --color-success: var( --color-primary-text );
+    --color-success-hover: #3dbf4b;
 
     --color-bg-form-control: var( --color-white );
     --color-bg-form-control-focus: #303030;

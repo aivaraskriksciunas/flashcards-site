@@ -1,6 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue';
+import NumberPaginator from '../pagination/NumberPaginator.vue';
 
 const props = defineProps({
     url: {
@@ -10,15 +11,23 @@ const props = defineProps({
 
 const state = ref( 'loading' )
 const emit = defineEmits([ 'load' ])
+const pagination = ref( false )
 
-axios.get( props.url )
-.then( ( response ) => {
-    state.value = 'loaded'
-    emit( 'load', response.data )
-})
-.catch( ( err ) => {
-    state.value = 'error'
-})
+const loadData = ( url ) => {
+    state.value = 'loading'
+
+    axios.get( url )
+    .then( ( response ) => {
+        state.value = 'loaded'
+        pagination.value = response.data.meta
+        emit( 'load', response.data )
+    })
+    .catch( ( err ) => {
+        state.value = 'error'
+    })
+}
+
+loadData( props.url )
 
 </script>
 
@@ -27,6 +36,8 @@ axios.get( props.url )
 <div v-if="state == 'loading'">Loading...</div>
 <div v-else-if="state == 'loaded'">
     <slot></slot>
+    
+    <NumberPaginator v-if="pagination" :pagination="pagination" @page-change="loadData"></NumberPaginator>
 </div>
 <div v-else-if="state == 'error'">
     Whoops! An error occurred.

@@ -1,6 +1,6 @@
 <template>
     
-<div class="header flex">
+<div class="header flex items-center">
     <h1 class="flex-grow">
         <slot></slot>
     </h1>

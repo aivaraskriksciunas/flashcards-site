@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router'
 
 <template>
 
-<div id="auth-page" class="flex">
+<div id="auth-page" class="flex theme-light">
     <div class="auth-form-container mx-auto">
         <div id="auth-page-logo">
             <img src="/LOGO.png">

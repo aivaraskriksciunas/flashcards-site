@@ -1,16 +1,23 @@
 <script setup>
 import AjaxForm from '../../components/forms/AjaxForm.vue'
 import TextField from '../../components/forms/TextField.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import jsCookie from 'js-cookie';
 
 const router = useRouter()
+const route = useRoute()
 
 function onLogin( data ) {
     if ( data.token ) {
-        localStorage.setItem( 'api_key', data.token )
+        jsCookie.set( 'api_key', data.token, { expires: 40, sameSite: 'strict' } )
     }
     
-    router.push({ name: 'home' })
+    if ( route.query.r ) {
+        router.push( route.query.r )
+    }
+    else {
+        router.push({ name: 'home' })
+    }
 }
 
 </script>

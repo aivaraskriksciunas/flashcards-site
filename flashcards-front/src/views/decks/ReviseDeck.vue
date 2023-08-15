@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import SlimContainer from '../../components/ui/SlimContainer.vue';
 import Card from '../../components/ui/Card.vue';
 import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue';
-import SimpleCardRevision from './components/_SimpleCardRevision.vue';
+import SimpleCardRevision from './components/SimpleCardRevision.vue';
 import Button from '../../components/ui/Button.vue';
 import PlainButton from '../../components/ui/PlainButton.vue';
 

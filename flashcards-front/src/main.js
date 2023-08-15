@@ -1,11 +1,13 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import FontAwesomeIcon from './fontawesome'
 import axios from 'axios'
 
 import App from './App.vue'
 import router from './router'
 
 import './assets/base.css'
+import Cookies from 'js-cookie'
 
 const app = createApp(App)
 
@@ -18,8 +20,10 @@ axios.defaults.withCredentials = true
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.defaults.headers.common['Accept'] = 'application/json'
 
-if ( localStorage.getItem( 'api_key') ) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem( 'api_key')}`;
+let api_key = Cookies.get( 'api_key' )
+if ( api_key ) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${api_key}`;
+    Cookies.set( 'api_key', api_key, { expires: 40, sameSite: 'strict' } );
 }
 
-app.mount('#app')
+app.component( 'font-awesome-icon', FontAwesomeIcon ).mount('#app')

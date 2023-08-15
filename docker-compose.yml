@@ -1,11 +1,30 @@
 version: '3'
 services:
   server:
-    build: ./flashcards
+    build: ./nginx
     ports: 
-      - "8000:8000"
+      - "8000:80"
     volumes:
-      - ./flashcards:/var/www
+      - ./flashcards:/var/www/
+      - ./logs:/var/log/nginx/
+    depends_on:
+      php:
+        condition: service_started
+
+  php:
+    build: ./flashcards
+    ports:
+      - "9003:9003"
+    environment:
+      XDEBUG_MODE: debug
+      XDEBUG_CONFIG: client_host=host.docker.internal client_port=9003 remote_enable=1
+    volumes:
+      - ./flashcards:/var/www/
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    depends_on: 
+      db:
+        condition: service_started
 
   # frontend:
   #   build: ./flashcards-front
@@ -32,3 +51,4 @@ services:
 volumes:
   flashcards:
   flashcards-front:
+

@@ -1,6 +1,6 @@
 <script setup>
 import Header from '../../components/common/Header.vue'
-import EditForm from './components/_EditForm.vue'
+import EditForm from './components/EditForm.vue'
 
 </script>
 

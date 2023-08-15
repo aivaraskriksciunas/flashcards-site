@@ -6,7 +6,7 @@ const props = defineProps({
     type: {
         type: String,
         default: 'secondary'
-    }
+    },
 })
 
 const buttonStyle = computed(() => {
@@ -21,6 +21,7 @@ const buttonStyle = computed(() => {
             return 'plain-secondary'
     }
 })
+
 </script>
 
 <template>

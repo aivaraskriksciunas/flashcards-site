@@ -2,6 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Forum\ForumCommentRateLimitReached;
+use App\Exceptions\Forum\ForumPostRateLimitReached;
+use App\Exceptions\Import\DeckImportException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Exceptions\Quiz\QuizItemAlreadyAnswered;
 use Throwable;
@@ -15,6 +18,9 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         QuizItemAlreadyAnswered::class,
+        ForumPostRateLimitReached::class,
+        ForumCommentRateLimitReached::class,
+        DeckImportException::class,
     ];
 
     /**

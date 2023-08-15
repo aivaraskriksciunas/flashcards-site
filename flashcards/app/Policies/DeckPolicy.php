@@ -41,11 +41,10 @@ class DeckPolicy
      * @param Deck $deck
      * @return Response
      */
-    public function view( User $user, Deck $deck ) : Response 
+    public function view( ?User $user, Deck $deck ) : Response 
     {
-        return $deck->user_id === $user->id ?
-            Response::allow() :
-            Response::denyAsNotFound();
+        // TODO: check if deck is public
+        return Response::allow();
     }
 
     /**

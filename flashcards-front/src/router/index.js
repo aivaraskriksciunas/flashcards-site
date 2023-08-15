@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/auth/Login.vue'
 import RegisterView from '../views/auth/Register.vue'
@@ -7,6 +8,9 @@ import BaseTemplate from '../views/templates/BaseTemplate.vue'
 import ViewDeck from '../views/decks/ViewDeck.vue'
 import Dashboard from '../views/dashboard/Dashboard.vue'
 import ReviseDeck from '../views/decks/ReviseDeck.vue'
+import LearnDeck from '../views/decks/LearnDeck.vue'
+import PracticeDeck from '../views/decks/PracticeDeck.vue'
+import { useUserStore } from '../stores/user'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,12 +33,23 @@ const router = createRouter({
                 {
                     path: '/decks/:id',
                     name: 'view-deck',
-                    component: ViewDeck
+                    component: ViewDeck,
+                    meta: { allowGuest: true }
                 },
                 {
                     path: '/decks/:id/revise',
                     name: 'revise-deck',
-                    component: ReviseDeck,
+                    component: PracticeDeck,
+                },
+                {
+                    path: '/decks/:id/practice',
+                    name: 'practice-deck',
+                    component: PracticeDeck,
+                },
+                {
+                    path: '/decks/:id/learn',
+                    name: 'learn-deck',
+                    component: LearnDeck,
                 },
                 { 
                     path: '/decks/edit/:id',
@@ -42,6 +57,32 @@ const router = createRouter({
                     component: () => import( '../views/decks/EditDeck.vue' )
                 },
 
+                {
+                    path: '/forum/:topic?',
+                    name: 'forum',
+                    component: () => import( '../views/forum/Forum.vue' ),
+                },
+                {
+                    path: '/forum/:topic/new',
+                    name: 'create-forum-post',
+                    component: () => import( '../views/forum/CreatePost.vue' ),
+                },
+                { 
+                    path: '/forum/post/:id',
+                    name: 'view-forum-post',
+                    component: () => import( '../views/forum/Post.vue' ),
+                },
+
+                {
+                    path: '/import/quizlet',
+                    name: 'import-quizlet',
+                    component: () => import( '../views/importing/ImportQuizlet.vue' ),
+                },
+                {
+                    path: '/import/anki',
+                    name: 'import-anki',
+                    component: () => import( '../views/importing/ImportAnki.vue' ),
+                },
             ]
         },
         
@@ -52,17 +93,20 @@ const router = createRouter({
                 {
                     path: '/register',
                     name: 'register',
-                    component: RegisterView
+                    component: RegisterView,
+                    meta: { allowGuest: true }
                 },
                 {
                     path: '/login',
                     name: 'login',
-                    component: LoginView
+                    component: LoginView,
+                    meta: { allowGuest: true }
                 },
                 {
                     path: '/logout',
                     name: 'logout',
                     component: LogoutView,
+                    meta: { allowGuest: true }
                 },
             ]
         },
@@ -71,6 +115,27 @@ const router = createRouter({
         
         
     ]
+})
+
+/**
+ * Is Authenticated middleware
+ */
+router.beforeEach( async ( to ) => {
+    const { isLoggedIn, setCurrentUser } = useUserStore();
+
+    // Allow navigation if logged in or unprotected route
+    if ( isLoggedIn || to.meta.allowGuest === true ) {
+        return;
+    }
+
+    // Attempt to get information about the logged in user from the server
+    try {
+        let res = await axios.get( '/api/user' );
+        setCurrentUser( res.data )
+    }
+    catch ( e ) {
+        return { name: 'login', query: { r: to.fullPath } }
+    }
 })
 
 export default router

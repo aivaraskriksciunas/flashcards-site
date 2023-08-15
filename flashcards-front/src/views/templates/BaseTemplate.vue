@@ -1,28 +1,33 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import UserInfoProviderWrapper from '../../components/wrappers/UserInfoProviderWrapper.vue';
 import Navbar from '../../components/common/Navbar.vue';
 import Sidebar from '../../components/common/Sidebar.vue';
+import StatusMessages from '../../components/common/StatusMessages.vue';
+import { useUserSettingStore } from '../../stores/user-settings';
+import { computed } from 'vue';
+
+const userSettings = useUserSettingStore()
+const colorThemeCss = computed( () => 'theme-' + userSettings.colorTheme )
 
 </script>
 
 <template>
-    <UserInfoProviderWrapper>
-
+    <div :class="[ colorThemeCss ]">
         <div class="flex application-container">
             <div class="sidebar md:w-1/3">
                 <Sidebar></Sidebar>
             </div>
-            <div class="content">
+            <div class="content px-8 py-4">
                 <Navbar/>
 
                 <div class="container">
+                    <StatusMessages/>
                     <RouterView/>
                 </div>
             </div>
         </div>
+    </div>
         
-    </UserInfoProviderWrapper>
 </template>
 
 <style scoped>

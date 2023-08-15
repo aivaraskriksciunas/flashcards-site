@@ -10,13 +10,17 @@ use App\Http\Resources\Deck\DeckDetailResource;
 use App\Services\DeckService;
 use App\Models\Deck;
 use App\Models\Flashcard;
+use App\Services\DeckSummaryService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class ApiDeckController extends Controller
 {
 
-    public function __construct( private DeckService $deckService ) {}
+    public function __construct( 
+        private DeckService $deckService, 
+        private DeckSummaryService $deckSummaryService 
+    ) {}
 
     /**
      * Get a list of decks for this registered user
@@ -88,5 +92,16 @@ class ApiDeckController extends Controller
         $this->deckService->updateCards( $deck, $data['cards'] );
         
         return new DeckResource( $deck );
+    }
+
+    /**
+     * Retrieves summary for this deck, such as most recent cards
+     *
+     * @param Deck $deck
+     * @return void
+     */
+    public function get_deck_summary( Request $request, Deck $deck )
+    {
+        return $this->deckSummaryService->getDeckSummary( $deck, $request->user() );
     }
 }

@@ -50,7 +50,7 @@ const removeCard = ( index ) => {
 </script>
 
 <template>
-    <AjaxForm :action="url" :method="method">
+    <AjaxForm :action="url" :method="method" :show-status-message="true">
         <TextField class="mb-8" :value="props.deck?.name ?? ''" name="name" placeholder="">Deck name:</TextField>
 
         <TransitionGroup name="card-list">

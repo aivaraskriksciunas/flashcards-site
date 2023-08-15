@@ -4,9 +4,21 @@ namespace App\Services;
 
 use App\Models\Deck;
 use App\Models\Flashcard;
+use App\Models\User;
 
 class DeckService 
 {
+    public function createEmptyDeck( User $user, string $name )
+    {
+        $deck = $user->decks()->create([
+            'name' => $name,
+        ]);
+
+        $user->getLibrary()->decks()->attach( $deck );
+
+        return $deck;
+    }
+
     public function updateCards( Deck $deck, array $cards )
     {
         $cards_to_update = $this->getDeckCardList( $deck );

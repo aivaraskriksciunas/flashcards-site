@@ -1,0 +1,51 @@
+version: '3'
+services:
+  server:
+    build: ./nginx
+    ports: 
+      - "8000:80"
+    volumes:
+      - ./flashcards:/var/www/
+      - ./logs:/var/log/nginx/
+    depends_on:
+      php:
+        condition: service_started
+
+  php:
+    build: ./flashcards
+    ports:
+      - "9003:9003"
+    volumes:
+      - ./flashcards:/var/www/
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    depends_on: 
+      db:
+        condition: service_started
+
+  # frontend:
+  #   build: ./flashcards-front
+  #   ports:
+  #     - "4200:8000"
+  #   volumes:
+  #     - ./flashcards-front:/home/node/app
+
+  db:
+    image: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: flashcards_db
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8008:80
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: admin 
+
+volumes:
+  flashcards:
+  flashcards-front:
+

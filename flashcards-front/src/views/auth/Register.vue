@@ -2,12 +2,13 @@
 import AjaxForm from '../../components/forms/AjaxForm.vue'
 import TextField from '../../components/forms/TextField.vue'
 import { useRouter } from 'vue-router'
+import jsCookie from 'js-cookie';
 
 const router = useRouter()
 
 function onRegister( data ) {
     if ( data.token ) {
-        localStorage.setItem( 'api_key', data.token )
+        jsCookie.set( 'api_key', data.token, { expires: 40, sameSite: 'strict' } )
     }
     
     router.push({ name: 'home' })

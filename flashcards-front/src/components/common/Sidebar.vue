@@ -1,49 +1,63 @@
 <script setup>
-import { computed } from 'vue';
+import { storeToRefs } from "pinia";
 import { useUserSettingStore } from "../../stores/user-settings";
+import { useSidebarStore } from "../../stores/sidebar";
+import { useUserStore } from "../../stores/user";
 import Button from '../../components/ui/Button.vue';
+import Logo from './Logo.vue'
 
 const userSettings = useUserSettingStore();
-const logo = computed( () => {
-    if ( userSettings.colorTheme == 'dark' ) {
-        return "/LOGODARK.png";
-    }
-
-    return "/LOGO.png";
-})
+const sidebar = useSidebarStore();
+const { user, isLoggedIn } = storeToRefs( useUserStore() )
 
 </script>
 
 <template>
-    <div class="sidebar">
-        <router-link :to="{name: 'home'}">
-            <div class="sidebar-logo">
-                <img :src="logo">
-            </div>
-        </router-link>
+    <div class="sidebar-blocker md:hidden" 
+        :class="{ 'hidden': !sidebar.isSidebarVisible }"
+        @click="sidebar.hideSidebar"></div>
 
-        <div class="px-8">
-            <div class="links">
-                <router-link :to="{name: 'home'}">
-                    <div class='sidebar-link'>Home</div>
-                </router-link>
-                <router-link :to="{name: 'home'}">
-                    <div class='sidebar-link'>Profile</div>
-                </router-link>
-                <router-link :to="{name: 'home'}">
-                    <div class='sidebar-link'>Forum</div>
-                </router-link>
-            </div>
+    <aside class="sidebar md:block p-8" 
+        :class="{ 'hidden': !sidebar.isSidebarVisible }"
+        @click="sidebar.hideSidebar">
 
-            <div class="sidebar-header">
-                My library
-            </div>
-
-            <Button :to="{name: 'create-deck'}">New deck</Button>
-
-            <div @click="() => userSettings.toggleColorTheme()">Change theme</div>
+        <div class="sidebar-logo">
+            <router-link :to="{name: 'home'}">
+                <Logo></Logo>
+            </router-link>
         </div>
-    </div>
+
+        <div class="sidebar-profile md:hidden" v-if="isLoggedIn">
+            <div>{{ user.name }}</div>
+            <router-link :to="{ name: 'logout' }">Log out</router-link>
+        </div>
+        <div class="sidebar-profile md:hidden" v-else>
+            <router-link :to="{ name: 'login' }">Log in</router-link>
+            or 
+            <router-link :to="{ name: 'register' }">Register</router-link>
+        </div>
+
+        <div class="links">
+            <router-link :to="{name: 'home'}">
+                <div class='sidebar-link'>Home</div>
+            </router-link>
+            <router-link :to="{name: 'home'}">
+                <div class='sidebar-link'>Profile</div>
+            </router-link>
+            <router-link :to="{name: 'forum'}">
+                <div class='sidebar-link'>Forum</div>
+            </router-link>
+        </div>
+
+        <div class="sidebar-header">
+            My library
+        </div>
+
+        <Button :to="{name: 'create-deck'}">New deck</Button>
+
+        <div @click="() => userSettings.toggleColorTheme()">Change theme</div>
+
+    </aside>
 </template>
 
 <style scoped>
@@ -52,10 +66,50 @@ const logo = computed( () => {
     height: 100%;
 }
 
+@media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        animation: slideshow-animation 0.3s;
+    }
+
+    .sidebar-blocker {
+        position: absolute;
+        animation: slideshow-blocker-animation 0.3s;
+        width: 100%;
+        height: 100%;
+        background-color: rgba( 100, 100, 100, 0.2 );
+    }
+
+    @keyframes slideshow-animation {
+        0% {
+            left: -100%;
+        }
+        100% {
+            left: 0;
+        }
+    }
+
+    @keyframes slideshow-blocker-animation {
+        0% {
+            background-color: #ffffff00;
+        }
+        100% {
+            background-color: rgba( 100, 100, 100, 0.2 );
+        }
+    }
+}
+
+.sidebar-profile {
+    font-weight: 300;
+    margin: 22px 0;
+}
+
 .sidebar-logo {
-    @apply p-8;
-    min-height: 80px;
+    padding-top: 10px;
+    padding-bottom: 16px;
     text-align: center;
+    display: flex;
+    align-items: center;
 }
 
 .sidebar-logo img {

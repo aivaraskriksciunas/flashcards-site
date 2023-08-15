@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Deck;
+use App\Models\Flashcard;
 
 class DeckTest extends TestCase
 {
@@ -26,6 +27,11 @@ class DeckTest extends TestCase
         $response->assertUnauthorized();
     }
 
+    /**
+     * Can create a deck for this user unauthorized
+     *
+     * @return void
+     */
     public function test_creates_empty_deck()
     {
         $user = User::factory()->create();
@@ -41,6 +47,11 @@ class DeckTest extends TestCase
         ]);
     }
 
+    /**
+     * User can view this deck
+     *
+     * @return void
+     */
     public function test_view_created_deck()
     {
         $deck_author = User::factory()->create();
@@ -54,17 +65,192 @@ class DeckTest extends TestCase
         $response->assertStatus( 200 );
     }
 
-    public function test_cannot_view_created_deck()
+    /**
+     * Admin user can view any deck
+     *
+     * @return void
+     */
+    public function test_admin_can_view_any_deck() 
     {
-        $deck_author = User::factory()->create();
-        $deck = new Deck([ 'name' => 'Testing' ]);
-        $deck->user()->associate( $deck_author );
-        $deck->save();
+        $u1 = User::factory()->create();
+        $u2 = User::factory()->create([ 'is_admin' => true ]);
+        $deck = $u1->decks()->create([ 'name' => 'Testing' ]);
 
-        $user = User::factory()->create();
-        $response = $this->actingAs( $user )
+        $response = $this->actingAs( $u2 )
             ->getJson( "/api/decks/{$deck->id}" );
-        
-        $response->assertStatus( 404 );
+
+        $response->assertStatus( 200 );
+    }
+
+    /**
+     * Unauthorized user can view deck
+     *
+     * @return boolean
+     */
+    public function test_can_view_deck_unauthorized()
+    {
+        $deck = User::factory()->create()
+            ->decks()->create([ 'name' => 'Test' ]);
+
+        $response = $this->getJson( "/api/decks/{$deck->id}" );
+
+        $response->assertStatus( 200 );
+    }
+
+    /**
+     * Can add new cards to empty deck
+     *
+     * @return void
+     */
+    public function test_can_edit_deck()
+    {
+        $user = User::factory()->create();
+        $deck = $user->decks()->create([ 'name' => 'Test' ]);
+
+        $request = $this->actingAs( $user )
+            ->patchJson( 
+                route( 'api.decks.update', [ 'deck' => $deck ] ),
+            [
+                'name' => 'Test2',
+                'cards' => [
+                    [ 'question' => 'A', 'answer' => 'B' ],
+                    [ 'question' => 'C', 'answer' => 'D' ],
+                ]
+            ] 
+        );
+
+        $request->assertSuccessful();
+
+        $deck->refresh();
+        $this->assertEquals( 2, $deck->cards()->count() );
+        $this->assertEquals( 'Test2', $deck->name );
+    }
+
+    /**
+     * Test correctly updates existing, deletes cards
+     *
+     * @return void
+     */
+    public function test_correctly_updates_cards()
+    {
+        $user = User::factory()->create();
+        $deck = $user->decks()->create([ 'name' => 'Test' ]);
+        $cards = $deck->cards()->createMany([
+            [ 'question' => 'A', 'answer' => 'B' ],
+            [ 'question' => 'C', 'answer' => 'D' ]
+        ]);
+
+        $request = $this->actingAs( $user )
+            ->patchJson( 
+                route( 'api.decks.update', [ 'deck' => $deck ] ),
+            [
+                'name' => 'Test',
+                'cards' => [
+                    [ 'id' => $cards[0]->id, 'question' => 'A', 'answer' => 'B' ],
+                    [ 'id' => $cards[1]->id, 'question' => 'Updated', 'answer' => 'Updated Answer' ],
+                    [ 'question' => 'New', 'answer' => 'New Answer' ],
+                ]
+            ] 
+        );
+
+        $request->assertSuccessful();
+
+        $deck->refresh();
+        $new_cards = $deck->cards()->get();
+        $this->assertCount( 3, $new_cards );
+
+        $card = Flashcard::find( $cards[0]->id );
+        $this->assertNotNull( $card, 'Untouched card should still exist' );
+        $this->assertEquals( 'A', $card->question, 'Untouched card should not have modifications' );
+        $this->assertEquals( 'B', $card->answer );
+
+        $card = Flashcard::find( $cards[1]->id );
+        $this->assertNull( $card, 'Touched card should no longer exist and a new one should have been created' );
+    }
+
+    /**
+     * Test unauthorized user cannot modify deck
+     *
+     * @return void
+     */
+    public function test_unauthorized_user_cannot_modify()
+    {
+        $user = User::factory()->create();
+        $deck = $user->decks()->create([ 'name' => 'Test' ]);
+
+        $request = $this->patchJson( 
+            route( 'api.decks.update', [ 'deck' => $deck ] ),
+            [
+                'name' => 'Test2',
+                'cards' => [
+                    [ 'question' => 'A', 'answer' => 'B' ],
+                    [ 'question' => 'C', 'answer' => 'D' ],
+                ]
+            ] 
+        );
+
+        $request->assertUnauthorized();
+
+        $deck->refresh();
+        $this->assertEquals( 0, $deck->cards()->count() );
+        $this->assertEquals( 'Test', $deck->name );
+    }
+
+    /**
+     * Test non owner cannot modify deck
+     *
+     * @return void
+     */
+    public function test_non_owner_user_cannot_modify()
+    {
+        $user = User::factory()->create();
+        $u2 = User::factory()->create();
+        $deck = $user->decks()->create([ 'name' => 'Test' ]);
+
+        $request = $this->actingAs( $u2 )->patchJson( 
+            route( 'api.decks.update', [ 'deck' => $deck ] ),
+            [
+                'name' => 'Test2',
+                'cards' => [
+                    [ 'question' => 'A', 'answer' => 'B' ],
+                    [ 'question' => 'C', 'answer' => 'D' ],
+                ]
+            ] 
+        );
+
+        $request->assertNotFound();
+
+        $deck->refresh();
+        $this->assertEquals( 0, $deck->cards()->count() );
+        $this->assertEquals( 'Test', $deck->name );
+    }
+
+    /**
+     * Test admin can modify deck
+     *
+     * @return void
+     */
+    public function test_admin_user_can_modify()
+    {
+        $user = User::factory()->create();
+        $u2 = User::factory()->create([ 'is_admin' => true ]);
+        $deck = $user->decks()->create([ 'name' => 'Test' ]);
+
+        $request = $this->actingAs( $u2 )->patchJson( 
+            route( 'api.decks.update', [ 'deck' => $deck ] ),
+            [
+                'name' => 'Test2',
+                'cards' => [
+                    [ 'question' => 'A', 'answer' => 'B' ],
+                    [ 'question' => 'C', 'answer' => 'D' ],
+                ]
+            ] 
+        );
+
+        $request->assertSuccessful();
+
+        $deck->refresh();
+        $this->assertEquals( 2, $deck->cards()->count() );
+        $this->assertEquals( 'Test2', $deck->name );
     }
 }

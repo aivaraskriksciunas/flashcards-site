@@ -1,23 +1,28 @@
 
-FROM php:8.2-cli
+FROM php:8.2-fpm-alpine
 
 RUN docker-php-ext-install \
     bcmath \
-    pdo_mysql
+    pdo_mysql \
+    opcache
 
-RUN apt update -y && apt install -y \
-    npm
+COPY production/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apk add --no-cache \
+    npm \
+    linux-headers
+
+RUN apk add --no-cache $PHPIZE_DEPS \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+COPY ./production/php.ini /usr/local/etc/php/
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 COPY . /var/www
 WORKDIR /var/www
 
-RUN composer install
+RUN composer update
+RUN npx webpack build --mode production
 
-EXPOSE 8000
-
-RUN php artisan migrate 
-RUN php artisan db:seed --class InitialSeeder
-
-CMD [ "php", "artisan", "serve", "--host", "0.0.0.0" ]

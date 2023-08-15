@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Quiz;
 use App\Models\QuizItem;
 use App\Exceptions\Quiz\QuizItemAlreadyAnswered;
+use App\Services\LearnLevels;
 
 class CardProgressService 
 {
@@ -47,6 +48,10 @@ class CardProgressService
 
         $progress->is_last_wrong = !$is_correct;
         $progress->last_review = \Carbon\Carbon::now();
+        // Increase learn level by one, or reset it to 0 if mistake made
+        $progress->learn_level = $is_correct ? min( $progress->learn_level + 1, LearnLevels::MAX_LEARN_LEVEL ) : 0;
+        // Store recommended date for next learn date
+        $progress->next_revision = \Carbon\Carbon::now()->addDays( LearnLevels::LEARN_LEVELS[$progress->learn_level] );
         $progress->save();
 
         return $progress;

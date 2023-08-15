@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Services\DeckService;
+use App\Services\DeckSummaryService;
+use App\Services\NotificationService;
 use App\Services\QuizGeneration\CardRaters\CardRater;
-use App\Services\QuizGeneration\CardRaters\DefaultCardRater;
+use App\Services\QuizGeneration\CardRaters\ProgressBasedCardRater;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,13 +26,12 @@ class AppServiceProvider extends ServiceProvider
             return new DeckService();
         });
 
-        $this->app->bind( CardRater::class, DefaultCardRater::class );
-
+        $this->app->bind( CardRater::class, ProgressBasedCardRater::class );
         
         Response::macro( 'error', function ( string $message, int $status_code = 400 ) {
             return Response::json([
                 'message' => $message,
-            ], 400 );
+            ], $status_code );
         });
     }
 

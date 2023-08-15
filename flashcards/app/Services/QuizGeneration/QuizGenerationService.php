@@ -102,7 +102,7 @@ class QuizGenerationService
         $chosen_cards = [];
         while ( count( $chosen_cards ) < $card_count && $weight_sum > 0 )
         {
-            $choice = rand( 0, $weight_sum );
+            $choice = mt_rand( 0, $weight_sum );
             foreach ( $card_weights as $card_id => $weight ) 
             {
                 $choice -= $weight;

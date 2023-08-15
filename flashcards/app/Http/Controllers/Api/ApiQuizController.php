@@ -13,6 +13,7 @@ use App\Services\QuizGeneration\QuizGenerationService;
 use App\Services\CardProgressService;
 use App\Http\Resources\Quiz\QuizDetailResource;
 use App\Http\Requests\Quiz\ProgressReport;
+use App\Http\Resources\Quiz\QuizSummaryResource;
 
 class ApiQuizController extends Controller
 {
@@ -65,5 +66,10 @@ class ApiQuizController extends Controller
         return response()->json([
             'message' => 'Flashcard progress saved',
         ]);
+    }
+
+    public function get_quiz_summary( Quiz $quiz )
+    {
+        return new QuizSummaryResource( $quiz );
     }
 }

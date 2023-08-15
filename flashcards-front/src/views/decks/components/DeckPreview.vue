@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue';
-import Card from '../../../components/ui/Card.vue';
-import PlainButton from '../../../components/ui/PlainButton.vue';
-import FlashcardContent from './_FlashcardContent.vue';
+import FlashcardContent from './FlashcardContent.vue';
+import FlashcardDisplay from './FlashcardDisplay.vue';
+import FlashcardControls from './FlashcardControls.vue';
 
 const props = defineProps([ 'cards' ])
 
@@ -30,21 +30,15 @@ const prevCard = () => {
 <template>
 
 <div v-if="props.cards">
-    <Card>
+    <FlashcardDisplay>
         <FlashcardContent :card="card"></FlashcardContent>
-
-        <div class="controls">
-            <PlainButton @click="prevCard">
-                Prev
-            </PlainButton>
-            <div id="card-count">
+        
+        <template v-slot:controls>
+            <FlashcardControls @onPrev="prevCard" @onNext="nextCard">
                 {{ currentCardIndex + 1 }}/{{ cards.length }}
-            </div>
-            <PlainButton @click="nextCard">
-                Next
-            </PlainButton>
-        </div>
-    </Card>
+            </FlashcardControls>
+        </template>
+    </FlashcardDisplay>
 </div>
 <div v-else>
     Deck is empty. 
@@ -53,13 +47,6 @@ const prevCard = () => {
 
 
 <style scoped>
-
-.controls {
-    margin-top: 4em;
-    display: flex;
-    align-items: center;
-}
-
 #card-count {
     flex-grow: 1;
     text-align: center;

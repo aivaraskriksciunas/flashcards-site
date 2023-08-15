@@ -35,6 +35,9 @@
                         'route' => 'user.index',
                         'group' => 'user'
                     ],
+                    'Forum topics' => [
+                        'route' => 'forum-topic.index'
+                    ]
                 ]
             @endphp
 

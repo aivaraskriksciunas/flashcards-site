@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeckController;
+use App\Http\Controllers\ForumTopicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,5 +34,6 @@ Route::middleware([ 'auth', 'is-admin' ])->group( function () {
     Route::resource( 'admin-user', AdminUserController::class )->only( [ 'index', 'store', 'create' ]);
     Route::resource( 'user', UserController::class );
     Route::resource( 'user.deck', DeckController::class )->except( 'index' )->shallow();
+    Route::resource( 'forum-topic', ForumTopicController::class );
 
 });

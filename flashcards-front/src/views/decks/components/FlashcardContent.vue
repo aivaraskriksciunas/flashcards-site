@@ -11,12 +11,14 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="card-content" v-if="!props.questionOnly">
+    <div v-if="!props.questionOnly">
         <div class="card-question">{{ card.question }}</div>
         <div class="divider"></div>
-        <div class="card-answer">{{ card.answer }}</div>  
+        <slot name="card-answer">
+            <div class="card-answer">{{ card.answer }}</div>  
+        </slot>
     </div>
-    <div class="card-content" v-else>
+    <div v-else>
         <div class="card-question">{{ card.question }}</div>
     </div>
 </template>
