@@ -1,0 +1,36 @@
+name: Build and Test Docker Image
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "master", "develop" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker-compose build --no-cache --force-rm 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: webiny/action-post-run@3.0.0
+        id: post-run-command
+        with:
+          run: docker-compose stop
+      - name: Setup docker
+        run: docker-compose up -d
+      - name: Debug
+        run: |
+          sleep 5
+          docker ps -a
+          docker exec aktulibre-flashcards_server_1 bash -c "ls -la"
+      - name: Composer update
+        run: docker exec aktulibre-flashcards_server_1 bash -c "composer update"
+      - name: Run tests
+        run: docker exec aktulibre-flashcards_server_1 bash -c "php artisan test"
