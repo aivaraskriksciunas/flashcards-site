@@ -24,7 +24,7 @@ jobs:
         with:
           run: docker-compose stop
       - name: Setup docker
-        run: docker-compose up -d --file docker-compose.cicd.yml
+        run: docker-compose up -d
       - name: Debug
         run: |
           sleep 5
