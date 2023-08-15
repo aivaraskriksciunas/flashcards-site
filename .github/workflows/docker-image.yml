@@ -27,10 +27,10 @@ jobs:
         run: docker-compose -f docker-compose.cicd.yml up -d
       - name: Debug
         run: |
-          sleep 5
+          sleep 3
           docker ps -a
-          docker exec aktulibre-flashcards_server_1 bash -c "ls -la"
+          docker exec flashcards-site_server bash -c "ls -la"
       - name: Composer update
-        run: docker exec aktulibre-flashcards_server_1 bash -c "composer update"
+        run: docker exec flashcards-site_server bash -c "composer update"
       - name: Run tests
-        run: docker exec aktulibre-flashcards_server_1 bash -c "php artisan test"
+        run: docker exec flashcards-site_server bash -c "php artisan test"
