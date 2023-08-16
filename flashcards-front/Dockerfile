@@ -4,6 +4,6 @@ RUN npm install -y -g npm
 
 WORKDIR /home/node/app
 
-EXPOSE 8000
+RUN npm install
 
-CMD [ "npm", "run", "dev", "--", "--port", "8000", "--host", "0.0.0.0" ]
+CMD [ "npm", "run", "build", "--prod" ]
