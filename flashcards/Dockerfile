@@ -21,7 +21,7 @@ COPY ./production/php.ini /usr/local/etc/php/
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 COPY . /var/www
-WORKDIR /var/www
+WORKDIR /var/www 
 
 RUN composer update
 RUN npm install && npx webpack build --mode production

@@ -21,6 +21,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 COPY . /var/www
 WORKDIR /var/www
 
+RUN chmod -R 755 /var/www && chmod -R 775 /var/www/storage/logs && chmod -R 775 /var/www/storage/app
+
 RUN composer update
 RUN npm install && npx webpack build --mode production
 
