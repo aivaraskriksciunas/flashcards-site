@@ -14,7 +14,7 @@ const { showSidebar } = useSidebarStore()
     
 <nav class="main-navbar hidden md:flex container py-4">
     <div class="navbar-logo flex-grow">
-        Preview version
+        Preview version v0.5
     </div>
 
     <div class="">

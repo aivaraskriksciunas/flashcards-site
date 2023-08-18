@@ -17,7 +17,10 @@ class DeckDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'cards' => $this->getCards( $request->query( 'choose', false ) ),
+            'cards' => $this->getCards( 
+                $request->query( 'quiz-mode' ), 
+                $request->query( 'choose', false ) 
+            ),
         ];
     }
 
@@ -27,7 +30,7 @@ class DeckDetailResource extends JsonResource
      * @param boolean $choose if we should select 10 random cards
      * @return void
      */
-    private function getCards( bool $choose = false ) 
+    private function getCards( ?string $mode, bool $choose = false ) 
     {
         $deck_card_collection = $this->cards;
         if ( $choose ) {
@@ -38,8 +41,8 @@ class DeckDetailResource extends JsonResource
         foreach ( $deck_card_collection as $card ) {
             $cards[] = [
                 'id' => $card->id,
-                'question' => $card->question,
-                'answer' => $card->answer,
+                ...$card->formatQAPair( $mode ),
+                'comment' => $card->comment,
             ];
         }
 

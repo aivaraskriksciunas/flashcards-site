@@ -21,12 +21,15 @@ const onLoad = ( data ) => {
     <h2>Summary {{ summary.correct_count }}/{{ summary.total_cards }}</h2>
     <Card v-for="item in summary.items" :key="item.card_id" class="summary-card mb-3" :class="{ 'incorrect': !item.is_correct }">
         <div class="flex">
-            <div class="flex-1">
+            <div class="flex-1 pr-2">
                 <div class="card-question">
                     {{ item.question }}
                 </div>
                 <div class="card-answer">
                     {{ item.answer }}
+                </div>
+                <div class="card-comment">
+                    {{ item.comment }}
                 </div>
             </div>
             <div class="summary-icon">
@@ -44,6 +47,11 @@ const onLoad = ( data ) => {
     font-size: 1.2em;
     font-weight: 500;
     color: var( --color-success );
+}
+
+.summary-card .card-comment {
+    font-size: 0.9em;
+    color: var( --color-text-lighter );
 }
 
 .summary-card {

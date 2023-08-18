@@ -6,6 +6,10 @@ import NumberPaginator from '../pagination/NumberPaginator.vue';
 const props = defineProps({
     url: {
         type: String
+    },
+    queryParams: {
+        type: Object,
+        default: {},
     }
 })
 
@@ -15,8 +19,8 @@ const pagination = ref( false )
 
 const loadData = ( url ) => {
     state.value = 'loading'
-
-    axios.get( url )
+    
+    axios.get( url, { params: props.queryParams } )
     .then( ( response ) => {
         state.value = 'loaded'
         pagination.value = response.data.meta

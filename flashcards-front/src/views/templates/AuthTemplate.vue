@@ -1,5 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import StatusMessages from '../../components/common/StatusMessages.vue';
 </script>
 
 
@@ -10,6 +11,7 @@ import { RouterView } from 'vue-router'
         <div id="auth-page-logo">
             <img src="/LOGO.png">
         </div>
+        <StatusMessages></StatusMessages>
         <RouterView></RouterView>
     </div>
 </div>

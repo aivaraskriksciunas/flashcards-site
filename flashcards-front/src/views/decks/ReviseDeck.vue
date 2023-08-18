@@ -2,15 +2,16 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import SlimContainer from '../../components/ui/SlimContainer.vue';
-import Card from '../../components/ui/Card.vue';
 import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue';
 import SimpleCardRevision from './components/SimpleCardRevision.vue';
 import Button from '../../components/ui/Button.vue';
 import PlainButton from '../../components/ui/PlainButton.vue';
+import { useUserSettingStore } from '../../stores/user-settings';
 
 const route = useRoute()
 const router = useRouter()
 const deckId = route.params.id
+const settings = useUserSettingStore()
 
 const data = ref({})
 const dataRefreshKey = ref( 0 )
@@ -36,7 +37,11 @@ const onBack = () => {
 </script>
 
 <template>
-<DataLoaderWrapper :url="`/api/decks/${deckId}/quiz`" @load="onLoad" :key="dataRefreshKey">
+<DataLoaderWrapper 
+    :url="`/api/decks/${deckId}/quiz`" 
+    :query-params="{'quiz-mode': settings.getPreferredQuizMode( deckId )}"
+    @load="onLoad" 
+    :key="dataRefreshKey">
     <SlimContainer v-if="data.items">
         <h1>{{ data.deck.name  }}</h1>
         <div v-if="revisionState == 'revision'">

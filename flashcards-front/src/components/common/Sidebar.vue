@@ -5,6 +5,8 @@ import { useSidebarStore } from "../../stores/sidebar";
 import { useUserStore } from "../../stores/user";
 import Button from '../../components/ui/Button.vue';
 import Logo from './Logo.vue'
+import DropdownButton from "../ui/DropdownButton.vue";
+import DropdownButtonItem from "../ui/DropdownButtonItem.vue";
 
 const userSettings = useUserSettingStore();
 const sidebar = useSidebarStore();
@@ -53,9 +55,16 @@ const { user, isLoggedIn } = storeToRefs( useUserStore() )
             My library
         </div>
 
-        <Button :to="{name: 'create-deck'}">New deck</Button>
+        <Button class='mb-3' :to="{name: 'create-deck'}">New deck</Button>
 
-        <div @click="() => userSettings.toggleColorTheme()">Change theme</div>
+        <DropdownButton>
+            <template v-slot:label>
+                <font-awesome-icon icon="fas fa-paint-roller" size="xs" class="mr-1" ></font-awesome-icon>
+                Theme
+            </template>
+            <DropdownButtonItem @click="userSettings.setColorTheme( 'light' )">Light</DropdownButtonItem>
+            <DropdownButtonItem @click="userSettings.setColorTheme( 'dark' )">Dark</DropdownButtonItem>
+        </DropdownButton>
 
     </aside>
 </template>

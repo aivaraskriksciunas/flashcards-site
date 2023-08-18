@@ -27,6 +27,7 @@ class CreateDeck extends FormRequest
             'name' => 'required|min:3|max:100',
             'cards.*.question' => 'required|max:200',
             'cards.*.answer' => 'required|max:200',
+            'cards.*.comment' => 'nullable|string|max:800',
         ];
     }
 }

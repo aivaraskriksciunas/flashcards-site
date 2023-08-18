@@ -40,7 +40,7 @@ Route::middleware( 'auth:sanctum' )->group( function() {
     /**
      * Quiz endpoints
      */
-    Route::get( '/decks/{deck}/quiz', [ ApiQuizController::class, 'get' ] );
+    Route::get( '/decks/{deck}/quiz', [ ApiQuizController::class, 'get' ] )->name( 'quiz.generate' );
     Route::post( '/cards/{card}/progress', [ ApiQuizController::class, 'report_card_progress' ]);
     Route::post( '/quiz/item/{quizItem}/progress', [ ApiQuizController::class, 'report_quiz_item_progress' ]);
     Route::get( '/quiz/{quiz}', [ ApiQuizController::class, 'get_quiz_summary' ] )
@@ -49,6 +49,9 @@ Route::middleware( 'auth:sanctum' )->group( function() {
 
     Route::get( '/library', [ ApiLibraryController::class, 'index' ]);
 
+    /**
+     * Forum
+     */
     Route::get( 'forum-posts/list/{forumTopic}', [ ApiForumPostController::class, 'getPostList' ] );
     Route::get( 'forum-posts/list/', [ ApiForumPostController::class, 'getPostList' ] );
     Route::post( 'forum-posts/react/{forumPost}', [ ApiForumPostController::class, 'reactToForumPost' ])
@@ -60,6 +63,9 @@ Route::middleware( 'auth:sanctum' )->group( function() {
 
     Route::get( '/forum-topics', [ ApiForumPostController::class, 'getTopicList' ]);
 
+    /**
+     * Forum comments
+     */
     Route::apiResource( 'forum-posts.comments', ApiForumCommentController::class )
         ->shallow()
         ->except([ 'store' ]);
@@ -71,6 +77,9 @@ Route::middleware( 'auth:sanctum' )->group( function() {
     Route::post( 'comments/react/{forumComment}', [ ApiForumCommentController::class, 'reactToForumComment' ] )
         ->name( 'react-to-forum-comment' );
 
+    /**
+     * Importing
+     */
     Route::post( 'import/quizlet', [ ApiImportController::class, 'import_quizlet_set' ] )->name( 'import-quizlet' );
     Route::post( 'import/anki', [ ApiImportController::class, 'import_anki_set' ])->name( 'import-anki' );
 });

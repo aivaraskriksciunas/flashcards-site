@@ -1,5 +1,7 @@
 <script setup>
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const props = defineProps({
     icon: {
         required: true
@@ -17,6 +19,9 @@ const props = defineProps({
     text: {
         default: '',
         type: String
+    },
+    to: {
+        default: null,
     }
 })
 
@@ -25,10 +30,19 @@ if ( props.type == 'danger' ) {
     iconStyle = 'icon-button-danger'
 }
 
+const emit = defineEmits( 'click' )
+const onClick = () => {
+    if ( props.to ) {
+        router.push( props.to )
+    }
+
+    emit( 'click' )
+}
+
 </script>
 
 <template>
-    <div class="icon-button" :class="[{ 'filled': props.filled, 'round': props.text == '' }, iconStyle ]">
+    <div class="icon-button" :class="[{ 'filled': props.filled, 'round': props.text == '' }, iconStyle ]" @click="onClick">
         <font-awesome-icon class="icon" :icon="props.icon" :size="props.size"></font-awesome-icon>
         {{ props.text }}
     </div>
@@ -60,7 +74,7 @@ if ( props.type == 'danger' ) {
 }
 
 .icon-button-success {
-    border-color: var( --color-success );
+    border-color: var( --color-primary );
 }
 
 .icon-button-danger {
@@ -76,7 +90,7 @@ if ( props.type == 'danger' ) {
 }
 
 .icon-button-success:hover {
-    background-color: var( --color-success );
+    background-color: var( --color-primary );
     color: var( --color-white );
 }
 
@@ -104,12 +118,12 @@ if ( props.type == 'danger' ) {
 }
 
 .icon-button-success.filled {
-    background-color: var( --color-success );
+    background-color: var( --color-primary );
     color: var( --color-white );
 }
 .icon-button-success.filled:hover {
-    background-color: var( --color-success-hover );
-    border-color: var( --color-success-hover );
+    background-color: var( --color-primary-active );
+    border-color: var( --color-primary-active );
 }
 
 .icon-button-success.filled .icon path,

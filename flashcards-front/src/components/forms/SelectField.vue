@@ -6,6 +6,10 @@ import FieldErrors from './_FieldErrors.vue'
  * Element Properties
  */
 const props = defineProps({
+    type: {
+        type: String,
+        default: 'text'
+    },
     name: {
         type: String,
         required: true,
@@ -14,9 +18,8 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    placeholder: {
-        type: String,
-        default: ''
+    choices: {
+        required: true,
     }
 })
 
@@ -40,12 +43,13 @@ const onChange = ( ev ) => {
             <slot/>
         </label>
 
-        <textarea class='form-control' 
-            v-model='data'
-            :name='props.name'
-            :placeholder="props.placeholder"
-            @change="onChange">
-        </textarea>
+        <select 
+            :name="props.name"
+            v-model="data"
+            @change="onChange"
+            class="select-control">
+            <option v-for="choice of props.choices" :value="choice.value" :key="choice.value">{{ choice.label }}</option>    
+        </select>
 
         <FieldErrors :errors="error"></FieldErrors>
     </div>
@@ -53,30 +57,10 @@ const onChange = ( ev ) => {
 
 <style scoped>
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.1em;
-}
-
-label {
-    display: block;
-    font-weight: 400;
-    margin-bottom: 4px;
-    font-size: 0.9em;
-}
-
-.form-control {
+.select-control {
+    @apply px-2 py-2;
     border: 1px solid var( --color-shadow );
-    padding: 0.4em 0.7em;
-    border-radius: 4px;
-    margin-bottom: 12px;
-    background-color: var( --color-bg-form-control );
-}
-
-.form-control:focus {
-    background-color: var( --color-bg-form-control-active );
-    outline: 1px solid var( --color-primary );
-    box-shadow: 0 2px 6px 2px var( --color-shadow );
+    border-bottom-width: 2px;
+    border-radius: 6px;
 }
 </style>

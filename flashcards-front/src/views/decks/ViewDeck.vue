@@ -8,9 +8,12 @@ import DeckPreview from "./components/DeckPreview.vue";
 import PlainButton from "../../components/ui/PlainButton.vue";
 import SlimContainer from "../../components/ui/SlimContainer.vue";
 import DeckSummary from "./components/DeckSummary.vue";
+import SelectField from "../../components/forms/SelectField.vue";
+import { useUserSettingStore } from '../../stores/user-settings';
 
 const route = useRoute()
 const deckId = route.params.id 
+const settings = useUserSettingStore()
 
 const deck = ref( null )
 const onLoad = ( data ) => {
@@ -18,6 +21,17 @@ const onLoad = ( data ) => {
 } 
 
 const { isLoggedIn } = useUserStore()
+
+const quizModes = [
+    { value: 'qa', label: 'Question-Answer' },
+    { value: 'aq', label: 'Answer-Question' },
+    { value: 'mixed', label: 'Mixed' }
+];
+const quizMode = ref( settings.getPreferredQuizMode( deckId ) || 'qa' );
+
+const onQuizModeChange = ( val ) => {
+    settings.setPreferredQuizMode( deckId, val )
+}
 
 </script>
 
@@ -42,6 +56,11 @@ const { isLoggedIn } = useUserStore()
             <DeckPreview :cards="deck.cards"></DeckPreview>
 
             <div v-if="isLoggedIn">
+                
+                <div class="flex mt-3 items-center justify-end text-sm">
+                    <div class="mr-2">Quiz mode:</div>
+                    <SelectField name="" :value="quizMode" @change="onQuizModeChange" :choices="quizModes"></SelectField>
+                </div>
 
                 <div class="flex deck-actions mt-3">
                     <router-link :to="{ name: 'revise-deck', params: { id: deck.id } }">

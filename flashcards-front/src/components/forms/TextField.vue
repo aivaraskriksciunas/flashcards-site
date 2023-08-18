@@ -17,6 +17,10 @@ const props = defineProps({
     value: {
         type: String,
         default: '',
+    },
+    placeholder: {
+        type: String,
+        default: '',
     }
 })
 
@@ -44,13 +48,14 @@ const onChange = ( ev ) => {
             v-model='data' 
             :type='props.type' 
             :name='props.name'
+            :placeholder="props.placeholder"
             @change="onChange">
 
         <FieldErrors :errors="error"></FieldErrors>
     </div>
 </template>
 
-<style>
+<style scoped>
 
 .form-group {
     display: flex;
@@ -60,7 +65,7 @@ const onChange = ( ev ) => {
 
 label {
     display: block;
-    font-weight: 500;
+    font-weight: 400;
     margin-bottom: 4px;
 }
 

@@ -8,9 +8,11 @@ import FlashcardControls from './components/FlashcardControls.vue';
 import FlashcardContent from './components/FlashcardContent.vue';
 import OutlineButton from '../../components/ui/OutlineButton.vue';
 import PlainButton from '../../components/ui/PlainButton.vue';
+import { useUserSettingStore } from '../../stores/user-settings';
 
 const route = useRoute()
 const deckId = route.params.id 
+const settings = useUserSettingStore()
 
 const deck = ref({})
 const i_currentCard = ref( 0 )
@@ -27,14 +29,18 @@ const refreshKey = ref( 0 )
 </script>
 
 <template>
-<DataLoaderWrapper :url="`/api/decks/${deckId}?choose=true`" @load="onLoad" :key="refreshKey">
+<DataLoaderWrapper 
+    :url="`/api/decks/${deckId}`" 
+    :query-params="{ 'choose': true, 'quiz-mode': settings.getPreferredQuizMode( deckId )}"
+    @load="onLoad" 
+    :key="refreshKey">
     <SlimContainer>
         <h1>{{ deck.name }}</h1>
 
         <div v-if="deck.cards.length">
             <FlashcardDisplay>
                 <div v-if="i_currentCard != deck.cards.length">
-                    <FlashcardContent :card="deck.cards[i_currentCard]">
+                    <FlashcardContent :card="deck.cards[i_currentCard]" :show-comment="cardRevealed === i_currentCard">
                         <template v-slot:card-answer>
                             <div v-if="cardRevealed !== i_currentCard">
                                 <PlainButton @click="cardRevealed = i_currentCard">View answer</PlainButton>

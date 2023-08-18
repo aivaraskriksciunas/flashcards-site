@@ -40,7 +40,8 @@ class DeckService
                 Flashcard::where( 'id', $card['id'] )
                     ->update([ 
                         'question' => $card['question'], 
-                        'answer' => $card['answer'] 
+                        'answer' => $card['answer'],
+                        'comment' => $card['comment'] ?? null,
                     ]);
 
                 // Remove this card from the queue
@@ -65,6 +66,7 @@ class DeckService
             $list[$card->id] = [
                 'question' => $card->question,
                 'answer' => $card->answer,
+                'comment' => $card->comment,
             ];
         }
 
