@@ -8,6 +8,8 @@ import PlainButton from '../../../components/ui/PlainButton.vue';
 import Card from '../../../components/ui/Card.vue';
 import IconButton from '../../../components/ui/IconButton.vue';
 import PlainIconButton from '../../../components/ui/PlainIconButton.vue';
+import Button from '../../../components/ui/Button.vue';
+import OutlineButton from '../../../components/ui/OutlineButton.vue';
 
 const props = defineProps({
     deck: {
@@ -113,7 +115,9 @@ const closeComment = ( index ) => {
             </div>
         </TransitionGroup>
 
-        <div @click="addCard" class="btn btn-primary">New</div>
+        <div >
+            <OutlineButton @click="addCard" class="w-full mb-4" type="primary">New card</OutlineButton>
+        </div>
     </AjaxForm>
 </template>
 
