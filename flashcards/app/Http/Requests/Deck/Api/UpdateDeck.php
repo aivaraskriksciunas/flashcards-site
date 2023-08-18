@@ -28,6 +28,7 @@ class UpdateDeck extends FormRequest
             'cards.*.id' => 'nullable|numeric',
             'cards.*.question' => 'required|max:200',
             'cards.*.answer' => 'required|max:200',
+            'cards.*.comment' => 'nullable|string|max:800',
         ];
     }
 }

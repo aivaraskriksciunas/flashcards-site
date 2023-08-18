@@ -29,6 +29,7 @@ class QuizSummaryResource extends JsonResource
                     'is_correct' => $item->is_correct,
                     'question' => $item->card->question,
                     'answer' => $item->card->answer,
+                    'comment' => $item->card->comment,
                     'card_id' => $item->card->id,
                 ];
             }),

@@ -8,7 +8,6 @@ const { deck } = defineProps({
 })
 
 const onLoad = ( data ) => {
-    console.log( data )
 }
 
 </script>

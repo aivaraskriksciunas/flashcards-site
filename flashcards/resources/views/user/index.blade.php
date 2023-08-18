@@ -12,7 +12,7 @@
     </x-slot:actions>
 </x-page-title>
 
-<div class='list-group'>
+<div class='list-group mb-3'>
     @foreach ( $users as $user )
 
         <div class='list-group-item list-group-item-action d-flex w-100 align-items-center'>
@@ -27,6 +27,9 @@
         </div>
 
     @endforeach
+    
 </div>
+
+{{ $users->links() }}
 
 @endsection 

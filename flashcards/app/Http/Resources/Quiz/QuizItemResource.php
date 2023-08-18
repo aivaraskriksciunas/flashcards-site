@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources\Quiz;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use PDO;
 
 class QuizItemResource extends JsonResource
 {
@@ -19,9 +21,10 @@ class QuizItemResource extends JsonResource
             'date_answered' => $this->date_answered,
             'card' => [
                 'id' => $this->card->id,
-                'question' => $this->card->question,
-                'answer' => $this->card->answer,
+                ...$this->card->formatQAPair( $request->query( 'quiz-mode' ) ),
+                'comment' => $this->card->comment,
             ]
         ];
     }
+
 }

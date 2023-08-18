@@ -5,6 +5,10 @@ const props = defineProps({
     questionOnly: {
         type: Boolean,
         default: false,
+    },
+    showComment: {
+        type: Boolean,
+        default: true,
     }
 })
 
@@ -17,6 +21,10 @@ const props = defineProps({
         <slot name="card-answer">
             <div class="card-answer">{{ card.answer }}</div>  
         </slot>
+
+        <div class="card-comment py-5" v-if="props.showComment">
+            {{ card.comment }}
+        </div>
     </div>
     <div v-else>
         <div class="card-question">{{ card.question }}</div>
@@ -36,6 +44,11 @@ const props = defineProps({
 
 .card-answer {
     font-size: 2em;
+}
+
+.card-comment {
+    font-size: 1.1em;
+    color: var( --color-text-lighter );
 }
 
 .divider {

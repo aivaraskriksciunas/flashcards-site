@@ -82,6 +82,10 @@ const submitCard = ( isCorrect ) => {
                 <div id="correctAnswerValue">{{ currentItem.card.answer }}</div>
             </div>
 
+            <div class="card-comment">
+                {{ currentItem.card.comment }}
+            </div>
+
             <div class="flex mt-3 items-center">
                 <OutlineButton class="flex-1" @click="submitCard( isCorrect )">Continue</OutlineButton>
                 <PlainButton id="iWasRightButton" v-if="!isCorrect" @click="submitCard( true )">I was right</PlainButton>
@@ -96,6 +100,12 @@ const submitCard = ( isCorrect ) => {
     font-weight: 500;
     font-size: 3em;
     margin-bottom: 0.8em;
+}
+
+.card-comment {
+    font-size: 0.9;
+    color: var( --color-text-light );
+    text-align: left;
 }
 
 .card-input-field {

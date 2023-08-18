@@ -12,6 +12,7 @@ use App\Services\NotificationService;
 use App\Services\QuizGeneration\CardRaters\CardRater;
 use App\Services\QuizGeneration\CardRaters\ProgressBasedCardRater;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,5 +44,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         JsonResource::withoutWrapping();
+        Paginator::useBootstrapFive();
     }
 }

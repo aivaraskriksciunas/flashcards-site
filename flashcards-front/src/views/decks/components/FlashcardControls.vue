@@ -25,7 +25,7 @@ const emit = defineEmits([ 'onPrev', 'onNext' ])
 
 <style scoped>
 .controls {
-    margin-top: 4em;
+    margin-top: 1em;
     display: flex;
     align-items: center;
     justify-content: space-between;
