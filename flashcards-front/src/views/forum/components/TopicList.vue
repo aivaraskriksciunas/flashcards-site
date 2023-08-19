@@ -2,10 +2,11 @@
 import DataLoaderWrapper from '../../../components/wrappers/DataLoaderWrapper.vue';
 import { ref } from 'vue';
 import PlainButton from '../../../components/ui/PlainButton.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const topics = ref([])
 const router = useRouter()
+const route = useRoute()
 
 const onLoad = ( data ) => {
     topics.value = data;
@@ -16,9 +17,10 @@ const onLoad = ( data ) => {
 <template>
 
 <DataLoaderWrapper url="/api/forum-topics" @load="onLoad">
-    <div class="pl-8">
+    <div class="flex lg:block flex-wrap lg:pl-3">
         <PlainButton 
             class='topic' 
+            :class="{ 'current-topic': !route.params.topic }"
             @click="() => router.push({ name: 'forum' })">
             All
         </PlainButton>
@@ -26,6 +28,7 @@ const onLoad = ( data ) => {
         <PlainButton 
             class='topic' 
             v-for="topic of topics"
+            :class="{ 'current-topic': route.params.topic == topic.slug }"
             @click="() => router.push({ name: 'forum', params: { 'topic': topic.slug }})">
             {{ topic.title }}
         </PlainButton>
@@ -39,5 +42,10 @@ const onLoad = ( data ) => {
 .topic {
     font-weight: 500;
     color: var( --color-text-light );
+}
+
+.current-topic {
+    color: var( --color-primary );
+
 }
 </style>

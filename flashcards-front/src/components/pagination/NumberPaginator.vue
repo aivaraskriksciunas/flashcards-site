@@ -13,7 +13,7 @@ const emit = defineEmits([ 'pageChange' ])
 </script>
 
 <template>
-    <div class="flex my-8 items-center">
+    <div class="flex my-8 items-center flex-wrap">
         <div v-for="link of props.pagination.links" 
             class="pagination-link-container">
             <span v-if="link.active" class="active-pagination-link" v-html="link.label"></span>

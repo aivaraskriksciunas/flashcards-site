@@ -12,7 +12,7 @@ const { showSidebar } = useSidebarStore()
 
 <template>
     
-<nav class="main-navbar hidden md:flex container py-4">
+<nav class="main-navbar hidden lg:flex container py-4">
     <div class="navbar-logo flex-grow">
         Preview version v0.5
     </div>
@@ -30,7 +30,7 @@ const { showSidebar } = useSidebarStore()
     </div>
 </nav>
 
-<nav class="mobile-navbar flex md:hidden container py-4">
+<nav class="mobile-navbar flex lg:hidden container py-4">
     <HamburgerIcon class="sidebar-expand" @click="showSidebar"></HamburgerIcon>
     <div class="navbar-logo">
         <Logo></Logo>

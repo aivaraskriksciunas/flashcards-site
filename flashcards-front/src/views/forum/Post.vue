@@ -27,7 +27,7 @@ const commentAdded = ( data ) => {
 <DataLoaderWrapper :url="`/api/forum-posts/${route.params.id}`" @load="onLoad">
     <SlimContainer>
         <Card>
-            <div class="flex">
+            <div class="lg:flex">
                 <Header class="flex-grow">{{ post.title }}</Header>
                 <ReactButtons :postId="post.id" :reactions="post.reactions"></ReactButtons>
             </div>

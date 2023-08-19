@@ -18,13 +18,16 @@ const props = defineProps({
                     {{ props.item.title }}
                 </router-link>
             </div>
+            <div class="forum-list-item-actions lg:hidden mb-3">
+                <ReactButtons :postId="props.item.id" :reactions="props.item.reactions"></ReactButtons>
+            </div>
             <div class="forum-post-content">{{ props.item.content }}</div>
             <div class="forum-post-details">
                 <span class="forum-post-author">{{ props.item.user.name }}</span> posted 
                 <span class="forum-post-date">{{ props.item.human_created_at }}</span>
             </div>
         </div>
-        <div class="forum-list-item-actions">
+        <div class="forum-list-item-actions hidden lg:block">
             <ReactButtons :postId="props.item.id" :reactions="props.item.reactions"></ReactButtons>
         </div>
     </div>

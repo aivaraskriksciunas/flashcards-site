@@ -47,7 +47,7 @@ const onVote = async ( reaction ) => {
 
 <template>
 <div v-if="!isLoading" class="react-button-container">
-    <div class="single-react-button mr-2">
+    <div class="single-react-button mr-3">
         <IconButton @click="() => onVote( 'upvote' )" :filled="reactions.user_reaction == '1'" icon="fa-regular fa-thumbs-up"></IconButton>
         <div class='reaction-count upvotes'>{{ reactions.upvotes }}</div>
     </div>
@@ -68,12 +68,24 @@ const onVote = async ( reaction ) => {
 
 .single-react-button {
     text-align: center;
+    display: flex;
+    align-items: center;
 }
 
 .reaction-count {
-    margin-top: 6px;
+    margin-left: 6px;
     font-weight: 300;
     color: var( --color-text-lighter );
+}
+
+@media ( min-width: 1024px ) {
+    .single-react-button {
+        display: block;
+    }
+
+    .reaction-count {
+        margin-top: 6px;
+    }
 }
 
 /* .upvotes {

@@ -50,7 +50,7 @@ const buttonStyle = computed(() => {
 }
 
 .plain-primary {
-    color: var( --color-text-primary );
+    color: var( --color-primary );
 }
 
 </style>

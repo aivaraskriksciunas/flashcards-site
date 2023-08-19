@@ -23,13 +23,30 @@ const route = useRoute()
         </template>
     </Header>
     
-    <div class="flex">
-        <div class="content flex-grow">
+    <div id="forumContainer" class="flex">
+        <div id="forumContent" class="content flex-grow">
             <ForumPostList :topic="route.params.topic"></ForumPostList>
         </div>
 
-        <TopicList></TopicList>
+        <TopicList id="topicList"></TopicList>
 
     </div>
 
 </template>
+
+<style scoped>
+@media ( max-width: 1024px ) {
+    #forumContainer {
+        flex-direction: column;
+    }
+
+    #topicList {
+        order: 1;
+        margin-bottom: 1.2em;
+    }
+
+    #forumContent {
+        order: 2;
+    }
+}
+</style>
