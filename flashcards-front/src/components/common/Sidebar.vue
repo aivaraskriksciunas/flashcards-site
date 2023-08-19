@@ -7,21 +7,28 @@ import Button from '../../components/ui/Button.vue';
 import Logo from './Logo.vue'
 import DropdownButton from "../ui/DropdownButton.vue";
 import DropdownButtonItem from "../ui/DropdownButtonItem.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const userSettings = useUserSettingStore();
 const sidebar = useSidebarStore();
 const { user, isLoggedIn } = storeToRefs( useUserStore() )
 
+router.afterEach( ( from, to, failure ) => {
+    if ( failure ) return;
+
+    if ( from != to ) sidebar.hideSidebar();
+})
+
 </script>
 
 <template>
-    <div class="sidebar-blocker md:hidden" 
+    <div class="sidebar-blocker lg:hidden" 
         :class="{ 'hidden': !sidebar.isSidebarVisible }"
         @click="sidebar.hideSidebar"></div>
 
-    <aside class="sidebar md:block p-8" 
-        :class="{ 'hidden': !sidebar.isSidebarVisible }"
-        @click="sidebar.hideSidebar">
+    <aside class="sidebar lg:block p-8" 
+        :class="{ 'hidden': !sidebar.isSidebarVisible }">
 
         <div class="sidebar-logo">
             <router-link :to="{name: 'home'}">
@@ -73,9 +80,10 @@ const { user, isLoggedIn } = storeToRefs( useUserStore() )
 .sidebar {
     background-color: var( --color-white );
     height: 100%;
+    z-index: 2;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .sidebar {
         position: absolute;
         animation: slideshow-animation 0.3s;

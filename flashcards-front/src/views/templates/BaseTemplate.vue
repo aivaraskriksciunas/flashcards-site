@@ -14,7 +14,7 @@ const colorThemeCss = computed( () => 'theme-' + userSettings.colorTheme )
 <template>
     <div :class="[ colorThemeCss ]">
         <div class="flex application-container">
-            <div class="sidebar md:w-1/3">
+            <div class="sidebar lg:w-1/3">
                 <Sidebar></Sidebar>
             </div>
             <div class="content px-8 py-4">

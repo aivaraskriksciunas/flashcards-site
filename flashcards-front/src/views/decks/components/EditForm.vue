@@ -70,7 +70,7 @@ const closeComment = ( index ) => {
         <TransitionGroup name="card-list">
             <div v-for="( card, index ) in cards" :key="card.listItemId" class="card">
                 <Card class="deck-item-form">
-                    <div class="card-header md:flex content-center">
+                    <div class="card-header flex content-center">
                         <div class="card-title">#{{ index + 1 }}</div>
                         <div class="flex-1"></div>
                         <PlainIconButton @click="() => removeCard( index )" type="danger" icon="fas fa-trash" size="sm">
