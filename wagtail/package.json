@@ -1,0 +1,25 @@
+{
+  "name": "aktulibre-presentation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "npx webpack watch --mode=development",
+    "build": "npx webpack build --mode=production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "css-loader": "^6.8.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "postcss": "^8.4.30",
+    "postcss-loader": "^7.3.3",
+    "postcss-preset-env": "^9.1.4",
+    "webpack": "^5.88.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

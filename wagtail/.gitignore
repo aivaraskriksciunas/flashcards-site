@@ -1,0 +1,8 @@
+static
+node_modules
+media
+dist
+.env
+**/migrations
+**/__pycache__
+db.sqlite3

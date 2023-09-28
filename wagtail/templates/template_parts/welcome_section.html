@@ -1,0 +1,34 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+{% load wagtailimages_tags %}
+
+<div class="welcome-section md:flex">
+    <div class="w-full md:w-2/3 lg:w-1/2">
+    
+        <div class='welcome-section__logo mb-12'>
+            <img src="{% static 'images/logo-contrast.png' %}">
+        </div>
+
+        <div class='welcome-section__header mb-4'>
+            {{ page.hero_heading }}
+        </div>  
+
+        <div class='welcome-section__subtitle mb-20'>
+            {{ page.hero_subtitle }}
+        </div>
+
+        <div class='welcome-section__actions'>
+            <a href="https://app.aktulibre.eu" class='welcome-section__main-action'>
+                Go to Aktulibre
+            </a>
+
+            <a href="#">
+                Learn more
+            </a>
+        </div>
+    </div>
+
+    <div class="welcome-section__image mt-20 w-2/3 mx-auto md:mt-0 md:w-full">
+        {% image page.hero_image height-600 %}
+    </div>
+
+</div>

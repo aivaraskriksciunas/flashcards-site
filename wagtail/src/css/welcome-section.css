@@ -1,0 +1,52 @@
+.welcome-section {
+    padding-top: 5rem;
+    box-sizing: border-box;
+}
+
+.welcome-section__logo img {
+    height: 52px;
+}
+
+.welcome-section__header {
+    font-size: 5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.welcome-section__subtitle {
+    font-size: 1.6rem;
+    font-weight: 300;
+}
+
+.welcome-section__actions {
+    display: flex;
+    align-items: center;
+}
+
+.welcome-section__main-action {
+    border: 2px solid var( --color-primary );
+    color: var( --color-primary );
+    font-size: 1.2rem;
+    padding: 8px 16px;
+    border-radius: 1000px;
+    margin-right: 16px;
+}
+
+.welcome-section__main-action:hover {
+    background-color: var( --color-primary );
+    color: white;
+}
+
+.welcome-section__image {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex: 1;
+    padding: 0 20px;
+}
+
+.welcome-section__image img {
+    transform: rotate( 5deg );
+    box-shadow: 8px 8px 8px rgba( 0, 0, 0, 0.1 );
+    border-radius: 4px;
+}

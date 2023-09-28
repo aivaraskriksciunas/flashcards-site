@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap');
+
+@import './welcome-section.css';
+
+body {
+    --color-white: #ffffff;
+    --color-bg: #F5F5F5;
+    --color-primary: #0A6514;
+
+    background-color: var( --color-bg );
+    font-family: 'Rubik', sans-serif;
+}
+
+.site-navbar {
+    padding: 12px 20px;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-menu {
+    flex-grow: 1;
+}
+
+.navbar-logo img {
+    height: 42px;
+}
+
+

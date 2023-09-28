@@ -3,3 +3,4 @@ nginx/*
 php
 .vscode
 logs
+# wagtail

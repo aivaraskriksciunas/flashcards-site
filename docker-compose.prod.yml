@@ -39,7 +39,16 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-
+  wagtail: 
+    build: ./wagtail
+    ports: 
+      - "8080:8000"
+    volumes:
+      - ./wagtail:/app
+    command: gunicorn aktulibre.wsgi
+    depends_on:
+      db: 
+        condition: service_started
 
 volumes:
   flashcards:
