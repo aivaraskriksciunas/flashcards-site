@@ -1,9 +1,13 @@
 version: '3'
 services:
   server:
-    build: ./nginx
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile.prod
+    restart: always
     ports: 
       - "80:80"
+      - "443:443"
     volumes:
       - ./flashcards:/var/www/
       - ./flashcards-front:/var/www-front/
@@ -15,6 +19,7 @@ services:
     build: 
         context: ./flashcards
         dockerfile: Dockerfile.prod
+    restart: always
     ports:
       - "9003:9003"
     volumes:
@@ -24,11 +29,13 @@ services:
 
   frontend:
     build: ./flashcards-front
+    restart: "no"
     volumes:
       - ./flashcards-front:/home/node/app
 
   phpmyadmin:
     image: phpmyadmin
+    restart: always
     ports:
       - 8008:80
     environment:
