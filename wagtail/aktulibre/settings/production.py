@@ -5,6 +5,9 @@ DEBUG = False
 
 SECRET_KEY = os.getenv( 'SECRET_KEY' )
 
+ALLOWED_HOSTS = [ 'aktulibre.eu', 'wagtail.aktulibre.eu' ]
+CSRF_TRUSTED_ORIGINS = ['https://aktulibre.eu', 'https://wagtail.aktulibre.eu']
+
 DATABASES = {
    "default": {
        "ENGINE": "django.db.backends.mysql",
