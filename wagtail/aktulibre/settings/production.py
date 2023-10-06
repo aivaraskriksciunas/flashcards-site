@@ -16,6 +16,34 @@ DATABASES = {
    }
 }
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module}: {message}",
+            "style": "{"
+        }
+    },
+    "handlers": {
+        "file": {
+            "level": "ERROR",
+            "formatter": "verbose",
+            "class": "logging.RotatingFileHandler",
+            "filename": os.path.join( BASE_DIR, 'logs', 'error.log' ),
+            "maxBytes": 1024 * 1024 * 10,
+            "backupCount": 5,
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+}
+
 try:
     from .local import *
 except ImportError:
