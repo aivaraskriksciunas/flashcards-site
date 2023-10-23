@@ -1,34 +1,28 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 {% load wagtailimages_tags %}
 
-<div class="welcome-section md:flex">
-    <div class="w-full md:w-2/3 lg:w-1/2">
-    
-        <div class='welcome-section__logo mb-12'>
-            <img src="{% static 'images/logo-contrast.png' %}">
+<div class='welcome-section mt-6 pt-3 sm:flex sm:items-start' >
+    <div class='sm:order-1 sm:w-1/3 sm:p-6'>
+        <div class='welcome-section__image'>
+            {% image page.hero_image original %}
+        </div>
+    </div>
+
+    <div class='welcome-section__main bg-white p-8 lg:p-16 sm:flex-1 sm:bg-gray-background'>
+        <div class='welcome-section__logo hidden sm:inline-block sm:mb-8 lg:mb-12'>
+            <img src="{% static 'images/logo-bw.png' %}">
         </div>
 
-        <div class='welcome-section__header mb-4'>
+        <div class='welcome-section__header mb-4 text-5xl/tight md:text-6xl/tight lg:text-7xl/tight lg:mb-6'>
             {{ page.hero_heading }}
         </div>  
 
-        <div class='welcome-section__subtitle mb-20'>
+        <div class='welcome-section__subtitle mb-8 md:mb-12 font-light text-xl lg:text-2xl lg:mb-20 xl:text-3xl'>
             {{ page.hero_subtitle }}
         </div>
 
-        <div class='welcome-section__actions'>
-            <a href="https://app.aktulibre.eu" class='welcome-section__main-action'>
-                Go to Aktulibre
-            </a>
-
-            <a href="#">
-                Learn more
-            </a>
+        <div class='welcome-section__actions flex'>
+            <a href='https://app.aktulibre.eu' class='btn-pill-outline btn-lg'>Go to Aktulibre</a>
         </div>
     </div>
-
-    <div class="welcome-section__image mt-20 w-2/3 mx-auto md:mt-0 md:w-full">
-        {% image page.hero_image height-600 %}
-    </div>
-
 </div>

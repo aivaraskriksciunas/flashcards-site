@@ -26,6 +26,16 @@
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
 
+        {# Favicon #}
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'site.webmanifest' %}">
+        <link rel="mask-icon" href="{% static 'safari-pinned-tab.svg' %}" color="#0a6514">
+        <meta name="msapplication-TileColor" content="#00a300">
+        <meta name="theme-color" content="#ffffff">
+
+
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
         {% endblock %}
@@ -36,7 +46,9 @@
         
         {% include 'template_parts/navbar.html' %}
         
-        {% block content %}{% endblock %}
+        <div id='mainContentContainer' class='bg-gray-background min-h-screen'>
+            {% block content %}{% endblock %}
+        </div>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'main.bundle.js' %}"></script>

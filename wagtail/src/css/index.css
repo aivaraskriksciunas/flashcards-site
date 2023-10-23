@@ -1,35 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap');
 
 @import './welcome-section.css';
+@import './navbar.css';
+@import './components.css';
 
 body {
-    --color-white: #ffffff;
-    --color-bg: #F5F5F5;
-    --color-primary: #0A6514;
+    --color-white: 255 255 255;
+    --color-bg: 245 245 245;
+    --color-primary: 10 101 20;
+    --color-secondary: 59 193 74;
+
+    --navbar-height: 60px;
 
     background-color: var( --color-bg );
     font-family: 'Rubik', sans-serif;
+    font-size: 100%;
 }
 
-.site-navbar {
-    padding: 12px 20px;
+#mainContentContainer {
+    padding-top: var( --navbar-height ); 
 }
-
-.navbar-container {
-    display: flex;
-    align-items: center;
-}
-
-.navbar-menu {
-    flex-grow: 1;
-}
-
-.navbar-logo img {
-    height: 42px;
-}
-
 
