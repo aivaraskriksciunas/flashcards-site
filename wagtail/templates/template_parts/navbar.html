@@ -2,15 +2,18 @@
 
 <header class="site-navbar bg-white">
     <div class="container navbar-container">
-        <div class="navbar-logo">
-            <img src="{% static "images/logo-contrast.png" %}">
+        <div class="navbar-logo flex-1">
+            <a href='/'>
+                <img src="{% static "images/logo-contrast.png" %}">
+            </a>
         </div>
 
         <nav class="navbar-menu">
+            <div class="navbar-actions btn-pill">
+                <a href='https://app.aktulibre.eu' >
+                    Go to Aktulibre
+                </a>
+            </div>
         </nav>
-
-        <div class="navbar-actions">
-            Register or login
-        </div>
     </div>
 </header>
