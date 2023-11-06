@@ -101,7 +101,7 @@ function onFormSubmit( ev ) {
         }
     })
     .catch( ( error ) => {
-        const data = error.response.data 
+        const data = error?.response?.data 
         
         if ( data.message ) {
             // formErrorMessage.value = data.message

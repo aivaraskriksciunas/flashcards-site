@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('flashcards', function (Blueprint $table) {
-            $table->text( 'comment' )->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string( 'password' )->nullable()->default( null )->change();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('flashcards', function (Blueprint $table) {
-            $table->dropColumn( 'comment' );
+        Schema::table('users', function (Blueprint $table) {
+            $table->string( 'password' )->nullable( false )->change();
         });
     }
 };
