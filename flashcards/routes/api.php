@@ -23,6 +23,8 @@ use App\Http\Controllers\Api\ApiImportController;
 
 Route::post( '/login', [ ApiAuthController::class, 'login' ]);
 Route::post( '/register', [ ApiAuthController::class, 'register' ]);
+Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
+Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

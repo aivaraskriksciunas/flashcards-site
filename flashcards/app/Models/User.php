@@ -15,6 +15,9 @@ class User extends Model implements AuthenticatableContract
 {
     use Authenticatable, Authorizable, HasFactory, HasApiTokens;
 
+    const PASSWORD_LOGIN_TOKEN = 'browser-token';
+    const GOOGLE_LOGIN_TOKEN = 'google-token';
+
     protected $fillable = [
         'name', 'email', 'password'
     ];

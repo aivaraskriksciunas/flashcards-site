@@ -27,3 +27,5 @@ if ( api_key ) {
 }
 
 app.component( 'font-awesome-icon', FontAwesomeIcon ).mount('#app')
+
+

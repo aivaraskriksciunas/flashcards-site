@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Auth\GoogleAccountAlreadyExists;
+use App\Exceptions\Auth\InvalidGoogleToken;
 use App\Exceptions\Forum\ForumCommentRateLimitReached;
 use App\Exceptions\Forum\ForumPostRateLimitReached;
 use App\Exceptions\Import\DeckImportException;
@@ -21,6 +23,8 @@ class Handler extends ExceptionHandler
         ForumPostRateLimitReached::class,
         ForumCommentRateLimitReached::class,
         DeckImportException::class,
+        InvalidGoogleToken::class,
+        GoogleAccountAlreadyExists::class,
     ];
 
     /**

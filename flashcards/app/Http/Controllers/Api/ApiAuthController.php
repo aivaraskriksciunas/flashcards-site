@@ -8,29 +8,23 @@ use App\Http\Requests\Auth\ApiRegister;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\Auth\EmailAlreadyExists;
-use App\Exceptions\Auth\IncorrectCredentials;
-use Carbon\Carbon;
+use App\Http\Requests\Auth\GoogleLogin;
+use App\Http\Requests\Auth\LinkGoogleAccount;
 use App\Models\User;
+use App\Services\Authentication\GoogleAuthenticator;
+use App\Services\Authentication\GoogleAuthService;
+use App\Services\Authentication\GoogleLinkingAuthenticator;
+use App\Services\Authentication\PasswordAuthenticator;
 
 class ApiAuthController extends Controller
 {
     public function login( ApiLogin $request ) 
     {
-        $creds = $request->validated();
-        
-        if ( !Auth::attempt( $creds ) )
-        {
-            $request->session()->regenerate();
-
-            throw new IncorrectCredentials();
-        }
-
-        $user = Auth::user();
-        $user->last_login = Carbon::now();
-        $user->save();
+        $auth = new PasswordAuthenticator( $request->validated() );
+        $user = $auth->authenticate();
 
         return response()->json([
-            'token' => $user->createToken( 'browser-token' )->plainTextToken,
+            'token' => $user->createToken( User::PASSWORD_LOGIN_TOKEN )->plainTextToken,
         ]);
     }
 
@@ -50,7 +44,33 @@ class ApiAuthController extends Controller
         Auth::login( $user );
 
         return response()->json([
-            'token' => $user->createToken( 'browser-token' )->plainTextToken,
+            'token' => $user->createToken( User::PASSWORD_LOGIN_TOKEN )->plainTextToken,
+        ]);
+    }
+
+    public function googleLogin( GoogleLogin $request ) 
+    {
+        $data = $request->validated();
+        $authService = new GoogleAuthenticator( $data['credential'] );
+        $user = $authService->authenticate();
+
+        return response()->json([
+            'token' => $user->createToken( User::GOOGLE_LOGIN_TOKEN )->plainTextToken,
+        ]);
+    }
+
+    public function linkGoogleAccount( LinkGoogleAccount $request ) 
+    {
+        $data = $request->validated();
+        $authService = new GoogleLinkingAuthenticator(
+            $data['password'], 
+            $data['email'],
+            $data['credential']
+        );
+        $user = $authService->authenticate();
+
+        return response()->json([
+            'token' => $user->createToken( User::GOOGLE_LOGIN_TOKEN )->plainTextToken,
         ]);
     }
 }

@@ -60,7 +60,7 @@ const onChange = ( ev ) => {
 .form-group {
     display: flex;
     flex-direction: column;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 label {
