@@ -9,6 +9,7 @@
 
 .btn-pill:hover {
     @apply bg-secondary;
+    color: white;
     cursor: pointer;
 }
 
@@ -31,4 +32,8 @@
     @apply text-xl;
 
     padding: 12px 24px;
+}
+
+.box-shadow { 
+    box-shadow: 6px 6px 8px rgba( 50, 50, 50, 0.1 );
 }

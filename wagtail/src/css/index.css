@@ -7,6 +7,8 @@
 @import './welcome-section.css';
 @import './navbar.css';
 @import './components.css';
+@import './layout.css';
+@import './typography.css';
 
 body {
     --color-white: 255 255 255;
