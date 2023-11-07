@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load textdocs_filters %}
+
+{% block body_class %}template-textdoc{% endblock %}
+
+
+{% block content %}
+
+    <div class="container-slim my-8 box-shadow bg-white p-8">
+
+        <h1>{{ page.title }}</h1>
+
+        {{ page.intro|richtext }}
+
+        {% if page.show_table_of_contents %}
+            Table of contents
+            
+            <ul>
+                {% for block_id, block in table_of_contents.items %}
+                    <li><a href='#{{ block.slug }}'>{{ block.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <article>
+            {% for block in page.body %}
+                {% if block.block_type == 'section_heading' %}
+                    {% if block.id in table_of_contents %}
+                        <h2 id='{{ block|get_contents_related_slug:table_of_contents }}'>
+                            {{ block.value }}
+                        </h2>
+                    {% else %}
+                        <h2>{{ block.value }}</h2>
+                    {% endif %}
+                {% elif block.block_type == 'paragraph' %}
+                    {{ block.value|richtext }}
+                {% endif %}
+            {% endfor %}
+        </article>
+    </div>
+
+{% endblock content %}

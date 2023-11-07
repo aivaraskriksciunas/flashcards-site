@@ -1,0 +1,29 @@
+
+h1 {
+    @apply text-3xl mb-4;
+    font-weight: 500;
+}
+
+h2 {
+    @apply text-xl mb-4 mt-8;
+    font-weight: 500;
+
+}
+
+p { 
+    @apply pb-2 leading-normal;
+}
+
+ul {
+    @apply mb-2;
+    list-style-type: disc;
+    margin-left: 1em;
+}
+
+a { 
+    @apply text-primary;
+}
+
+a:hover {
+    @apply text-secondary;
+}
