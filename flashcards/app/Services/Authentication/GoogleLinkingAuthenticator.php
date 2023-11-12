@@ -38,6 +38,7 @@ class GoogleLinkingAuthenticator extends BaseAuthenticator {
         }
 
         $user->google_id = $payload['sub'];
+        $user->is_valid = true;
         $user->save();
         return $this->authenticateUser( $user );
     }

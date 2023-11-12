@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import axios from 'axios'
 
 export const useUserStore = defineStore( 'user', () => {
     const user = ref( null )
@@ -13,5 +14,16 @@ export const useUserStore = defineStore( 'user', () => {
         user.value = null
     }
 
-    return { user, isLoggedIn, setCurrentUser, logout }
+    const refreshUserInfo = async () => {
+        let res = await axios.get( '/api/user' );
+        setCurrentUser( res.data )
+    }
+
+    const resendVerificationCode = () => {
+        if ( user.value.is_valid ) return null;
+
+        return axios.get( '/api/resend-confirmation-email' )
+    }
+
+    return { user, isLoggedIn, setCurrentUser, refreshUserInfo, resendVerificationCode, logout }
 } )

@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\DB;
 use App\Exceptions\Auth\EmailAlreadyExists;
 use App\Http\Requests\Auth\GoogleLogin;
 use App\Http\Requests\Auth\LinkGoogleAccount;
+use App\Models\EmailConfirmation;
 use App\Models\User;
 use App\Services\Authentication\GoogleAuthenticator;
-use App\Services\Authentication\GoogleAuthService;
 use App\Services\Authentication\GoogleLinkingAuthenticator;
 use App\Services\Authentication\PasswordAuthenticator;
+use App\Services\Mail\ConfirmationEmailSender;
+use Illuminate\Http\Request;
 
 class ApiAuthController extends Controller
 {
@@ -39,12 +41,27 @@ class ApiAuthController extends Controller
 
         $user = new User( $data );
         $user->is_admin = false;
+        $user->is_valid = false;
         $user->save();
+
+        ConfirmationEmailSender::send( $user );
 
         Auth::login( $user );
 
         return response()->json([
             'token' => $user->createToken( User::PASSWORD_LOGIN_TOKEN )->plainTextToken,
+        ]);
+    }
+
+    public function sendConfirmationEmail( Request $request )
+    {
+        if ( !$request->user()->is_valid ) 
+        {
+            ConfirmationEmailSender::send( $request->user() );
+        }
+
+        return response()->json([
+            'message' => 'Confirmation email sent.'
         ]);
     }
 
@@ -71,6 +88,18 @@ class ApiAuthController extends Controller
 
         return response()->json([
             'token' => $user->createToken( User::GOOGLE_LOGIN_TOKEN )->plainTextToken,
+        ]);
+    }
+
+    public function verifyAccount( string $verification_code )
+    {
+        $confirmation = EmailConfirmation::where( 'verification_code', $verification_code )->firstOrFail();
+        $user = $confirmation->user;
+        $user->is_valid = true;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Email has been verified. You may now login normally.'
         ]);
     }
 }

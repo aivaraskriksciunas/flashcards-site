@@ -8,11 +8,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Services\DeckService;
 use App\Services\DeckSummaryService;
+use App\Services\Mail\MailjetTransport;
 use App\Services\NotificationService;
 use App\Services\QuizGeneration\CardRaters\CardRater;
 use App\Services\QuizGeneration\CardRaters\ProgressBasedCardRater;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Mail;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,10 +31,16 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind( CardRater::class, ProgressBasedCardRater::class );
         
-        Response::macro( 'error', function ( string $message, int $status_code = 400 ) {
-            return Response::json([
+        Response::macro( 'error', function ( string $message, int $status_code = 400, string $required_action = null ) {
+            $response = [
                 'message' => $message,
-            ], $status_code );
+            ];
+
+            if ( !empty( $required_action ) ) {
+                $response['required_action'] = $required_action;
+            }
+
+            return Response::json( $response, $status_code );
         });
     }
 
@@ -45,5 +53,11 @@ class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
         Paginator::useBootstrapFive();
+        Mail::extend( 'mailjet', function ( array $config ) {
+            return new MailjetTransport(
+                $config['api_key'],
+                $config['secret_key']
+            );
+        });
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeckController;
 use App\Http\Controllers\ForumTopicController;
 
+use App\Http\Controllers\Api\ApiAuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +30,7 @@ Route::get( '/logout', [ AuthController::class, 'logout' ] )->name( 'logout' );
 
 Route::middleware([ 'auth', 'is-admin' ])->group( function () {
 
+    Route::get( '/resend-confirmation-email', [ ApiAuthController::class, 'sendConfirmationEmail']);
     Route::get( '/', [ PageController::class, 'home' ] )->name( 'home' );
 
     Route::resource( 'admin-user', AdminUserController::class )->only( [ 'index', 'store', 'create' ]);

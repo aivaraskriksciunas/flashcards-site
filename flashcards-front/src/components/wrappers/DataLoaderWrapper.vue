@@ -14,7 +14,7 @@ const props = defineProps({
 })
 
 const state = ref( 'loading' )
-const emit = defineEmits([ 'load' ])
+const emit = defineEmits([ 'load', 'error' ])
 const pagination = ref( false )
 
 const loadData = ( url ) => {
@@ -28,6 +28,7 @@ const loadData = ( url ) => {
     })
     .catch( ( err ) => {
         state.value = 'error'
+        emit( 'error', err )
     })
 }
 
@@ -44,7 +45,9 @@ loadData( props.url )
     <NumberPaginator v-if="pagination" :pagination="pagination" @page-change="loadData"></NumberPaginator>
 </div>
 <div v-else-if="state == 'error'">
-    Whoops! An error occurred.
+    <slot name="error">
+        Whoops! An error occurred.
+    </slot>
 </div>
 
 </template>
