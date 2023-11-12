@@ -78,6 +78,12 @@ return [
                 'log',
             ],
         ],
+
+        'mailjet' => [
+            'transport' => 'mailjet',
+            'api_key' => env( 'MAILJET_API_KEY' ),
+            'secret_key' => env( 'MAILJET_SECRET_KEY' ),
+        ],
     ],
 
     /*
@@ -92,8 +98,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@aktulibre.eu'),
+        'name' => env('MAIL_FROM_NAME', 'Aktulibre'),
     ],
 
     /*

@@ -108,12 +108,14 @@ const router = createRouter({
                     component: LogoutView,
                     meta: { allowGuest: true }
                 },
+                {
+                    path: '/verify-email/:verification_code',
+                    name: 'verify-email',
+                    component: () => import( '../views/auth/VerifyEmail.vue' ),
+                    meta: { allowGuest: true }
+                }
             ]
         },
-
-        
-        
-        
     ]
 })
 
@@ -121,7 +123,7 @@ const router = createRouter({
  * Is Authenticated middleware
  */
 router.beforeEach( async ( to ) => {
-    const { isLoggedIn, setCurrentUser } = useUserStore();
+    const { isLoggedIn, refreshUserInfo } = useUserStore();
 
     // Allow navigation if logged in or unprotected route
     if ( isLoggedIn || to.meta.allowGuest === true ) {
@@ -130,8 +132,7 @@ router.beforeEach( async ( to ) => {
 
     // Attempt to get information about the logged in user from the server
     try {
-        let res = await axios.get( '/api/user' );
-        setCurrentUser( res.data )
+        await refreshUserInfo()
     }
     catch ( e ) {
         return { name: 'login', query: { r: to.fullPath } }

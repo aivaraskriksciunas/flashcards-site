@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\EmailConfirmation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -58,6 +59,10 @@ class User extends Model implements AuthenticatableContract
 
     public function forumComments() {
         return $this->hasMany( ForumComment::class );
+    }
+
+    public function emailConfirmations() {
+        return $this->hasMany( EmailConfirmation::class );
     }
 
     public function getLibrary() 

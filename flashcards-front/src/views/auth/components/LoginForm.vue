@@ -9,7 +9,7 @@ const { onLoginSuccessCallback } = useAuthentication()
 </script>
 
 <template>
-    <div class='mb-6'>
+    <div class='mb-4'>
         <GoogleLogin></GoogleLogin>
     </div>
 
@@ -17,7 +17,6 @@ const { onLoginSuccessCallback } = useAuthentication()
         <TextField type="email" name="email">Email:</TextField>
         <TextField type="password" name="password">Password:</TextField>
     </AjaxForm>
-
 
     <small>Don't have an account? <router-link :to="{ name: 'register' }">Register</router-link></small>
 </template>

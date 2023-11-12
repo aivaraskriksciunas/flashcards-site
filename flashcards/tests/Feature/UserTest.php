@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use \App\Models\User;
 
 class UserTest extends TestCase
 {
@@ -12,11 +13,6 @@ class UserTest extends TestCase
 
     protected $seed = true;
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function test_login()
     {
         $password = 'admin';
@@ -39,5 +35,21 @@ class UserTest extends TestCase
         $response->assertStatus( 200 );
         $this->assertAuthenticated();
 
+    }
+
+    public function test_register()
+    {
+        $password = 'admin';
+        $email = $this->faker->safeEmail();
+        $response = $this->post( '/api/register', [
+            'email' => $email,
+            'password' => $password,
+        ]);
+
+        $response->assertStatus( 200 );
+        
+        $this->assertAuthenticated();
+        $user = User::first();
+        $this->assertFalse( $user->is_valid, 'New user should be invalid until email confirmed.' );
     }
 }

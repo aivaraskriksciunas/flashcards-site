@@ -63,8 +63,9 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        // 'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'is-admin' => \App\Http\Middleware\IsAdmin::class,
+        'is-verified' => \App\Http\Middleware\Auth\IsValidUser::class,
         'limit-forum-posts' => \App\Http\Middleware\Forum\LimitForumPosts::class,
         'limit-forum-comments' => \App\Http\Middleware\Forum\LimitForumComments::class,
     ];
