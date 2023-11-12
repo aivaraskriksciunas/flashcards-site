@@ -48,14 +48,13 @@ services:
 
   wagtail: 
     build: ./wagtail
+    restart: always
     ports: 
       - "8080:8000"
     volumes:
       - ./wagtail:/app
     command: gunicorn aktulibre.wsgi
-    depends_on:
-      db: 
-        condition: service_started
+    
 
 volumes:
   flashcards:
