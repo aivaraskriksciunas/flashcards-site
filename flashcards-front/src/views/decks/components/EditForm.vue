@@ -18,6 +18,7 @@ const props = defineProps({
 })
 
 const cards = ref([])
+const addCardButton = ref( null )
 
 if ( props.deck && props.deck.cards ) {
     for ( let card of props.deck.cards ) {
@@ -38,6 +39,10 @@ let url = '/api/decks', method = 'POST';
 if ( props.deck ) {
     url = `/api/decks/${props.deck.id}`
     method = 'PATCH'
+}
+
+const scrollToView = () => {
+    addCardButton.value.scrollIntoView({ behavior: 'smooth', block: 'end' })
 }
 
 const addCard = () => {
@@ -67,7 +72,7 @@ const closeComment = ( index ) => {
     <AjaxForm :action="url" :method="method" :show-status-message="true">
         <TextField class="mb-8" :value="props.deck?.name ?? ''" name="name" placeholder="">Deck name:</TextField>
 
-        <TransitionGroup name="card-list">
+        <TransitionGroup name="card-list" @after-enter="scrollToView">
             <div v-for="( card, index ) in cards" :key="card.listItemId" class="card">
                 <Card class="deck-item-form">
                     <div class="card-header flex content-center">
@@ -115,7 +120,7 @@ const closeComment = ( index ) => {
             </div>
         </TransitionGroup>
 
-        <div >
+        <div ref="addCardButton">
             <OutlineButton @click="addCard" class="w-full mb-4" type="primary">New card</OutlineButton>
         </div>
     </AjaxForm>
@@ -148,7 +153,7 @@ const closeComment = ( index ) => {
 
 .card-list-enter-active,
 .card-list-leave-active {
-    transition: transform 0.2s ease;
+    transition: transform 0.1s ease;
 }
 
 </style>
