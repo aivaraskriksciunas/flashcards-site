@@ -95,6 +95,28 @@ class ApiDeckController extends Controller
     }
 
     /**
+     * Deletes deck
+     *
+     * @param Deck $deck
+     */
+    public function delete( Request $request, Deck $deck )
+    {
+        // Remove deck from library
+        $request->user()
+            ->getLibrary()
+            ->decks()
+            ->detach([ $deck->id ]);
+
+        // If user is the owner, delete deck
+        if ( $deck->user == $request->user )
+        {
+            $deck->delete();
+        }
+
+        return response( '', 204 );
+    }
+
+    /**
      * Retrieves summary for this deck, such as most recent cards
      *
      * @param Deck $deck

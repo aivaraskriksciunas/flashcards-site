@@ -6,7 +6,7 @@ import { useUserStore } from "../../stores/user";
 import Button from '../../components/ui/Button.vue';
 import Logo from './Logo.vue'
 import DropdownButton from "../ui/DropdownButton.vue";
-import DropdownButtonItem from "../ui/DropdownButtonItem.vue";
+import DropdownButtonItem from "../ui/DropdownItem.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter()

@@ -29,6 +29,9 @@ let iconStyle = 'icon-button-success'
 if ( props.type == 'danger' ) {
     iconStyle = 'icon-button-danger'
 }
+else if ( props.type == 'secondary' ) {
+    iconStyle = 'icon-button-secondary'
+}
 
 const emit = defineEmits( 'click' )
 const onClick = () => {
@@ -81,12 +84,20 @@ const onClick = () => {
     border-color: var( --color-danger );
 }
 
+.icon-button-secondary {
+    border: 0;
+}
+
 .icon-button-success .icon path {
     fill: var( --color-success );
 }
 
 .icon-button-danger .icon path {
     fill: var( --color-danger );
+}
+
+.icon-button-secondary .icon path {
+    fill: var( --color-text );
 }
 
 .icon-button-success:hover {
@@ -96,6 +107,11 @@ const onClick = () => {
 
 .icon-button-danger:hover  {
     background-color: var( --color-danger );
+    color: var( --color-white );
+}
+
+.icon-button-secondary:hover  {
+    background-color: var( --color-shadow );
     color: var( --color-white );
 }
 

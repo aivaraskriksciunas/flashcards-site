@@ -4,7 +4,7 @@ import Header from '../../components/common/Header.vue'
 import DeckList from './_DeckList.vue'
 import Button from '../../components/ui/Button.vue';
 import DropdownButton from '../../components/ui/DropdownButton.vue';
-import DropdownButtonItem from '../../components/ui/DropdownButtonItem.vue';
+import DropdownButtonItem from '../../components/ui/DropdownItem.vue';
 import IconButton from '../../components/ui/IconButton.vue';
 
 const { user } = useUserStore()

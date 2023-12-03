@@ -52,7 +52,6 @@ export const useUserSettingStore = defineStore( 'user-settings', () => {
     
     const getPreferredQuizMode = ( deckId ) => {
         try {
-            console.log( quizModePreferences.value.hasOwnProperty( deckId ))
             return quizModePreferences.value.hasOwnProperty( deckId ) 
                 ? quizModePreferences.value[deckId] 
                 : null

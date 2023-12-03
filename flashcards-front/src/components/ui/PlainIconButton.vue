@@ -24,6 +24,9 @@ let iconStyle = 'icon-plain-button-success'
 if ( props.type == 'danger' ) {
     iconStyle = 'icon-plain-button-danger'
 }
+if ( props.type == 'secondary' ) {
+    iconStyle = 'icon-plain-button-secondary'
+}
 
 </script>
 
@@ -59,6 +62,10 @@ if ( props.type == 'danger' ) {
 
 .icon-plain-button-danger .icon path {
     fill: var( --color-danger );
+}
+
+.icon-plain-button-danger .icon path {
+    fill: var( --color-text );
 }
 
 .icon-plain-button-success:hover  .icon path {

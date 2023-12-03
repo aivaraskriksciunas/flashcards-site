@@ -55,12 +55,19 @@ const onChange = ( ev ) => {
     </div>
 </template>
 
-<style scoped>
+<style>
 
 .select-control {
     @apply px-2 py-2;
     border: 1px solid var( --color-shadow );
+    background-color: var( --color-bg-form-control );
     border-bottom-width: 2px;
     border-radius: 6px;
 }
+
+.select-control:hover {
+    cursor: pointer;
+    background-color: var( --color-bg-form-control-focus );
+}
+
 </style>
