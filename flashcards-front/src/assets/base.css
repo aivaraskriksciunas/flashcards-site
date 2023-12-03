@@ -91,3 +91,11 @@ a {
 a:hover {
     color: var( --color-primary-text-active );
 }
+
+.text-danger {
+    color: var( --color-danger );
+}
+
+.text-danger path {
+    fill: var( --color-danger );
+}

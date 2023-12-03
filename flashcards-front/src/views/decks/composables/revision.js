@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { reportQuizItemProgress } from '../../../services/DeckProgressService'
+import { reportQuizItemProgress } from '../../../services/DeckService'
 
 export default function useCardRevision( quizItems, onFinish ) {
 

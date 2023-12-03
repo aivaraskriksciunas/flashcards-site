@@ -5,3 +5,7 @@ export const reportQuizItemProgress = ( quizItemId, isCorrect ) => {
         is_correct: isCorrect 
     } )
 }
+
+export const deleteDeck = ( deckId ) => {
+    return axios.delete( `api/decks/${deckId}` );
+}

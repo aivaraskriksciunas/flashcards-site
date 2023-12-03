@@ -37,10 +37,10 @@ Route::middleware([ 'auth:sanctum', 'is-verified' ])->group( function() {
 
     Route::get( '/decks', [ ApiDeckController::class, 'index' ] )->name( 'decks.get' );
     Route::post( '/decks', [ ApiDeckController::class, 'create' ] )->name( 'decks.create' );
-
     Route::patch( '/decks/{deck}', [ ApiDeckController::class, 'update' ] )
         ->middleware( 'can:update,deck')
         ->name( 'decks.update' );
+    Route::delete( '/decks/{deck}', [ ApiDeckController::class, 'delete' ] )->name( 'decks.delete' );
     Route::get( '/decks/{deck}/summary', [ ApiDeckController::class, 'get_deck_summary' ] );
 
     /**
