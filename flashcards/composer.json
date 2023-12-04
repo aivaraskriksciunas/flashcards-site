@@ -9,6 +9,7 @@
         "doctrine/dbal": "^3.7",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient": "^2.15",
+        "google/cloud-recaptcha-enterprise": "^1.6",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^3.2",

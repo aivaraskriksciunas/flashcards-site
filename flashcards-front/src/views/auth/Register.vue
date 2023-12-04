@@ -18,11 +18,7 @@ function onRegister( data ) {
 
 <template>
 
-    <p>Due to technical issues, we are having a hard time sending confirmation emails. We recommend you use 
-        <router-link :to="{ name: 'login' }">Google login</router-link> instead.
-    </p>
-
-    <AjaxForm action="/api/register" @success="onRegister">
+    <AjaxForm action="/api/register" captcha="REGISTER" @success="onRegister">
         <TextField type="text" name="name">Your name:</TextField>
         <TextField type="email" name="email">Email:</TextField>
         <TextField type="password" name="password">Password:</TextField>

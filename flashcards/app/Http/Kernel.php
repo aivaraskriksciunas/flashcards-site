@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'is-verified' => \App\Http\Middleware\Auth\IsValidUser::class,
         'limit-forum-posts' => \App\Http\Middleware\Forum\LimitForumPosts::class,
         'limit-forum-comments' => \App\Http\Middleware\Forum\LimitForumComments::class,
+        'captcha' => \App\Http\Middleware\Auth\HasValidCaptcha::class,
     ];
 }

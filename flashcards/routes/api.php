@@ -22,7 +22,8 @@ use App\Http\Controllers\Api\ApiImportController;
 */
 
 Route::post( '/login', [ ApiAuthController::class, 'login' ]);
-Route::post( '/register', [ ApiAuthController::class, 'register' ]);
+Route::post( '/register', [ ApiAuthController::class, 'register' ])
+    ->middleware( 'captcha:REGISTER' );
 Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
 Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ]);
