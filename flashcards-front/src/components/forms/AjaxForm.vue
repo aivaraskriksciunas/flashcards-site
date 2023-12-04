@@ -32,10 +32,13 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    captcha: {
+        type: String,
+        default: '',
+    },
 })
 const emit = defineEmits([ 'success' ])
 
-const formErrorMessage = ref( '' )
 const isLoading = ref( false )
 
 const statusMessage = useStatusMessageService()
@@ -62,6 +65,18 @@ provide( FormDeregister, deregisterFormElement )
 function onFormSubmit( ev ) {
     ev.preventDefault();
 
+    if ( props.captcha !== '' && typeof grecaptcha !== 'undefined' ) {
+        grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute( import.meta.env.VITE_GOOGLE_CAPTCHA_KEY, { action: props.captcha });
+            handleSubmit( token );
+        });
+    }
+    else {
+        handleSubmit( null );
+    }
+}
+
+function handleSubmit( token ) {
     if ( props.action == null ) return;
 
     const availableRequestMethods = [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ]
@@ -77,6 +92,10 @@ function onFormSubmit( ev ) {
     }
     else {
         data = getFormData();
+    }
+
+    if ( token != null ) {
+        data['recaptcha_token'] = token;
     }
 
     axios({
@@ -104,7 +123,6 @@ function onFormSubmit( ev ) {
         const data = error?.response?.data 
         
         if ( data.message ) {
-            // formErrorMessage.value = data.message
             statusMessage.addStatusMessage( 'Action was not successful', data.message )
         }
         
