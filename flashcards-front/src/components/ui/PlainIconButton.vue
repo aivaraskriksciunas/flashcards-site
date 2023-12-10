@@ -57,7 +57,7 @@ if ( props.type == 'secondary' ) {
 }
 
 .icon-button-success .icon path {
-    fill: var( --color-success );
+    fill: var( --color-primary );
 }
 
 .icon-plain-button-danger .icon path {
@@ -69,7 +69,7 @@ if ( props.type == 'secondary' ) {
 }
 
 .icon-plain-button-success:hover  .icon path {
-    fill: var( --color-success-hover );
+    fill: var( --color-primary-hover );
 }
 
 .icon-plain-button-danger:hover  .icon path {

@@ -61,6 +61,7 @@ const onClick = () => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    font-weight: 500;
 }
 
 .icon-button .icon {
@@ -89,7 +90,7 @@ const onClick = () => {
 }
 
 .icon-button-success .icon path {
-    fill: var( --color-success );
+    fill: var( --color-primary );
 }
 
 .icon-button-danger .icon path {
@@ -101,18 +102,18 @@ const onClick = () => {
 }
 
 .icon-button-success:hover {
-    background-color: var( --color-primary );
-    color: var( --color-white );
+    background-color: var( --color-primary-hover );
+    color: var( --color-content-bg );
 }
 
 .icon-button-danger:hover  {
     background-color: var( --color-danger );
-    color: var( --color-white );
+    color: var( --color-content-bg );
 }
 
 .icon-button-secondary:hover  {
     background-color: var( --color-shadow );
-    color: var( --color-white );
+    color: var( --color-content-bg );
 }
 
 .icon-button-success:hover  .icon path {
@@ -126,7 +127,7 @@ const onClick = () => {
 /* Filled styles */
 .icon-button-danger.filled {
     background-color: var( --color-danger );
-    color: var( --color-white );
+    color: var( --color-content-bg );
 }
 .icon-button-danger.filled:hover {
     background-color: var( --color-danger-hover );
@@ -135,15 +136,15 @@ const onClick = () => {
 
 .icon-button-success.filled {
     background-color: var( --color-primary );
-    color: var( --color-white );
+    color: var( --color-content-bg );
 }
 .icon-button-success.filled:hover {
-    background-color: var( --color-primary-active );
-    border-color: var( --color-primary-active );
+    background-color: var( --color-primary-hover );
+    border-color: var( --color-primary-hover );
 }
 
 .icon-button-success.filled .icon path,
 .icon-button-danger.filled .icon path {
-    fill: white;
+    fill: var( --color-text-contrast );
 }
 </style>

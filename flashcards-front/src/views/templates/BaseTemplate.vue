@@ -43,6 +43,6 @@ const colorThemeCss = computed( () => 'theme-' + userSettings.colorTheme )
 
 .content {
     flex-grow: 1;
-    background-color: var( --color-content-bg );
+    background-color: var( --color-background );
 }
 </style>

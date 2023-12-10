@@ -87,12 +87,4 @@ const onVote = async ( reaction ) => {
         margin-top: 6px;
     }
 }
-
-/* .upvotes {
-    color: var( --color-success );
-}
-
-.downvotes {
-    color: var( --color-danger );
-} */
 </style>

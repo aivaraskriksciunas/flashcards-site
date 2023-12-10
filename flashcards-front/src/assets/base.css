@@ -3,54 +3,56 @@
 @tailwind utilities;
 
 * {
-    --color-primary: #3BC14A;
-    --color-primary-active: #49DC5A;
+    /* --color-primary: #3BC14A;
+    --color-primary-active: #49DC5A; */
 }
 
 .theme-light {
     --color-text: #343434;
     --color-text-light: #707070;
-    --color-text-lighter: #aaaaaa;
+    --color-text-lighter: #AAAAAA;
+    --color-text-contrast: #FFFFFF;
 
-    --color-primary-text: #298533;
-    --color-primary-text-active: #3CD44D;
+    --color-primary: #048112;
+    --color-primary-hover: #34C042;
+    --color-primary-text: var( --color-primary );
 
-    --color-content-bg: #F5F5F5;
-    --color-shadow: #E8E2E2;
-    --color-hover: #E8E2E2;
-    --color-accent: var( --color-text-light );
+    --color-background: #F5F5F5;
+    --color-shadow: #E1E1E1;
+    --color-sidebar-bg: #FFFFFF;
+    --color-content-bg: #FFFFFF;
+    --color-hover: #E6E6E6;
+    --color-accent: #E7E7E7;
 
-    --color-white: #FFFFFF;
-    --color-danger: #D93329;
-    --color-danger-hover: #FF554B;
-    --color-success: var( --color-primary-text );
-    --color-success-hover: #3dbf4b;
+    --color-danger: #DE341D;
+    --color-danger-hover: #B42B18;
 
-    --color-bg-form-control: var( --color-white );
-    --color-bg-form-control-focus: #FBFBFB;
+    --color-success: var( --color-primary );
+    --color-success-hover: var( --color-primary-hover );
 }
 
 .theme-dark {
     --color-text: #E1E1E1;
     --color-text-light: #AFAFAF;
     --color-text-lighter: #6c6c6c;
+    --color-text-contrast: #2C2C2C;
 
-    --color-primary-text: #3BC14A;
-    --color-primary-text-active: #49DC5A;
+    --color-primary: #67EB74;
+    --color-primary-hover: #34C042;
+    --color-primary-text: var( --color-primary );
 
-    --color-content-bg: #333333;
-    --color-shadow: #252525;
-    --color-hover: #252525;
-    --color-accent: #707070;
+    --color-background: #303030;
+    --color-shadow: transparent;
+    --color-sidebar-bg:  #2B2B2B;
+    --color-content-bg: #404040;
+    --color-hover: #3A3A3A;
+    --color-accent: #5A5A5A;
 
-    --color-white: #393939;
-    --color-danger: #D93329;
+    --color-danger: #EB7464;
     --color-danger-hover: #FF554B;
-    --color-success: var( --color-primary-text );
-    --color-success-hover: #3dbf4b;
 
-    --color-bg-form-control: var( --color-white );
-    --color-bg-form-control-focus: #303030;
+    --color-success: var( --color-primary );
+    --color-success-hover: var( --color-primary-hover );
 }
 
 .svg-inline--fa path {
@@ -89,7 +91,7 @@ a {
 }
 
 a:hover {
-    color: var( --color-primary-text-active );
+    color: var( --color-primary-hover );
 }
 
 .text-danger {

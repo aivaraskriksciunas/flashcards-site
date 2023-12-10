@@ -55,11 +55,11 @@ const getMessageStyleClass = ( message ) => {
 }
 
 .status-message-success {
-    border-bottom-color: var( --color-success );
+    border-bottom-color: var( --color-primary );
 }
 
 .status-message-success .title {
-    color: var( --color-success );
+    color: var( --color-primary );
 }
 
 .status-message-error {

@@ -27,6 +27,10 @@ class User extends Model implements AuthenticatableContract
         'password', 'is_admin', 'remember_token',
     ];
 
+    protected $casts = [
+        'is_valid' => 'boolean'
+    ];
+
     public $timestamps = true;
 
     protected function password() : Attribute

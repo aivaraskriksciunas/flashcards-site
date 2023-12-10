@@ -59,15 +59,15 @@ const onChange = ( ev ) => {
 
 .select-control {
     @apply px-2 py-2;
-    border: 1px solid var( --color-shadow );
-    background-color: var( --color-bg-form-control );
+    border: 1px solid var( --color-accent );
+    background-color: var( --color-content-bg );
     border-bottom-width: 2px;
     border-radius: 6px;
 }
 
 .select-control:hover {
     cursor: pointer;
-    background-color: var( --color-bg-form-control-focus );
+    background-color: var( --color-hover );
 }
 
 </style>

@@ -31,13 +31,13 @@ const onClick = () => {
     border-radius: 1000px;
     display: inline-block;
     padding: 8px 18px;
-    color: white;
+    color: var( --color-text-contrast );
     user-select: none;
     font-weight: 500;
 }
 
 .button:hover {
-    background-color: var( --color-primary-active );
+    background-color: var( --color-primary-hover );
     cursor: pointer; 
 }
 </style>

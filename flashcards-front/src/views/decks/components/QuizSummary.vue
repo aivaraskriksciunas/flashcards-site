@@ -46,7 +46,7 @@ const onLoad = ( data ) => {
 .summary-card .card-question {
     font-size: 1.2em;
     font-weight: 500;
-    color: var( --color-success );
+    color: var( --color-primary );
 }
 
 .summary-card .card-comment {
@@ -55,7 +55,7 @@ const onLoad = ( data ) => {
 }
 
 .summary-card {
-    border-bottom: 3px solid var( --color-success );
+    border-bottom: 3px solid var( --color-primary );
 }
 
 .incorrect .card-question {
@@ -73,7 +73,7 @@ const onLoad = ( data ) => {
 }
 
 .summary-icon .icon path {
-    fill: var( --color-success );
+    fill: var( --color-primary );
 }
 
 .incorrect .summary-icon .icon path {

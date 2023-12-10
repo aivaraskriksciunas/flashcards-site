@@ -43,13 +43,15 @@ class UserTest extends TestCase
         $email = $this->faker->safeEmail();
         $response = $this->post( '/api/register', [
             'email' => $email,
+            'name' => $this->faker->name(),
             'password' => $password,
+            'password_confirmation' => $password,
         ]);
 
         $response->assertStatus( 200 );
         
         $this->assertAuthenticated();
-        $user = User::first();
+        $user = User::where( 'email', $email )->first();
         $this->assertFalse( $user->is_valid, 'New user should be invalid until email confirmed.' );
     }
 }

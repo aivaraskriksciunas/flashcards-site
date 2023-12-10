@@ -78,7 +78,7 @@ router.afterEach( ( from, to, failure ) => {
 
 <style scoped>
 .sidebar {
-    background-color: var( --color-white );
+    background-color: var( --color-sidebar-bg );
     height: 100%;
     z-index: 2;
 }

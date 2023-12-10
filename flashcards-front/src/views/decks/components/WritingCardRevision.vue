@@ -110,7 +110,7 @@ const submitCard = ( isCorrect ) => {
 
 .card-input-field {
     border: 0;
-    background-color: var( --color-bg-form-control );
+    background-color: var( --color-content-bg );
     border-bottom: 3px solid var( --color-shadow );
     border-radius: 3px;
     font-size: 1.4em;
@@ -119,7 +119,7 @@ const submitCard = ( isCorrect ) => {
 }
 
 .card-input-field:focus {
-    background-color: var( --color-bg-form-control-focus );
+    background-color: var( --color-hover );
     outline: none;
 }
 
@@ -148,7 +148,7 @@ const submitCard = ( isCorrect ) => {
 }
 
 #correctAnswerValue {
-    color: var( --color-success );
+    color: var( --color-primary );
 }
 
 #iWasRightButton {

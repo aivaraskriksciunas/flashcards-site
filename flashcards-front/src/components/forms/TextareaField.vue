@@ -67,11 +67,11 @@ label {
 }
 
 .form-control {
-    border: 1px solid var( --color-shadow );
+    border: 1px solid var( --color-accent );
     padding: 0.4em 0.7em;
     border-radius: 4px;
     margin-bottom: 12px;
-    background-color: var( --color-bg-form-control );
+    background-color: var( --color-content-bg );
 }
 
 .form-control:focus {

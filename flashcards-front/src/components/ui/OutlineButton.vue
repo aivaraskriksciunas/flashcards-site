@@ -35,12 +35,13 @@ const buttonStyle = computed(() => {
 
 .outline-button {
     padding: 8px 16px;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 4px;
     text-align: center;
     cursor: pointer;
     user-select: none;
     font-weight: 500;
+    border-radius: 1000px;
 }
 
 .outline-secondary {
@@ -51,7 +52,7 @@ const buttonStyle = computed(() => {
 
 .outline-secondary:hover {
     background-color: var( --color-text-light );
-    color: var( --color-white );
+    color: var( --color-content-bg );
 }
 
 .outline-primary {
