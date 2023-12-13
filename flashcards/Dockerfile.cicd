@@ -1,11 +1,12 @@
-FROM php:8.2-cli
+FROM php:8.2-cli-alpine
 
 RUN docker-php-ext-install \
     bcmath \
     pdo_mysql
 
-RUN apt update -y && apt install -y \
-    npm
+RUN apk add --no-cache \
+    npm \
+    linux-headers
 
 RUN apk add --no-cache $PHPIZE_DEPS 
 
