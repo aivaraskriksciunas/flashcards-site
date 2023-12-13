@@ -24,10 +24,9 @@ jobs:
         with:
           run: docker-compose stop
       - name: Setup docker
-        run: docker-compose -f docker-compose.cicd.yml up -d
+        run: docker-compose -f docker-compose.cicd.yml up -d --wait
       - name: Debug
         run: |
-          sleep 3
           docker ps -a
           docker exec flashcards-site_server_1 bash -c "ls -la"
       - name: Composer update
