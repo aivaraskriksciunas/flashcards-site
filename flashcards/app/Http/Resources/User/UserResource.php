@@ -3,6 +3,7 @@
 namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\User;
 
 class UserResource extends JsonResource
 {
@@ -14,9 +15,11 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $parent = $this->getParentAccount();
+
         return [
-            'name' => $this->name,
-            'is_admin' => $this->when( $this->is_admin, $this->is_admin ),
+            'name' => $parent->name,
+            'is_admin' => $this->when( $this->account_type == User::USER_ADMIN, true ),
             'date_joined' => $this->created_at,
         ];
     }

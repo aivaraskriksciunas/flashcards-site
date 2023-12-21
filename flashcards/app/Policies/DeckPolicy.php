@@ -29,7 +29,7 @@ class DeckPolicy
      */
     public function before( User $user ) : bool|null
     {
-        if ( $user->is_admin ) return true;
+        if ( $user->isAdmin() ) return true;
 
         return null;
     }

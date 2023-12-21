@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Services\Authentication\PasswordAuthenticator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,17 +22,12 @@ class AuthController extends Controller
             'password' => [ 'required' ]
         ]);
 
-        if ( !Auth::attempt( $creds ) )
-        {
-            $request->session()->regenerate();
+        $authenticator = new PasswordAuthenticator(
+            $creds,
+            User::USER_ADMIN,
+        );
 
-            return view( 'auth.login' );
-        }
-
-        // Update last login time
-        $user = Auth::user();
-        $user->last_login = Carbon::now();
-        $user->save();
+        $authenticator->authenticate();
 
         return redirect( route( 'home' ) );
     }

@@ -13,7 +13,7 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        $users = User::where( 'is_admin', true )->get();
+        $users = User::where( 'account_type', User::USER_ADMIN )->get();
 
         return view( 'admin-users.index', [
             'users' => $users
@@ -37,7 +37,7 @@ class AdminUserController extends Controller
     public function store( CreateUser $request )
     {
         $user = new User( $request->validated() );
-        $user->is_admin = true;
+        $user->account_type = User::USER_ADMIN;
         $user->save();
 
         return redirect( route( 'admin-user.index' ) );

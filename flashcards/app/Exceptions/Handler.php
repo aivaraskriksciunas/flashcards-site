@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use App\Exceptions\Auth\GoogleAccountAlreadyExists;
 use App\Exceptions\Auth\InvalidGoogleToken;
+use App\Exceptions\Auth\IncorrectCredentials;
+use App\Exceptions\Auth\InvalidCaptcha;
 use App\Exceptions\Forum\ForumCommentRateLimitReached;
 use App\Exceptions\Forum\ForumPostRateLimitReached;
 use App\Exceptions\Import\DeckImportException;
@@ -25,6 +27,8 @@ class Handler extends ExceptionHandler
         DeckImportException::class,
         InvalidGoogleToken::class,
         GoogleAccountAlreadyExists::class,
+        IncorrectCredentials::class,
+        InvalidCaptcha::class,
     ];
 
     /**

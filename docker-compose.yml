@@ -29,7 +29,7 @@ services:
   wagtail: 
     build: ./wagtail
     ports: 
-      - "8080:8000"
+      - "8080:8080"
     volumes:
       - ./wagtail:/app
     command: tail -f /dev/null # Keep dev container running

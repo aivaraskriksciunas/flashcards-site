@@ -7,7 +7,7 @@ import AuthTemplate from '../views/templates/AuthTemplate.vue'
 import BaseTemplate from '../views/templates/BaseTemplate.vue'
 import ViewDeck from '../views/decks/ViewDeck.vue'
 import Dashboard from '../views/dashboard/Dashboard.vue'
-import ReviseDeck from '../views/decks/ReviseDeck.vue'
+import AccountPicker from '../views/auth/AccountPicker.vue'
 import LearnDeck from '../views/decks/LearnDeck.vue'
 import PracticeDeck from '../views/decks/PracticeDeck.vue'
 import { useUserStore } from '../stores/user'
@@ -113,6 +113,11 @@ const router = createRouter({
                     name: 'verify-email',
                     component: () => import( '../views/auth/VerifyEmail.vue' ),
                     meta: { allowGuest: true }
+                },
+                {
+                    path: '/login/accounts',
+                    name: 'account-picker',
+                    component: AccountPicker,
                 }
             ]
         },

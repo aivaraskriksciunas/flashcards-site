@@ -16,15 +16,25 @@ class User extends Model implements AuthenticatableContract
 {
     use Authenticatable, Authorizable, HasFactory, HasApiTokens;
 
+    const USER_ADMIN = 'admin';
+    const USER_STUDENT = 'student';
+    const USER_ORG_ADMIN = 'orgadmin';
+    const ROLES = [ 
+        User::USER_ADMIN,
+        User::USER_STUDENT,
+        User::USER_ORG_ADMIN
+    ];
+
     const PASSWORD_LOGIN_TOKEN = 'browser-token';
     const GOOGLE_LOGIN_TOKEN = 'google-token';
+    const SWITCH_ACCOUNT_LOGIN_TOKEN = 'switch-token';
 
     protected $fillable = [
-        'name', 'email', 'password'
+        'name', 'email', 'password', 'account_type',
     ];
 
     protected $hidden = [
-        'password', 'is_admin', 'remember_token',
+        'password', 'remember_token',
     ];
 
     protected $casts = [
@@ -67,6 +77,39 @@ class User extends Model implements AuthenticatableContract
 
     public function emailConfirmations() {
         return $this->hasMany( EmailConfirmation::class );
+    }
+
+    public function parentAccount() {
+        return $this->belongsTo( User::class, 'parent_id' );
+    }
+
+    public function subAccounts() {
+        return $this->hasMany( User::class, 'parent_id' );
+    }
+
+    public function isAdmin() {
+        return $this->account_type === User::USER_ADMIN;
+    }
+
+    /**
+     * Returns parent account or $this, if this is the parent account
+     *
+     * @return User
+     */
+    public function getParentAccount() 
+    {
+        return $this->parentAccount ?? $this;
+    }
+
+    /**
+     * Get a collection with the user and its subaccounts
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAllAccounts() 
+    {
+        $parent = $this->getParentAccount();
+        return $parent->subAccounts->prepend( $parent );
     }
 
     public function getLibrary() 

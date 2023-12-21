@@ -73,7 +73,7 @@ class DeckTest extends TestCase
     public function test_admin_can_view_any_deck() 
     {
         $u1 = User::factory()->create();
-        $u2 = User::factory()->create([ 'is_admin' => true ]);
+        $u2 = User::factory()->create([ 'account_type' => User::USER_ADMIN ]);
         $deck = $u1->decks()->create([ 'name' => 'Testing' ]);
 
         $response = $this->actingAs( $u2 )
@@ -233,7 +233,7 @@ class DeckTest extends TestCase
     public function test_admin_user_can_modify()
     {
         $user = User::factory()->create();
-        $u2 = User::factory()->create([ 'is_admin' => true ]);
+        $u2 = User::factory()->create([ 'account_type' => User::USER_ADMIN ]);
         $deck = $user->decks()->create([ 'name' => 'Test' ]);
 
         $request = $this->actingAs( $u2 )->patchJson( 

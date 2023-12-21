@@ -30,7 +30,7 @@ class QuizPolicy
      */
     public function view( User $user, Quiz $quiz )
     {
-        if ( $user->is_admin ) return Response::allow();
+        if ( $user->isAdmin() ) return Response::allow();
 
         return $quiz->user() == $user ? Response::allow() : Response::denyAsNotFound();
     }

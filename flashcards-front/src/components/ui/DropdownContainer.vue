@@ -45,5 +45,6 @@ onBeforeUnmount(() => {
     right: 0;
     border-radius: 5px;
     min-width: 100%;
+    z-index: 100;
 }
 </style>

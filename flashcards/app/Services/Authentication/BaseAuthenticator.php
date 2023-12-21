@@ -10,9 +10,10 @@ abstract class BaseAuthenticator {
 
     abstract public function authenticate() : User;
 
-    public function authenticateUser( User $user ) : User
+    protected function authenticateUser( User $user ) : User
     {
-        if ( Auth::user() != $user ) {
+        // Only use Auth for web stateful routes
+        if ( request()->route()->getPrefix() !== 'api' ) {
             Auth::login( $user );
         }
 
