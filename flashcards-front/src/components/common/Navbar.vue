@@ -4,6 +4,7 @@ import Logo from './Logo.vue';
 import HamburgerIcon from '../icons/HamburgerIcon.vue';
 import { useSidebarStore } from '../../stores/sidebar';
 import { storeToRefs } from 'pinia';
+import AccountDropdown from './AccountDropdown.vue';
 
 const { user, isLoggedIn } = storeToRefs( useUserStore() )
 const { showSidebar } = useSidebarStore()
@@ -14,12 +15,12 @@ const { showSidebar } = useSidebarStore()
     
 <nav class="main-navbar hidden lg:flex container py-4">
     <div class="navbar-logo flex-grow">
-        Preview version v0.6
+        Preview version v0.7
     </div>
 
     <div class="">
-        <div v-if="isLoggedIn">
-            {{ user.name }}
+        <div v-if="isLoggedIn" class="flex items-center">
+            <AccountDropdown/>
             <router-link :to="{ name: 'logout' }">Log out</router-link>
         </div>
         <div v-else>
@@ -32,9 +33,11 @@ const { showSidebar } = useSidebarStore()
 
 <nav class="mobile-navbar flex lg:hidden container py-4">
     <HamburgerIcon class="sidebar-expand" @click="showSidebar"></HamburgerIcon>
-    <div class="navbar-logo">
-        <Logo></Logo>
-    </div>
+    <router-link :to="{ name: 'home' }">
+        <div class="navbar-logo">
+            <Logo></Logo>
+        </div>
+    </router-link>
 </nav>
 
 </template>

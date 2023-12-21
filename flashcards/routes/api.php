@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAccountsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
@@ -21,6 +22,9 @@ use App\Http\Controllers\Api\ApiImportController;
 |
 */
 
+/**
+ * Login routes
+ */
 Route::post( '/login', [ ApiAuthController::class, 'login' ]);
 Route::post( '/register', [ ApiAuthController::class, 'register' ])
     ->middleware( 'captcha:REGISTER' );
@@ -28,14 +32,32 @@ Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
 Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ]);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/**
+ * Routes for authenticated users
+ */
+Route::middleware([ 'auth:sanctum' ])->group( function() {
 
-Route::middleware([ 'auth:sanctum', 'is-verified' ])->group( function() {
+    Route::get( '/user', [ ApiAuthController::class, 'currentUser' ]);
+    Route::get( '/account/switch/{user}', [ ApiAuthController::class, 'switchAccount' ])
+        ->name( 'accounts.switch' );
 
     Route::get( '/resend-confirmation-email', [ ApiAuthController::class, 'sendConfirmationEmail']);
+});
 
+/**
+ * Routes for authenticated and verified users
+ */
+Route::middleware([ 'auth:sanctum', 'is-verified' ])->group( function() {
+
+    /**
+     * Account management
+     */
+    Route::post( '/accounts', [ ApiAccountsController::class, 'get' ] )->name( 'accounts.get' );
+    Route::post( '/accounts/add/student', [ ApiAccountsController::class, 'addStudentAccount' ] )->name( 'accounts.add.student' );
+
+    /**
+     * Deck endpoints
+     */
     Route::get( '/decks', [ ApiDeckController::class, 'index' ] )->name( 'decks.get' );
     Route::post( '/decks', [ ApiDeckController::class, 'create' ] )->name( 'decks.create' );
     Route::patch( '/decks/{deck}', [ ApiDeckController::class, 'update' ] )

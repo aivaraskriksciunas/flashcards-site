@@ -8,6 +8,7 @@ import Logo from './Logo.vue'
 import DropdownButton from "../ui/DropdownButton.vue";
 import DropdownButtonItem from "../ui/DropdownItem.vue";
 import { useRouter } from "vue-router";
+import AccountDropdown from "./AccountDropdown.vue";
 
 const router = useRouter()
 const userSettings = useUserSettingStore();
@@ -37,7 +38,7 @@ router.afterEach( ( from, to, failure ) => {
         </div>
 
         <div class="sidebar-profile md:hidden" v-if="isLoggedIn">
-            <div>{{ user.name }}</div>
+            <AccountDropdown/>
             <router-link :to="{ name: 'logout' }">Log out</router-link>
         </div>
         <div class="sidebar-profile md:hidden" v-else>

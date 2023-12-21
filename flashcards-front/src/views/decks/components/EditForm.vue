@@ -19,6 +19,7 @@ const props = defineProps({
 
 const cards = ref([])
 const addCardButton = ref( null )
+const emit = defineEmits([ 'save' ])
 
 if ( props.deck && props.deck.cards ) {
     for ( let card of props.deck.cards ) {
@@ -66,10 +67,14 @@ const closeComment = ( index ) => {
     cards.value[index].comment = null
 }
 
+const onDeckSave = ( data ) => {
+    emit( 'save', data );
+}
+
 </script>
 
 <template>
-    <AjaxForm :action="url" :method="method" :show-status-message="true">
+    <AjaxForm :action="url" :method="method" :show-status-message="true" @success="onDeckSave">
         <TextField class="mb-8" :value="props.deck?.name ?? ''" name="name" placeholder="">Deck name:</TextField>
 
         <TransitionGroup name="card-list" @after-enter="scrollToView">

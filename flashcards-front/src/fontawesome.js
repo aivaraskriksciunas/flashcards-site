@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
 import { faThumbsUp, faThumbsDown, faEdit, faUser, faXmarkCircle, faCheckCircle, faTrashCan } from '@fortawesome/free-regular-svg-icons'
-import { faPlus, faTrash, faXmark, faChevronDown, faPaintRoller, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faTrash, faXmark, faChevronDown, faPaintRoller, faEllipsisVertical, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
 library.add( 
@@ -24,6 +24,7 @@ library.add(
     faPaintRoller,
     faEllipsisVertical,
     faTrashCan,
+    faArrowRightFromBracket,
 )
 
 export default FontAwesomeIcon
