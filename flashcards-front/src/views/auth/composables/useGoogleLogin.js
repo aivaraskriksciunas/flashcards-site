@@ -13,7 +13,7 @@ export default function useGoogleLogin() {
         axios.post( '/api/google-login', {
             credential: data.credential
         } )
-        .then( onLoginSuccessCallback )
+        .then( ( data ) => onLoginSuccessCallback( data.data ) )
         .catch( 
             ( error ) => {
                 if ( error.response.data?.required_action == 'link_google_account' ) {
