@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue';
-import DeckListItem from './_DeckListItem.vue';
+import DataLoaderWrapper from '../../../components/wrappers/DataLoaderWrapper.vue';
+import DeckListItem from './DeckListItem.vue';
 
 const decks = ref([])
 

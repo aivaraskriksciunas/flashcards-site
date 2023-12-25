@@ -2,7 +2,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/user';
 import AccountButton from '../../components/ui/AccountButton.vue';
-import useAccountSwitcher from './composables/useAccountSwitcher';
+import useAccountSwitcher from '../../composables/useAccountSwitcher';
 
 const user = useUserStore().user;
 const router = useRouter()

@@ -1,13 +1,15 @@
 import axios from "axios"
-import { useStatusMessageService, MESSAGE_TYPE } from "../../../services/StatusMessageService"
-import useAuthentication from "./useAuthentication"
-import { useUserStore } from "../../../stores/user"
+import { useStatusMessageService, MESSAGE_TYPE } from "../services/StatusMessageService"
+import useAuthentication from "../views/auth/composables/useAuthentication"
+import { useUserStore } from "../stores/user"
+import { useRouter } from "vue-router"
 
 export default function useAccountSwitcher( onSwitchCallback ) {
 
     const statusMessages = useStatusMessageService()
     const { setToken } = useAuthentication()
     const { refreshUserInfo } = useUserStore()
+    const router = useRouter()
 
     const switchAccount = ( id ) => {
         axios.get( `api/account/switch/${id}` )
@@ -19,6 +21,9 @@ export default function useAccountSwitcher( onSwitchCallback ) {
 
             if ( onSwitchCallback != null ) {
                 onSwitchCallback();
+            }
+            else {
+                router.go();
             }
         })
         .catch( () => {

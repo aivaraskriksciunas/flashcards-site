@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Account\OrganizationNotAssigned;
+use App\Exceptions\Account\StudentAccountAlreadyExists;
 use App\Exceptions\Auth\GoogleAccountAlreadyExists;
 use App\Exceptions\Auth\InvalidGoogleToken;
 use App\Exceptions\Auth\IncorrectCredentials;
@@ -29,6 +31,8 @@ class Handler extends ExceptionHandler
         GoogleAccountAlreadyExists::class,
         IncorrectCredentials::class,
         InvalidCaptcha::class,
+        StudentAccountAlreadyExists::class,
+        OrganizationNotAssigned::class,
     ];
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Account\AccountResource;
+use App\Http\Resources\Organization\OrganizationResource;
 
 class UserDetailResource extends JsonResource
 {
@@ -24,6 +25,7 @@ class UserDetailResource extends JsonResource
             'last_login' => $this->last_login,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'organization' => $this->when( $this->organization_id, new OrganizationResource( $this->organization ) ),
             'accounts' => AccountResource::collection( $this->getAllAccounts() ),
         ];
     }

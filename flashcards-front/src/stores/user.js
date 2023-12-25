@@ -25,5 +25,11 @@ export const useUserStore = defineStore( 'user', () => {
         return axios.get( '/api/resend-confirmation-email' )
     }
 
-    return { user, isLoggedIn, setCurrentUser, refreshUserInfo, resendVerificationCode, logout }
+    const userAccounts = computed(() => {
+        if ( user.value == null || user.value.accounts == null ) return [];
+        
+        return user.value.accounts;
+    })
+
+    return { user, isLoggedIn, setCurrentUser, refreshUserInfo, resendVerificationCode, logout, userAccounts }
 } )

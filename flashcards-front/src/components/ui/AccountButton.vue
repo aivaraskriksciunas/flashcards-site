@@ -14,6 +14,8 @@ const getAccountTypeName = ( type ) => {
     switch ( type ) {
         case 'admin':
             return 'Administrator';
+        case 'orgadmin': 
+            return 'Organization';
         case 'student':
         default: 
             return 'Student'

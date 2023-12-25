@@ -34,7 +34,7 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'email_verified_at' => null,
+                'is_valid' => false,
             ];
         });
     }
@@ -44,6 +44,15 @@ class UserFactory extends Factory
         return $this->state( function ( array $attributes ) {
             return [
                 'account_type' => User::USER_ADMIN
+            ];
+        });
+    }
+
+    public function orgAdmin() 
+    {
+        return $this->state( function ( array $attributes ) {
+            return [
+                'account_type' => User::USER_ORG_ADMIN
             ];
         });
     }

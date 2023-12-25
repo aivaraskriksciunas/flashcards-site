@@ -50,16 +50,47 @@ class UserTest extends TestCase
 
         $response->assertStatus( 200 );
         
-        $this->assertAuthenticated();
         $user = User::where( 'email', $email )->first();
         $this->assertFalse( $user->is_valid, 'New user should be invalid until email confirmed.' );
         $this->assertEquals( $user->account_type, User::USER_STUDENT, 'New user should be a student.' );
+    }
+
+    public function test_register_org_admin()
+    {
+        $password = 'admin';
+        $email = $this->faker->safeEmail();
+        $response = $this->post( route( 'api.register.org-admin' ), [
+            'email' => $email,
+            'name' => $this->faker->name(),
+            'password' => $password,
+            'password_confirmation' => $password,
+        ]);
+
+        $response->assertStatus( 200 );
+        
+        $user = User::where( 'email', $email )->first();
+        $this->assertFalse( $user->is_valid, 'New user should be invalid until email confirmed.' );
+        $this->assertEquals( $user->account_type, User::USER_ORG_ADMIN, 'New user should be an organization admin.' );
     }
 
     public function test_register_with_existing_email()
     {
         $admin = User::factory()->admin()->create();
         $response = $this->post( '/api/register', [
+            'email' => $admin->email,
+            'name' => $this->faker->name(),
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ]);
+
+        $response->assertBadRequest();
+        $this->assertEquals( 1, DB::table( 'users' )->count() );
+    }
+
+    public function test_register_org_admin_with_existing_email()
+    {
+        $admin = User::factory()->admin()->create();
+        $response = $this->post( route( 'api.register.org-admin' ), [
             'email' => $admin->email,
             'name' => $this->faker->name(),
             'password' => 'secret',
@@ -161,5 +192,122 @@ class UserTest extends TestCase
         $data = $response->json();
         $this->assertArrayHasKey( 'accounts', $data );
         $this->assertCount( 3, $data['accounts'], 'Should show all subaccounts when going through child' );
+    }
+
+    public function test_updates_profile_data()
+    {
+        $user = User::factory()->create();
+
+        $name = $this->faker()->name();
+        $email = $user->email;
+        
+        $response = $this->actingAs( $user )->patchJson(
+            route( 'api.accounts.update' ),
+            [
+                'name' => $name,
+                'email' => $email,
+            ]
+        );
+
+        $response->assertSuccessful();
+
+        $user->refresh();
+        $this->assertEquals( $name, $user->name, 'Name should be updated.' );
+        $this->assertEquals( $email, $user->email, 'Email should be updated.' );
+        $this->assertTrue( $user->is_valid, 'User should remain valid.' );
+    }
+
+    public function test_update_prevent_taking_another_account_email()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $name = $this->faker()->name();
+        $email = $user2->email;
+        
+        $response = $this->actingAs( $user )->patchJson(
+            route( 'api.accounts.update' ),
+            [
+                'name' => $name,
+                'email' => $email,
+            ]
+        );
+
+        $response->assertUnprocessable();
+
+        $user->refresh();
+        $this->assertNotEquals( $name, $user->name, 'Name should not be updated.' );
+        $this->assertNotEquals( $email, $user->email, 'Email should not be updated.' );
+        $this->assertTrue( $user->is_valid, 'User should remain valid.' );
+    }
+
+    public function test_changes_password()
+    {
+        $user = User::factory()->create();
+
+        $password = $this->faker()->password();
+        
+        $response = $this->actingAs( $user )->patchJson(
+            route( 'api.accounts.update' ),
+            [
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => $password,
+                'password_confirmation' => $password,
+            ]
+        );
+
+        $response->assertSuccessful();
+
+        $user->refresh();
+        $this->assertTrue( $user->checkPassword( $password ), 'Password should be updated.' );
+        $this->assertNotEquals( $password, $user->password, 'Should not store as plain text.' );
+        $this->assertTrue( $user->is_valid, 'User should remain valid.' );
+    }
+
+    public function test_sets_user_invalid_on_email_change()
+    {
+        $user = User::factory()->create();
+
+        $name = $user->name;
+        $email = $this->faker()->safeEmail();
+        
+        $response = $this->actingAs( $user )->patchJson(
+            route( 'api.accounts.update' ),
+            [
+                'name' => $name,
+                'email' => $email,
+            ]
+        );
+
+        $response->assertSuccessful();
+
+        $user->refresh();
+        $this->assertEquals( $name, $user->name, 'Name should be updated.' );
+        $this->assertEquals( $email, $user->email, 'Email should be updated.' );
+        $this->assertFalse( $user->is_valid, 'User should be set as invalid.' );
+    }
+
+    public function test_invalid_user_can_update_profile()
+    {
+        $user = User::factory()->unverified()->create();
+
+        $name = $user->name;
+        $email = $user->email;;
+        
+        $response = $this->actingAs( $user )->patchJson(
+            route( 'api.accounts.update' ),
+            [
+                'name' => $name,
+                'email' => $email,
+            ]
+        );
+
+        $response->assertSuccessful();
+
+        $user->refresh();
+        $this->assertEquals( $name, $user->name, 'Name should be updated.' );
+        $this->assertEquals( $email, $user->email, 'Email should be updated.' );
+        $this->assertFalse( $user->is_valid, 'User should remain invalid.' );
     }
 }

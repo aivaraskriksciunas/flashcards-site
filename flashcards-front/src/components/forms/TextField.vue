@@ -21,6 +21,14 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '',
+    },
+    autocomplete: {
+        type: String,
+        default: 'on',
+    },
+    note: {
+        type: String,
+        default: null,
     }
 })
 
@@ -49,7 +57,10 @@ const onChange = ( ev ) => {
             :type='props.type' 
             :name='props.name'
             :placeholder="props.placeholder"
+            :autocomplete="props.autocomplete"
             @change="onChange">
+
+        <small v-if="props.note">{{ props.note }}</small>
 
         <FieldErrors :errors="error"></FieldErrors>
     </div>
@@ -61,6 +72,7 @@ const onChange = ( ev ) => {
     display: flex;
     flex-direction: column;
     font-size: 1em;
+    margin-bottom: 12px;
 }
 
 label {
@@ -74,7 +86,6 @@ label {
     border: 1px solid var( --color-accent );
     padding: 0.4em 0.7em;
     border-radius: 4px;
-    margin-bottom: 12px;
     background-color: var( --color-content-bg );
 }
 

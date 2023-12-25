@@ -36,6 +36,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    autocomplete: {
+        type: String,
+        default: 'on',
+    }
 })
 const emit = defineEmits([ 'success' ])
 
@@ -195,7 +199,7 @@ function clearForm() {
 </script>
 
 <template>
-    <form @submit='onFormSubmit'>
+    <form @submit='onFormSubmit' :autocomplete="props.autocomplete">
 
         <slot></slot>
 

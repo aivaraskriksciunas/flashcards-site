@@ -25,6 +25,12 @@ const router = createRouter({
                     component: Dashboard
                 },
 
+                {
+                    path: '/profile',
+                    name: 'profile',
+                    component: () => import( '../views/profile/ProfilePage.vue' ),
+                },
+
                 { 
                     path: '/decks/new',
                     name: 'create-deck',
@@ -118,7 +124,12 @@ const router = createRouter({
                     path: '/login/accounts',
                     name: 'account-picker',
                     component: AccountPicker,
-                }
+                },
+                {
+                    path: '/register/org',
+                    name: 'register-org',
+                    component: () => import( '../views/auth/RegisterOrganization.vue' ),
+                },
             ]
         },
     ]
