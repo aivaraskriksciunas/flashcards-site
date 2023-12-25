@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/user';
-import useAccountSwitcher from '../../views/auth/composables/useAccountSwitcher';
+import useAccountSwitcher from '../../composables/useAccountSwitcher';
 import AccountButton from '../ui/AccountButton.vue';
 import DropdownContainer from '../ui/DropdownContainer.vue';
 import PlainButton from '../ui/PlainButton.vue';

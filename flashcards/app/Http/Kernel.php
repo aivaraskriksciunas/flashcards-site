@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'limit-forum-posts' => \App\Http\Middleware\Forum\LimitForumPosts::class,
         'limit-forum-comments' => \App\Http\Middleware\Forum\LimitForumComments::class,
         'captcha' => \App\Http\Middleware\Auth\HasValidCaptcha::class,
+        'is-valid-org-admin' => \App\Http\Middleware\Auth\IsValidOrgAdmin::class,
     ];
 }

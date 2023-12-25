@@ -7,6 +7,7 @@ use App\Exceptions\Auth\EmailAlreadyExists;
 use App\Services\Accounts\Payloads\StudentPayload;
 use App\Services\Mail\ConfirmationEmailSender;
 use App\Models\User;
+use App\Services\Accounts\Payloads\OrganizationAdminPayload;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,39 @@ class AccountManager
         $user->email = $payload->email;
         $user->password = $payload->password;
         $user->account_type = User::USER_STUDENT;
+        $user->is_valid = false;
+        $user->save();
+
+        if ( $sendEmail ) {
+            ConfirmationEmailSender::send( $user );
+        }
+
+        return $user;
+    }
+
+    /**
+     * Creates a new organization admin account, if one does not exist for the given email
+     *
+     * @param StudentPayload $payload
+     * @return User created student account
+     * @throws EmailAlreadyExists
+     */
+    public function registerOrganizationAdminAccount( 
+        OrganizationAdminPayload $payload, 
+        bool $sendEmail = true 
+    ) : User
+    {
+        // Make sure this email is unique
+        if ( DB::table( 'users' )->where( 'email', $payload->email )->count() ) 
+        {
+            throw new EmailAlreadyExists();
+        }
+
+        $user = new User();
+        $user->name = $payload->name;
+        $user->email = $payload->email;
+        $user->password = $payload->password;
+        $user->account_type = User::USER_ORG_ADMIN;
         $user->is_valid = false;
         $user->save();
 

@@ -7,6 +7,10 @@ const props = defineProps({
         type: String,
         default: 'secondary'
     },
+    selected: { 
+        type: Boolean,
+        default: false,
+    }
 })
 
 const buttonStyle = computed(() => {
@@ -26,7 +30,7 @@ const buttonStyle = computed(() => {
 
 <template>
 
-<div class="plain-button" :class="[buttonStyle]" @click="() => emit( 'click' )">
+<div class="plain-button" :class="[buttonStyle, { selected: props.selected }]" @click="() => emit( 'click' )">
     <slot></slot>
 </div>
 
@@ -39,6 +43,8 @@ const buttonStyle = computed(() => {
     cursor: pointer;
     border-radius: 3px;
     user-select: none;
+    display: flex;
+    align-items: center;
 }
 
 .plain-button:hover {
@@ -51,6 +57,15 @@ const buttonStyle = computed(() => {
 
 .plain-primary {
     color: var( --color-primary );
+}
+
+.plain-button.selected {
+    border: 2px solid var( --color-primary );
+}
+
+.plain-button.selected * {
+    color: var( --color-primary );
+    fill: var( --color-primary );
 }
 
 </style>

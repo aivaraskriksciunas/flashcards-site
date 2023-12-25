@@ -1,30 +1,80 @@
 <script setup>
-import AjaxForm from '../../components/forms/AjaxForm.vue'
-import TextField from '../../components/forms/TextField.vue'
 import { useRouter } from 'vue-router'
 import jsCookie from 'js-cookie';
+import StudentRegisterForm from './components/StudentRegisterForm.vue';
+import OrganizationRegisterForm from './components/OrganizationRegisterForm.vue';
+import PlainButton from '../../components/ui/PlainButton.vue';
+import { ref } from 'vue';
+import useAuthentication from './composables/useAuthentication';
 
 const router = useRouter()
+const accountType = ref( 'student' )
+const { setToken } = useAuthentication()
 
 function onRegister( data ) {
     if ( data.token ) {
-        jsCookie.set( 'api_key', data.token, { expires: 40, sameSite: 'strict' } )
+        setToken( data.token )
     }
     
-    router.push({ name: 'home' })
+    if ( accountType.value == 'organization' ) {
+        router.push({ name: 'register-org' })
+    }
+    else {
+        router.push({ name: 'home' })
+    }
 }
 
 </script>
 
 <template>
 
-    <AjaxForm action="/api/register" captcha="REGISTER" @success="onRegister">
-        <TextField type="text" name="name">Your name:</TextField>
-        <TextField type="email" name="email">Email:</TextField>
-        <TextField type="password" name="password">Password:</TextField>
-        <TextField type="password" name="password_confirmation">Confirm password:</TextField>
-    </AjaxForm>
+    <div>
+        Register as:
+    </div>
+    <div class="mb-3">
+        <PlainButton @click="accountType = 'student'" :selected="accountType == 'student'" class="mb-2">
+            <div class="flex account-type-btn">
+                <div class="account-type-btn__icon">
+                    <font-awesome-icon icon="fa-regular fa-user"></font-awesome-icon>
+                </div>
+                <div class="account-type-btn__text">
+                    Student
+                </div>
+            </div>
+        </PlainButton>
+        
+        <PlainButton @click="accountType = 'organization'" :selected="accountType == 'organization'">
+            <div class="flex account-type-btn">
+                <div class="account-type-btn__icon">
+                    <font-awesome-icon icon="fa-regular fa-building"></font-awesome-icon>
+                </div>
+                <div class="account-type-btn__text">
+                    Organization
+                </div>
+            </div>
+        </PlainButton>
+    </div>
+
+    <div v-if="accountType == 'student'">
+        <StudentRegisterForm :on-register="onRegister"></StudentRegisterForm>
+    </div>
+    <div v-else-if="accountType == 'organization'">
+        <OrganizationRegisterForm :on-register="onRegister"></OrganizationRegisterForm>
+    </div>
 
     <small>Already have an account? <router-link :to="{ name: 'login' }">Log in</router-link></small>
 
 </template>
+
+<style scoped>
+
+.account-type-btn__icon {
+    @apply p-2 mr-2;
+}
+
+.account-type-btn__text {
+    display: flex;
+    align-items: center;
+}
+
+</style>

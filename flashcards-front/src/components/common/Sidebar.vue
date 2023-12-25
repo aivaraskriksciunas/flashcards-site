@@ -51,7 +51,7 @@ router.afterEach( ( from, to, failure ) => {
             <router-link :to="{name: 'home'}">
                 <div class='sidebar-link'>Home</div>
             </router-link>
-            <router-link :to="{name: 'home'}">
+            <router-link :to="{name: 'profile'}">
                 <div class='sidebar-link'>Profile</div>
             </router-link>
             <router-link :to="{name: 'forum'}">

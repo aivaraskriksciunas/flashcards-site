@@ -1,5 +1,5 @@
 <script setup>
-import Card from '../../components/ui/Card.vue';
+import Card from '../../../components/ui/Card.vue';
 
 const { deck } = defineProps({
     deck: {

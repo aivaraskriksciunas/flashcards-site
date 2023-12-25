@@ -8,11 +8,15 @@ use App\Http\Requests\Auth\ApiRegister;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\Auth\EmailAlreadyExists;
+use App\Http\Requests\Auth\Api\OrganizationAdminRegister;
 use App\Http\Requests\Auth\GoogleLogin;
 use App\Http\Requests\Auth\LinkGoogleAccount;
 use App\Http\Resources\User\UserDetailResource;
 use App\Models\EmailConfirmation;
 use App\Models\User;
+use App\Services\Accounts\AccountManager;
+use App\Services\Accounts\Payloads\OrganizationAdminPayload;
+use App\Services\Accounts\Payloads\StudentPayload;
 use App\Services\Authentication\AccountSwitchAuthenticator;
 use App\Services\Authentication\GoogleAuthenticator;
 use App\Services\Authentication\GoogleLinkingAuthenticator;
@@ -22,6 +26,10 @@ use Illuminate\Http\Request;
 
 class ApiAuthController extends Controller
 {
+    public function __construct(
+        private AccountManager $accountManager
+    )
+    {}
 
     public function login( ApiLogin $request ) 
     {
@@ -35,25 +43,24 @@ class ApiAuthController extends Controller
 
     public function register( ApiRegister $request )
     {
-        $data = $request->validated();
-
-        // Make sure this email is unique
-        if ( DB::table( 'users' )->where( 'email', $data['email'] )->count() ) 
-        {
-            throw new EmailAlreadyExists();
-        }
-
-        $user = new User( $data );
-        $user->account_type = User::USER_STUDENT;
-        $user->is_valid = false;
-        $user->save();
-
-        ConfirmationEmailSender::send( $user );
-
-        Auth::login( $user );
+        $user = $this->accountManager->registerStudentAccount(
+            new StudentPayload( $request->validated() ),
+            true
+        );
 
         return response()->json([
             'token' => $user->createToken( User::PASSWORD_LOGIN_TOKEN )->plainTextToken,
+        ]);
+    }
+
+    public function registerOrganizationAdmin( OrganizationAdminRegister $request )
+    {   
+        $user = $this->accountManager->registerOrganizationAdminAccount(
+            new OrganizationAdminPayload( $request->validated() )
+        );
+
+        return response()->json([
+            'token' => $user->createToken( User::PASSWORD_LOGIN_TOKEN )->plainTextToken
         ]);
     }
 

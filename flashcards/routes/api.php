@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApiLibraryController;
 use App\Http\Controllers\Api\ApiQuizController;
 use App\Http\Controllers\Api\ApiForumPostController;
 use App\Http\Controllers\Api\ApiImportController;
+use App\Http\Controllers\Api\ApiOrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,13 @@ use App\Http\Controllers\Api\ApiImportController;
 /**
  * Login routes
  */
-Route::post( '/login', [ ApiAuthController::class, 'login' ]);
+Route::post( '/login', [ ApiAuthController::class, 'login' ])->name( 'login' );
 Route::post( '/register', [ ApiAuthController::class, 'register' ])
-    ->middleware( 'captcha:REGISTER' );
+    ->middleware( 'captcha:REGISTER' )
+    ->name( 'register' );
+Route::post( '/register-org', [ ApiAuthController::class, 'registerOrganizationAdmin' ])
+    ->middleware( 'captcha:REGISTER_ORG' )
+    ->name( 'register.org-admin');
 Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
 Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ]);
@@ -37,17 +42,24 @@ Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAc
  */
 Route::middleware([ 'auth:sanctum' ])->group( function() {
 
+    /**
+     * Account related endpoints
+     */
     Route::get( '/user', [ ApiAuthController::class, 'currentUser' ]);
     Route::get( '/account/switch/{user}', [ ApiAuthController::class, 'switchAccount' ])
         ->name( 'accounts.switch' );
+    Route::patch( '/accounts', [ ApiAccountsController::class, 'update' ] )->name( 'accounts.update' );
+    Route::post( '/register/org', [ ApiOrganizationController::class, 'register' ])
+        ->name( 'register.organization' );
 
     Route::get( '/resend-confirmation-email', [ ApiAuthController::class, 'sendConfirmationEmail']);
+
 });
 
 /**
  * Routes for authenticated and verified users
  */
-Route::middleware([ 'auth:sanctum', 'is-verified' ])->group( function() {
+Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->group( function() {
 
     /**
      * Account management

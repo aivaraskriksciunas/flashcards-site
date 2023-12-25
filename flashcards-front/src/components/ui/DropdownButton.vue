@@ -15,7 +15,7 @@ const props = defineProps({
     <DropdownContainer>
         <template v-slot:dropdown-button>
             <PlainButton class="dropdown-button">
-                <div class="flex items-center">
+                <div class="flex-1 flex items-center">
                     <div class="flex-1">
                         <slot name="label">
                             {{ props.label }}

@@ -87,6 +87,10 @@ class User extends Model implements AuthenticatableContract
         return $this->hasMany( User::class, 'parent_id' );
     }
 
+    public function organization() {
+        return $this->belongsTo( Organization::class );
+    }
+
     public function isAdmin() {
         return $this->account_type === User::USER_ADMIN;
     }

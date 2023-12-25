@@ -51,7 +51,7 @@ const onResend = () => {
     </div>
     <div v-else-if='resendState == "sent"'
         class='text-white'>
-        Confirmation email resent. Please be aware that due to issues email may take up to a day to arrive. We recommend using Google login instead.
+        Confirmation email resent. Please check your spam if you still do not receive it.
     </div>
     <div v-else-if='resendState == "error"'
         class='text-white'>
