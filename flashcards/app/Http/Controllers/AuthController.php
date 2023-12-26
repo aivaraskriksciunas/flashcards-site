@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Auth\IncorrectCredentials;
 use App\Models\User;
 use App\Services\Authentication\PasswordAuthenticator;
 use Carbon\Carbon;
@@ -27,7 +28,12 @@ class AuthController extends Controller
             User::USER_ADMIN,
         );
 
-        $authenticator->authenticate();
+        try {
+            $authenticator->authenticate();
+        }
+        catch ( IncorrectCredentials $e ) {
+            return response()->view( 'auth.login', [], 400 );
+        }
 
         return redirect( route( 'home' ) );
     }

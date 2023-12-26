@@ -14,6 +14,12 @@ class PasswordAuthenticator extends BaseAuthenticator {
         private string $accountType = '',
     ) {}
 
+    /**
+     * Authenticates user with the provided credentials
+     *
+     * @return User
+     * @throws \App\Exceptions\Auth\IncorrectCredentials
+     */
     public function authenticate() : User 
     {
         // Get parent account

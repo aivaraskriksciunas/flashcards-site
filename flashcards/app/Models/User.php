@@ -95,6 +95,19 @@ class User extends Model implements AuthenticatableContract
         return $this->account_type === User::USER_ADMIN;
     }
 
+    protected function isValid() : Attribute {
+        return Attribute::make(
+            get: function ( bool $value ) {
+                if ( $this->parentAccount ) {
+                    return $this->parentAccount->is_valid;
+                }
+
+                return $value;
+            },
+            set: fn( bool $value ) => $value,
+        );
+    }
+
     /**
      * Returns parent account or $this, if this is the parent account
      *

@@ -293,7 +293,7 @@ class UserTest extends TestCase
         $user = User::factory()->unverified()->create();
 
         $name = $user->name;
-        $email = $user->email;;
+        $email = $user->email;
         
         $response = $this->actingAs( $user )->patchJson(
             route( 'api.accounts.update' ),
@@ -309,5 +309,36 @@ class UserTest extends TestCase
         $this->assertEquals( $name, $user->name, 'Name should be updated.' );
         $this->assertEquals( $email, $user->email, 'Email should be updated.' );
         $this->assertFalse( $user->is_valid, 'User should remain invalid.' );
+    }
+
+    public function test_changing_email_on_child_changes_parent()
+    {
+        $user = User::factory()->admin()->create();
+        $student = $user->subAccounts()->save( User::factory()->makeOne() );
+
+        $name = $this->faker()->name();
+        $email = $this->faker()->email();
+        $pass = $this->faker()->password();
+        
+        $response = $this->actingAs( $student )->patchJson(
+            route( 'api.accounts.update' ),
+            [
+                'name' => $name,
+                'email' => $email,
+                'password' => $pass,
+                'password_confirmation' => $pass,
+            ]
+        );
+
+        $response->assertSuccessful();
+
+        $user->refresh();
+        $student->refresh();
+        $this->assertNotEquals( $name, $user->name, 'Name on parent should have stayed the same.' );
+        $this->assertEquals( $name, $student->name, 'Name on child should be changed.' );
+        $this->assertEquals( $email, $user->email, 'Email should be updated on parent.' );
+        $this->assertTrue( $user->checkPassword( $pass ), 'Password on parent should be updated.' );
+        $this->assertFalse( $user->is_valid, 'Parent should be set invalid' );
+        $this->assertFalse( $student->is_valid, 'Child should also be invalid.' );
     }
 }

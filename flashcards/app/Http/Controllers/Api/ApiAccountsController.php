@@ -30,8 +30,14 @@ class ApiAccountsController extends Controller
     public function update( UpdateAccount $request )
     {
         $user = $request->user();
-        $user->update( $request->validated() );
+        // Update this account
+        $user->update( $request->safe()->except([ 'email', 'password' ]) );
 
+        // Update parent account's login information
+        $user = $user->getParentAccount();
+        $user->update( $request->only([ 'email', 'password' ]) );
+
+        // Force email verification
         if ( $user->wasChanged( 'email' ) ) 
         {
             $user->is_valid = false;
