@@ -46,24 +46,24 @@ const onLoad = ( data ) => {
 .summary-card .card-question {
     font-size: 1.2em;
     font-weight: 500;
-    color: var( --color-primary );
+    color: rgb( var( --primary ) );
 }
 
 .summary-card .card-comment {
     font-size: 0.9em;
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
 }
 
 .summary-card {
-    border-bottom: 3px solid var( --color-primary );
+    border-bottom: 3px solid rgb( var( --primary ) );
 }
 
 .incorrect .card-question {
-    color: var( --color-danger );
+    color: rgb( var( --destructive ) );
 }
 
 .summary-card.incorrect {
-    border-bottom: 3px solid var( --color-danger );
+    border-bottom: 3px solid rgb( var( --destructive ) );
 }
 
 .summary-icon {
@@ -73,10 +73,10 @@ const onLoad = ( data ) => {
 }
 
 .summary-icon .icon path {
-    fill: var( --color-primary );
+    fill: rgb( var( --primary ) );
 }
 
 .incorrect .summary-icon .icon path {
-    fill: var( --color-danger );
+    fill: rgb( var( --destructive ) );
 }
 </style>

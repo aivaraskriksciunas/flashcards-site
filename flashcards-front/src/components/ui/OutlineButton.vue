@@ -45,22 +45,22 @@ const buttonStyle = computed(() => {
 }
 
 .outline-secondary {
-    border-color: var( --color-text );
-    color: var( --color-text );
+    border-color: rgb( var( --foreground ) );
+    color: rgb( var( --foreground ) );
     border-width: 1px;
 }
 
 .outline-secondary:hover {
-    background-color: var( --color-text-light );
-    color: var( --color-content-bg );
+    background-color: rgb( var( --muted-foreground ) );
+    color: rgb( var( --background ) );
 }
 
 .outline-primary {
-    border-color: var( --color-primary );
+    border-color: rgb( var( --primary ) );
 }
 
 .outline-primary:hover {
-    background-color: var( --color-primary );
+    background-color: rgb( var( --primary ) );
 }
 
 .outline-danger {

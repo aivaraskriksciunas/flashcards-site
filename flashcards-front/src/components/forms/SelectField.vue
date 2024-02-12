@@ -1,6 +1,13 @@
 <script setup>
 import { useFormElement } from './composables/FormElement'
 import FieldErrors from './_FieldErrors.vue'
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectItem,
+    SelectContent,
+} from '@/components/ui/select'
 
 /**
  * Element Properties
@@ -31,7 +38,8 @@ if ( props.value ) {
     data.value = props.value
 }
 
-const onChange = ( ev ) => {
+const onChange = ( newVal ) => {
+    data.value = newVal
     emits( 'change', data.value )
 }
 
@@ -39,35 +47,23 @@ const onChange = ( ev ) => {
 
 <template>
     <div class='form-group'>
-        <label>
+        <label class="mb-2 block">
             <slot/>
         </label>
-
-        <select 
-            :name="props.name"
-            v-model="data"
-            @change="onChange"
-            class="select-control">
-            <option v-for="choice of props.choices" :value="choice.value" :key="choice.value">{{ choice.label }}</option>    
-        </select>
+        
+        <Select :model-value="data" :name="props.name" @update:model-value="onChange">
+            <SelectTrigger>
+                <SelectValue></SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem v-for="choice of props.choices" :value="choice.value" :key="choice.value">{{ choice.label }}</SelectItem>
+            </SelectContent>
+        </Select>
 
         <FieldErrors :errors="error"></FieldErrors>
     </div>
 </template>
 
 <style>
-
-.select-control {
-    @apply px-2 py-2;
-    border: 1px solid var( --color-accent );
-    background-color: var( --color-content-bg );
-    border-bottom-width: 2px;
-    border-radius: 6px;
-}
-
-.select-control:hover {
-    cursor: pointer;
-    background-color: var( --color-hover );
-}
 
 </style>

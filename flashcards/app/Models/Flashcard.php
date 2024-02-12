@@ -19,7 +19,6 @@ class Flashcard extends Model
         return $this->belongsTo( Flashcard::class );
     } 
 
-
     /**
      * Returns an array with question/answer pair, with possibility to swap them
      *

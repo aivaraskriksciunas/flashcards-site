@@ -1,7 +1,7 @@
 <script setup>
 import { useStatusMessageService, MESSAGE_TYPE } from '../../services/StatusMessageService.js';
 import Card from '../ui/Card.vue';
-import CloseIcon from '../icons/CloseIcon.vue';
+import { X } from 'lucide-vue-next';
 
 const statusMessages = useStatusMessageService();
 
@@ -27,7 +27,7 @@ const getMessageStyleClass = ( message ) => {
                 <div class='message'>{{ message.message }}</div>
             </div>
             <div>
-                <CloseIcon class="close-icon" @click="statusMessages.removeStatusMessage( message.id )"></CloseIcon>
+                <X @click="statusMessages.removeStatusMessage( message.id )"/>
             </div>
         </div>
         
@@ -55,19 +55,19 @@ const getMessageStyleClass = ( message ) => {
 }
 
 .status-message-success {
-    border-bottom-color: var( --color-primary );
+    border-bottom-color: rgb( var( --primary ) );
 }
 
 .status-message-success .title {
-    color: var( --color-primary );
+    color: rgb( var( --primary ) );
 }
 
 .status-message-error {
-    border-bottom-color: var( --color-danger );
+    border-bottom-color: rgb( var( --destructive ) );
 }
 
 .status-message-error .title {
-    color: var( --color-danger );
+    color: rgb( var( --destructive ) );
 }
 
 .close-icon {

@@ -26,4 +26,20 @@ class Quiz extends Model
     {
         return $this->hasMany( QuizItem::class );
     }
+
+    /**
+     * Mark this quiz as complete
+     *
+     * @param boolean $shouldSave whether should save the changes to database
+     * @return Quiz
+     */
+    public function closeQuiz( bool $shouldSave = true )
+    {
+        $this->date_taken = \Carbon\Carbon::now();
+        if ( $shouldSave ) {
+            $this->save();
+        }
+
+        return $this;
+    }
 }

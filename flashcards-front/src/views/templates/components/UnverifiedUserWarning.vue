@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useUserStore } from "../../../stores/user";
 
-const { user } = storeToRefs( useUserStore() )
+const { user, isLoggedIn } = storeToRefs( useUserStore() )
 const { resendVerificationCode } = useUserStore()
 
 const resendState = ref( 'initial' )
@@ -39,7 +39,7 @@ const onResend = () => {
 </script>
 
 <template>
-<div v-if='!user.is_valid' class='unverified-warning bg-red-600'>
+<div v-if='isLoggedIn && !user.is_valid' class='unverified-warning'>
     <div class='text-white'>You may not perform any actions until your account is verified. Check your inbox for verification code.</div>
     <div v-if='resendState == "initial"' 
         class='text-white'>
@@ -63,7 +63,7 @@ const onResend = () => {
 <style scoped>
 .unverified-warning {
     
-    background-color: var( --color-danger );
+    background-color: rgb( var( --destructive ) );
     color: white;
     width: 100%;
     padding: 8px 16px;

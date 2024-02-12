@@ -89,6 +89,28 @@ const router = createRouter({
                     name: 'import-anki',
                     component: () => import( '../views/importing/ImportAnki.vue' ),
                 },
+
+                {
+                    path: '/course/create',
+                    name: 'create-course',
+                    component: () => import( '../views/courses/CreateCourse.vue' ),
+                },
+                {
+                    path: '/course/:id/edit',
+                    component: () => import( '../views/courses/EditCourse.vue' ),
+                    children: [
+                        {
+                            path: '',
+                            name: 'edit-course',
+                            component: () => import( '../views/courses/EditCourseContent.vue' ),
+                        },
+                        {
+                            path: 'page/:page_id',
+                            name: 'edit-course-page',
+                            component: () => import( '../views/courses/EditCoursePage.vue' ),
+                        }
+                    ]
+                }
             ]
         },
         

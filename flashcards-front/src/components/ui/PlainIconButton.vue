@@ -49,7 +49,7 @@ if ( props.type == 'secondary' ) {
 }
 
 .icon-plain-button:hover {
-    background-color: var( --color-shadow );
+    background-color: rgb( var( --shadow ) );
 }
 
 .icon-plain-button .icon {
@@ -57,7 +57,7 @@ if ( props.type == 'secondary' ) {
 }
 
 .icon-button-success .icon path {
-    fill: var( --color-primary );
+    fill: rgb( var( --primary ) );
 }
 
 .icon-plain-button-danger .icon path {
@@ -65,11 +65,11 @@ if ( props.type == 'secondary' ) {
 }
 
 .icon-plain-button-danger .icon path {
-    fill: var( --color-text );
+    fill: rgb( var( --foreground ) );
 }
 
 .icon-plain-button-success:hover  .icon path {
-    fill: var( --color-primary-hover );
+    fill: rgb( var( --primary-hover ) );
 }
 
 .icon-plain-button-danger:hover  .icon path {

@@ -3,10 +3,17 @@ import { storeToRefs } from "pinia";
 import { useUserSettingStore } from "../../stores/user-settings";
 import { useSidebarStore } from "../../stores/sidebar";
 import { useUserStore } from "../../stores/user";
-import Button from '../../components/ui/Button.vue';
+import { Button } from '@/components/ui/button'
 import Logo from './Logo.vue'
-import DropdownButton from "../ui/DropdownButton.vue";
-import DropdownButtonItem from "../ui/DropdownItem.vue";
+import { 
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+} from '@/components/ui/select';
+import { Palette } from 'lucide-vue-next';
 import { useRouter } from "vue-router";
 import AccountDropdown from "./AccountDropdown.vue";
 
@@ -63,23 +70,35 @@ router.afterEach( ( from, to, failure ) => {
             My library
         </div>
 
-        <Button class='mb-3' :to="{name: 'create-deck'}">New deck</Button>
+        <router-link :to="{name: 'create-deck'}">
+            <Button class='mb-3' size="sm" variant="pill">New deck</Button>
+        </router-link>
 
-        <DropdownButton>
-            <template v-slot:label>
-                <font-awesome-icon icon="fas fa-paint-roller" size="xs" class="mr-1" ></font-awesome-icon>
-                Theme
-            </template>
-            <DropdownButtonItem @click="userSettings.setColorTheme( 'light' )">Light</DropdownButtonItem>
-            <DropdownButtonItem @click="userSettings.setColorTheme( 'dark' )">Dark</DropdownButtonItem>
-        </DropdownButton>
+        <Select :model-value="userSettings.colorTheme">
+            <SelectTrigger>
+                <div class="flex items-center">
+                    <Palette size="16" class="mr-2" />
+                    <SelectValue></SelectValue>
+                </div>
+            </SelectTrigger>
+            <SelectContent>
+                <SelectGroup>
+                    <SelectItem value="light" @click="userSettings.setColorTheme( 'light' )">
+                        Light
+                    </SelectItem>
+                    <SelectItem value="dark" @click="userSettings.setColorTheme( 'dark' )">
+                        Dark
+                    </SelectItem>
+                </SelectGroup>
+            </SelectContent>
+        </Select>
 
     </aside>
 </template>
 
 <style scoped>
 .sidebar {
-    background-color: var( --color-sidebar-bg );
+    background-color: rgb( var( --sidebar ) );
     height: 100%;
     z-index: 2;
 }

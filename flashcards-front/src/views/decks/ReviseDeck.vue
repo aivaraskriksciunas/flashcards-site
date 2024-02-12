@@ -39,7 +39,10 @@ const onBack = () => {
 <template>
 <DataLoaderWrapper 
     :url="`/api/decks/${deckId}/quiz`" 
-    :query-params="{'quiz-mode': settings.getPreferredQuizMode( deckId )}"
+    :query-params="{
+        'quiz-mode': settings.getPreferredQuizMode( deckId ),
+        'quiz-size': settings.getPreferredQuizSize( deckId )
+    }"
     @load="onLoad" 
     :key="dataRefreshKey">
     <SlimContainer v-if="data.items">

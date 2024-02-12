@@ -48,7 +48,8 @@ const buttonStyle = computed(() => {
 }
 
 .plain-button:hover {
-    background-color: var( --color-hover );
+    @apply bg-background/80;
+    /* background-color: var( --color-hover ); */
 }
 
 .plain-danger {
@@ -56,16 +57,16 @@ const buttonStyle = computed(() => {
 }
 
 .plain-primary {
-    color: var( --color-primary );
+    color: rgb( var( --primary ) );
 }
 
 .plain-button.selected {
-    border: 2px solid var( --color-primary );
+    border: 2px solid rgb( var( --primary ) );
 }
 
 .plain-button.selected * {
-    color: var( --color-primary );
-    fill: var( --color-primary );
+    color: rgb( var( --primary ) );
+    fill: rgb( var( --primary ) );
 }
 
 </style>

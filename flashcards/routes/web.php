@@ -9,6 +9,8 @@ use App\Http\Controllers\DeckController;
 use App\Http\Controllers\ForumTopicController;
 
 use App\Http\Controllers\Api\ApiAuthController;
+use App\Http\Controllers\UserLogController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,4 +40,6 @@ Route::middleware([ 'auth', 'is-admin' ])->group( function () {
     Route::resource( 'user.deck', DeckController::class )->except( 'index' )->shallow();
     Route::resource( 'forum-topic', ForumTopicController::class );
 
+    Route::get( '/logs/user/{user}', [ UserLogController::class, 'showUserLogs' ] )->name( 'user-logs.user' );
+    Route::get( '/logs/{log}', [ UserLogController::class, 'show' ] )->name( 'user-logs.show' );
 });

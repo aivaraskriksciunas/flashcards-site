@@ -104,14 +104,14 @@ const submitCard = ( isCorrect ) => {
 
 .card-comment {
     font-size: 0.9;
-    color: var( --color-text-light );
+    color: rgb( var( --muted-foreground ) );
     text-align: left;
 }
 
 .card-input-field {
     border: 0;
-    background-color: var( --color-content-bg );
-    border-bottom: 3px solid var( --color-shadow );
+    background-color: rgb( var( --background ) );
+    border-bottom: 3px solid rgb( var( --shadow ) );
     border-radius: 3px;
     font-size: 1.4em;
     padding: 8px 16px;
@@ -119,7 +119,8 @@ const submitCard = ( isCorrect ) => {
 }
 
 .card-input-field:focus {
-    background-color: var( --color-hover );
+    @apply bg-background/80;
+    /* background-color: var( --color-hover ); */
     outline: none;
 }
 
@@ -129,7 +130,7 @@ const submitCard = ( isCorrect ) => {
 
 #youAnsweredText, #correctAnswerText {
     font-size: 1.1em;
-    color: var( --color-text-light );
+    color: rgb( var( --muted-foreground ) );
 }
 
 #youAnsweredValue {
@@ -148,7 +149,7 @@ const submitCard = ( isCorrect ) => {
 }
 
 #correctAnswerValue {
-    color: var( --color-primary );
+    color: rgb( var( --primary ) );
 }
 
 #iWasRightButton {

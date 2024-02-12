@@ -16,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
         '\App\Models\Deck' => '\App\Policies\DeckPolicy',
         '\App\Models\ForumPost' => '\App\Policies\ForumPostPolicy',
         '\App\Models\Quiz' => '\App\Policies\QuizPolicy',
+        '\App\Models\Course' => '\App\Policies\CoursePolicy',
     ];
 
     /**

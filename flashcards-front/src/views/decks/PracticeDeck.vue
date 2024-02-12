@@ -5,7 +5,7 @@ import SlimContainer from '../../components/ui/SlimContainer.vue';
 import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue';
 import WritingCardRevision from './components/WritingCardRevision.vue';
 import SimpleCardRevision from './components/SimpleCardRevision.vue';
-import Button from '../../components/ui/Button.vue';
+import { Button } from '@/components/ui/button';
 import PlainButton from '../../components/ui/PlainButton.vue';
 import QuizSummary from './components/QuizSummary.vue';
 import { useUserSettingStore } from '../../stores/user-settings';
@@ -40,7 +40,10 @@ const onBack = () => {
 <template>
 <DataLoaderWrapper 
     :url="`/api/decks/${deckId}/quiz`" 
-    :query-params="{'quiz-mode': settings.getPreferredQuizMode( deckId )}"
+    :query-params="{
+        'quiz-mode': settings.getPreferredQuizMode( deckId ),
+        'quiz-size': settings.getPreferredQuizSize( deckId )
+    }"
     @load="onLoad" 
     :key="dataRefreshKey">
     <SlimContainer v-if="quiz.items">

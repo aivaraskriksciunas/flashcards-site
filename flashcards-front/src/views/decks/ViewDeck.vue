@@ -5,17 +5,41 @@ import { useUserStore } from "../../stores/user";
 import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue'
 import Card from "../../components/ui/Card.vue";
 import DeckPreview from "./components/DeckPreview.vue";
-import PlainButton from "../../components/ui/PlainButton.vue";
-import OutlineButton from "../../components/ui/OutlineButton.vue";
+import { Pencil, MoreVertical, Trash2 } from 'lucide-vue-next';
+import { Button } from '@/components/ui/button';
 import SlimContainer from "../../components/ui/SlimContainer.vue";
 import DeckSummary from "./components/DeckSummary.vue";
 import SelectField from "../../components/forms/SelectField.vue";
 import { useUserSettingStore } from '../../stores/user-settings';
-import OverflowMenu from '../../components/ui/OverflowMenu.vue';
-import DropdownItem from '../../components/ui/DropdownItem.vue';
-import Modal from '../../components/ui/Modal.vue';
+import { 
+    DropdownMenu, 
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 import { deleteDeck } from '../../services/DeckService';
 import { useStatusMessageService, MESSAGE_TYPE } from '../../services/StatusMessageService';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { 
+    Sheet,
+    SheetContent,
+    SheetClose,
+    SheetTrigger,
+    SheetHeader, 
+    SheetTitle,
+    SheetDescription,
+    SheetFooter,
+} from '@/components/ui/sheet';
+import { Loader2, Settings } from "lucide-vue-next";
 
 const route = useRoute()
 const router = useRouter()
@@ -38,10 +62,25 @@ const quizModes = [
 const quizMode = ref( settings.getPreferredQuizMode( deckId ) || 'qa' );
 
 const onQuizModeChange = ( val ) => {
+    quizMode.value = val
     settings.setPreferredQuizMode( deckId, val )
 }
 
-const confirmDeleteModal = ref( null )
+const revisionSizes = [
+    { value: '5', label: '5 cards' },
+    { value: '10', label: '10 cards' },
+    { value: '15', label: '15 cards' },
+    { value: '20', label: '20 cards' },
+    { value: 'all', label: 'Entire deck' },
+]
+const revisionSize = ref( settings.getPreferredQuizSize( deckId ) || '10' )
+
+const onRevisionSizeChange = ( val ) => {
+    revisionSize.value = val
+    settings.setPreferredQuizSize( deckId, val )
+}
+
+const confirmDeleteModalOpen = ref( false )
 const deleteDeckLoading = ref( false )
 const onDeleteDeck = async () => {
     deleteDeckLoading.value = true;
@@ -56,7 +95,7 @@ const onDeleteDeck = async () => {
     }
     finally {
         deleteDeckLoading.value = false;
-        confirmDeleteModal.value.closeModal();
+        confirmDeleteModalOpen.value = false;
     }
 }
 
@@ -72,19 +111,23 @@ const onDeleteDeck = async () => {
                 <h1>{{ deck.name }}</h1>
             </div>
             <router-link :to="{ name: 'edit-deck', params: { id: deck.id } }">
-                <PlainButton class='mr-2'>
-                    <font-awesome-icon icon="far fa-edit"></font-awesome-icon>
+                <Button variant="ghost" size="sm" class="text-muted-foreground">
+                    <Pencil class="w-4 h-4 mr-2" color="rgb( var( --muted-foreground ) )"/>
                     Edit
-                </PlainButton>
+                </Button>
             </router-link>
-            <OverflowMenu>
-                <DropdownItem @click="confirmDeleteModal.openModal">
-                    <div class='flex items-center text-danger'>
-                        <font-awesome-icon icon="far fa-trash-can" class='mr-2'></font-awesome-icon>
-                        Delete
-                    </div>
-                </DropdownItem>
-            </OverflowMenu>
+            <DropdownMenu>
+                <DropdownMenuTrigger>
+                    <Button variant="ghost" size="icon">
+                        <MoreVertical />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem @click="confirmDeleteModalOpen = true" class="text-destructive">
+                        <Trash2 class="mr-2" size="16"/> Delete
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
 
         <div v-if="deck.cards.length">
@@ -93,8 +136,32 @@ const onDeleteDeck = async () => {
             <div v-if="isLoggedIn">
                 
                 <div class="flex mt-3 items-center justify-end text-sm">
-                    <div class="mr-2">Quiz mode:</div>
-                    <SelectField name="" :value="quizMode" @change="onQuizModeChange" :choices="quizModes"></SelectField>
+                    <Sheet>
+                        <SheetTrigger>
+                            <Button variant="ghost" class="text-muted-foreground">Revision options <Settings class="ml-1" size="22"/></Button>
+                        </SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader class="mb-6">
+                                <SheetTitle>Revision options</SheetTitle>
+                                <SheetDescription>
+                                    Fine-tune your revision generation. 
+                                </SheetDescription>
+                            </SheetHeader>
+
+                            <SelectField class="mb-3" name="" :value="quizMode" @change="onQuizModeChange" :choices="quizModes">
+                                Revision mode
+                            </SelectField>
+                            <SelectField class='mb-3' name="" :value="revisionSize" @change="onRevisionSizeChange" :choices="revisionSizes">
+                                Cards per revision
+                            </SelectField>
+
+                            <SheetFooter>
+                                <SheetClose>
+                                    <Button>Done</Button>
+                                </SheetClose>
+                            </SheetFooter>
+                        </SheetContent>
+                    </Sheet>
                 </div>
 
                 <div class="flex deck-actions mt-3">
@@ -119,17 +186,26 @@ const onDeleteDeck = async () => {
         </div>
         
     </SlimContainer>
+
+    <AlertDialog :open="confirmDeleteModalOpen">
+        <AlertDialogTrigger>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Confirm delete</AlertDialogTitle>
+                <AlertDialogDescription>Are you sure you want to delete this deck?</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel @click="confirmDeleteModalOpen = false">Cancel</AlertDialogCancel>
+                <Button variant="destructive" @click="onDeleteDeck" :disabled="deleteDeckLoading">
+                    <Loader2 v-if="deleteDeckLoading" class="h-4 w-4 mr-2 animate-spin"></Loader2>
+                    Delete
+                </Button>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
     
 </DataLoaderWrapper>
-
-<Modal ref="confirmDeleteModal" :isLoading="deleteDeckLoading">
-    Are you sure you want to delete this deck?
-
-    <template v-slot:actions>
-        <PlainButton class="mr-2" @click="confirmDeleteModal.closeModal">Cancel</PlainButton>
-        <OutlineButton type="danger" class="mr-2" @click="onDeleteDeck">Delete</OutlineButton>
-    </template>
-</Modal>
 
 </template>
 

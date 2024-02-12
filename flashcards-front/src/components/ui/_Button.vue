@@ -27,17 +27,17 @@ const onClick = () => {
 
 <style scoped>
 .button {
-    background-color: var( --color-primary );
+    background-color: rgb( var( --primary ) );
     border-radius: 1000px;
     display: inline-block;
     padding: 8px 18px;
-    color: var( --color-text-contrast );
+    color: rgb( var( --primary-foreground ) );
     user-select: none;
     font-weight: 500;
 }
 
 .button:hover {
-    background-color: var( --color-primary-hover );
+    background-color: rgb( var( --primary-hover ) );
     cursor: pointer; 
 }
 </style>

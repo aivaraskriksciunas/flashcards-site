@@ -35,7 +35,7 @@ const props = defineProps({
 .forum-post-comment {
     padding: 12px;
     margin-top: 8px;
-    border-bottom: 1px solid var( --color-shadow );
+    border-bottom: 1px solid rgb( var( --shadow ) );
 }
 
 .forum-post-comment:last-child {
@@ -44,12 +44,12 @@ const props = defineProps({
 
 .forum-post-comment .comment-meta {
     font-size: 0.8em;
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
     margin-bottom: 4px;
 }
 
 .forum-post-comment .comment-meta .comment-date {
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
 }
 
 .forum-post-comment .comment-meta .icon {
@@ -57,7 +57,7 @@ const props = defineProps({
 }
 
 .forum-post-comment .comment-meta .icon path {
-    fill: var( --color-text-lighter );
+    fill: rgb( var( --muted-foreground ) );
 }
 
 </style>

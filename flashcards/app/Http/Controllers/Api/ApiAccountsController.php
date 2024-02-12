@@ -35,7 +35,11 @@ class ApiAccountsController extends Controller
 
         // Update parent account's login information
         $user = $user->getParentAccount();
-        $user->update( $request->only([ 'email', 'password' ]) );
+        $user->email = $request->input( 'email' );
+        if ( $request->filled( 'password' ) ) {
+            $user->password = $request->input( 'password' );
+        }
+        $user->save();
 
         // Force email verification
         if ( $user->wasChanged( 'email' ) ) 

@@ -50,6 +50,6 @@ const prevCard = () => {
 #card-count {
     flex-grow: 1;
     text-align: center;
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
 }
 </style>

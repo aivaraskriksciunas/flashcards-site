@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Utils\HasActivityLogging;
 use App\Services\ForumReactions\ForumReactions;
 use App\Services\ForumReactions\Reactable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ForumPost extends Model
 {
-    use HasFactory, Reactable;
+    use HasFactory, Reactable, HasActivityLogging;
 
     protected $fillable = [
         'title', 'content'

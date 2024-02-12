@@ -83,15 +83,15 @@ label {
 
 .form-control {
     border: none;
-    border: 1px solid var( --color-accent );
+    border: 1px solid rgb( var( --border ) );
     padding: 0.4em 0.7em;
     border-radius: 4px;
-    background-color: var( --color-content-bg );
+    background-color: rgb( var( --input ) );
 }
 
 .form-control:focus {
     background-color: var( --color-bg-form-control-active );
-    outline: 1px solid var( --color-primary );
-    box-shadow: 0 2px 6px 2px var( --color-shadow );
+    outline: 1px solid rgb( var( --primary ) );
+    box-shadow: 0 2px 6px 2px rgb( var( --shadow ) );
 }
 </style>

@@ -48,7 +48,7 @@ const props = defineProps({
 
 .card-comment {
     font-size: 1.1em;
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
 }
 
 .divider {

@@ -42,7 +42,7 @@ const onSelect = () => {
 
 <style>
 .account-type {
-    color: var( --color-text-light );
+    color: rgb( var( --muted-foreground ) );
     font-style: italic;
     font-size: 0.9em;
 }

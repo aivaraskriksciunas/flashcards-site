@@ -77,8 +77,7 @@ class CardProgressService
 
         if ( $this->should_close_quiz( $quizItem->quiz ) ) {
             $quiz = $quizItem->quiz;
-            $quiz->date_taken = \Carbon\Carbon::now();
-            $quiz->save();
+            $quiz->closeQuiz();
         }
 
         return $quizItem;

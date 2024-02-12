@@ -25,7 +25,7 @@ const { deck } = defineProps({
 .deck-name {
     font-size: 1.5em;
     line-height: 1.3;
-    color: var( --color-primary-text );
+    color: rgb( var( --primary ) );
     font-weight: 500;
     margin-bottom: 8px
 }

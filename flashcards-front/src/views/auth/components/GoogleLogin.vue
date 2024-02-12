@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import useGoogleLogin from '../composables/useGoogleLogin.js'
 
 const { initializeGoogleLogin } = useGoogleLogin();
+const buttonContainer = ref( null )
 initializeGoogleLogin()
 
 onMounted(() => {
@@ -12,6 +13,7 @@ onMounted(() => {
             theme: "outline", 
             size: "large",
             text: "signin_with",
+            width: buttonContainer.value.scrollWidth,
         }
     );
 })
@@ -20,6 +22,6 @@ onMounted(() => {
 
 <template>
 
-    <div id='googleSignIn'></div>
+    <div id='googleSignIn' ref="buttonContainer"></div>
 
 </template>

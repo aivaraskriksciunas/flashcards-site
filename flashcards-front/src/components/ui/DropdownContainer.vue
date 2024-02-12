@@ -40,8 +40,8 @@ onBeforeUnmount(() => {
 
 .dropdown-container {
     position: absolute;
-    background-color: var( --color-content-bg );
-    border: 1px solid var( --color-shadow );
+    background-color: rgb( var( --background ) );
+    border: 1px solid rgb( var( --shadow ) );
     right: 0;
     border-radius: 5px;
     min-width: 100%;

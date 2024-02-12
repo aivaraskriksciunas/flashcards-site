@@ -34,11 +34,11 @@ const emit = defineEmits([ 'pageChange' ])
 }
 
 .pagination-spacer {
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
 }
 
 .active-pagination-link {
-    color: var( --color-primary );
+    color: rgb( var( --primary ) );
     font-weight: 500;
 }
 
@@ -47,7 +47,7 @@ const emit = defineEmits([ 'pageChange' ])
 }
 
 .pagination-link:hover {
-    background-color: var( --color-shadow );
+    background-color: rgb( var( --shadow ) ));
 }
 
 </style>

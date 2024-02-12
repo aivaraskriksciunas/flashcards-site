@@ -41,11 +41,11 @@ const onLoad = ( data ) => {
 <style scoped>
 .topic {
     font-weight: 500;
-    color: var( --color-text-light );
+    color: rgb( var( --muted-foreground ) );
 }
 
 .current-topic {
-    color: var( --color-primary );
+    color: rgb( var( --primary ) );
 
 }
 </style>

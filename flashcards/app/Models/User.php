@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\EmailConfirmation;
+use App\Models\Utils\HasActivityLogging;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -93,6 +94,22 @@ class User extends Model implements AuthenticatableContract
 
     public function isAdmin() {
         return $this->account_type === User::USER_ADMIN;
+    }
+
+    public function isOrgAdmin() {
+        return $this->account_type === User::USER_ORG_ADMIN;
+    }
+
+    public function isStudent() {
+        return $this->account_type === User::USER_STUDENT;
+    }
+
+    public function userLogs() {
+        return $this->hasMany( UserLog::class );
+    }
+
+    public function courses() {
+        return $this->hasMany( Course::class );
     }
 
     protected function isValid() : Attribute {

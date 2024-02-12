@@ -8,7 +8,8 @@
     {{ $user->name }}
 
     <x-slot:actions>
-        <a href='{{ route( 'user.edit', $user )}}'class='btn btn-primary'>Edit</a>
+        <a href='{{ route( 'user-logs.user', $user ) }}' class='btn btn-dark'>Activity</a>
+        <a href='{{ route( 'user.edit', $user )}}' class='btn btn-primary'>Edit</a>
     </x-slot:actions>
 </x-page-title>
 

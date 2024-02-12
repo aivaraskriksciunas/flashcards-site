@@ -1,8 +1,10 @@
 <script setup>
 import Header from '../../../components/common/Header.vue'
 import DeckList from '../components/DeckList.vue'
-import IconButton from '../../../components/ui/IconButton.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Plus } from 'lucide-vue-next';
 import { useUserStore } from '../../../stores/user';
+import CourseList from '../components/CourseList.vue';
 
 const user = useUserStore().user;
 
@@ -13,13 +15,17 @@ const user = useUserStore().user;
         {{ user.organization.name }}
         <template v-slot:actions>
             <div class="flex">
-                <IconButton class='mr-2' icon="fas fa-plus" text="Create deck" filled size="sm" :to="{ name: 'create-deck' }">
-                    Create deck
-                </IconButton>
+                <router-link :to="{ name: 'create-deck' }">
+                    <Button class='mr-2' icon="fas fa-plus">
+                        <Plus size="16" class="mr-2"/>
+                        Create deck
+                    </Button>
+                </router-link>
             </div>
         </template>
     </Header>
 
+    <CourseList></CourseList>
     <DeckList></DeckList>
 
 </template>

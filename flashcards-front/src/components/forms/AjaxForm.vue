@@ -3,7 +3,8 @@ import { provide, ref } from 'vue'
 import { FormDiscovery, FormDeregister } from '../../keys'
 import axios from 'axios'
 import { MESSAGE_TYPE, useStatusMessageService } from '../../services/StatusMessageService';
-import Button from '../ui/Button.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Loader2 } from 'lucide-vue-next';
 
 /**
  * Init
@@ -203,14 +204,21 @@ function clearForm() {
 
         <slot></slot>
 
-        <button type="submit" v-if="!isLoading">
-            <slot name="submit">
-                <Button>{{ props.submitText }}</Button>
-            </slot>
-        </button>
-        <div v-else="isLoading">
-            Loading...
+        <div class="flex">
+            <button type="submit" :disabled="isLoading">
+                <slot name="submit">
+                    <Button
+                        :disabled="isLoading"
+                        type="submit">
+                        <Loader2 v-if="isLoading" class="h-4 w-4 mr-2 animate-spin"/>
+                        {{ props.submitText }}
+                    </Button>
+                </slot>
+            </button>
+
+            <slot name="actions"></slot>
         </div>
+        
 
     </form>
 </template>

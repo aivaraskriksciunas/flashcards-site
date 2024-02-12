@@ -6,16 +6,20 @@ const AVAILABLE_THEMES = [ 'light', 'dark' ];
 export const useUserSettingStore = defineStore( 'user-settings', () => {
     const colorTheme = ref( 'light' );
     const quizModePreferences = ref({});
-    // Set color theme from local storage, if available
-    if ( AVAILABLE_THEMES.includes( localStorage.getItem( 'theme' ) ) ) {
-        colorTheme.value = localStorage.getItem( 'theme' );
-    }
+    const quizSizePreferences = ref({})
 
     try {
         quizModePreferences.value = JSON.parse( localStorage.getItem( 'quiz-modes' ) ) || {}
     }
     catch ( err ) {
         quizModePreferences.value = {}
+    }
+
+    try {
+        quizSizePreferences.value = JSON.parse( localStorage.getItem( 'quiz-sizes' ) ) || {}
+    }
+    catch ( err ) {
+        quizSizePreferences.value = {}
     }
 
     const setColorTheme = ( theme ) => {
@@ -26,8 +30,12 @@ export const useUserSettingStore = defineStore( 'user-settings', () => {
             colorTheme.value = 'light'
         }
 
+        document.body.className = 'theme-' + colorTheme.value;
         localStorage.setItem( 'theme', colorTheme.value )
     }
+
+    // Set color theme from local storage
+    setColorTheme( localStorage.getItem( 'theme' ) );
 
     const toggleColorTheme = () => {
         if ( colorTheme.value == 'dark' ) setColorTheme( 'light' );
@@ -36,6 +44,7 @@ export const useUserSettingStore = defineStore( 'user-settings', () => {
 
     const storeQuizPreferences = () => {
         localStorage.setItem( 'quiz-modes', JSON.stringify( quizModePreferences.value ) );
+        localStorage.setItem( 'quiz-sizes', JSON.stringify( quizSizePreferences.value ) );
     }
 
     const setPreferredQuizMode = ( deckId, mode ) => {
@@ -48,7 +57,6 @@ export const useUserSettingStore = defineStore( 'user-settings', () => {
 
         storeQuizPreferences();
     } 
-    
     
     const getPreferredQuizMode = ( deckId ) => {
         try {
@@ -64,5 +72,38 @@ export const useUserSettingStore = defineStore( 'user-settings', () => {
         return null;
     }
 
-    return { colorTheme, setColorTheme, toggleColorTheme, getPreferredQuizMode, setPreferredQuizMode }
+    const setPreferredQuizSize = ( deckId, size ) => {
+        try {
+            quizSizePreferences.value[deckId] = size
+        }
+        catch (err) {
+            quizSizePreferences.value = {}
+        }
+
+        storeQuizPreferences();
+    } 
+
+    const getPreferredQuizSize = ( deckId ) => {
+        try {
+            return quizSizePreferences.value.hasOwnProperty( deckId ) 
+                ? quizSizePreferences.value[deckId] 
+                : null
+        }
+        catch ( err ) {
+            quizSizePreferences.value = {}
+            storeQuizPreferences();
+        }
+
+        return null;
+    } 
+
+    return { 
+        colorTheme, 
+        setColorTheme, 
+        toggleColorTheme, 
+        getPreferredQuizMode, 
+        setPreferredQuizMode,
+        setPreferredQuizSize,
+        getPreferredQuizSize,
+    }
 } )

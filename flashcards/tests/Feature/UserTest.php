@@ -196,7 +196,8 @@ class UserTest extends TestCase
 
     public function test_updates_profile_data()
     {
-        $user = User::factory()->create();
+        $pass = $this->faker()->password();
+        $user = User::factory()->create([ 'password' => $pass ]);
 
         $name = $this->faker()->name();
         $email = $user->email;
@@ -215,6 +216,7 @@ class UserTest extends TestCase
         $this->assertEquals( $name, $user->name, 'Name should be updated.' );
         $this->assertEquals( $email, $user->email, 'Email should be updated.' );
         $this->assertTrue( $user->is_valid, 'User should remain valid.' );
+        $this->assertTrue( $user->checkPassword( $pass ), 'Password should remain unchanged' );
     }
 
     public function test_update_prevent_taking_another_account_email()

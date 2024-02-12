@@ -35,7 +35,7 @@ const props = defineProps({
 <style>
 .dropdown-button {
     @apply p-2 px-4;
-    border: 1px solid var( --color-accent );
+    border: 1px solid rgb( var( --border ) );
     position: relative;
     min-width: 160px;
 }

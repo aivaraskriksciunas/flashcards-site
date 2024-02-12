@@ -37,7 +37,7 @@ const props = defineProps({
 
 .forum-list-item {
     padding: 1.2em 1.5em;
-    border-bottom: 1px dashed var( --color-shadow );
+    border-bottom: 1px dashed rgb( var( --shadow ) );
     margin-bottom: 8px;
 }
 
@@ -61,11 +61,11 @@ const props = defineProps({
 
 .forum-post-date {
     font-style: italic;
-    color: var( --color-text-light );
+    color: rgb( var( --muted-foreground ) );
 }
 
 .forum-post-content {
-    color: var( --color-text-light );
+    color: rgb( var( --muted-foreground ) );
     font-weight: 300;
 }
 

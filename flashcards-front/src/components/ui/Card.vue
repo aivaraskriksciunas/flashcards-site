@@ -21,13 +21,14 @@ const emit = defineEmits([ 'click' ])
 .card-component {
     padding: 20px;
     border-radius: 10px;
-    background-color: var( --color-content-bg );
-    box-shadow: 3px 3px 0 var( --color-shadow );
+    background-color: rgb( var( --content ) );
+    box-shadow: 3px 3px 0 rgb( var( --shadow ) );
 }
 
 .card-component-hover:hover {
+    @apply bg-card/80;
     box-shadow: none;
-    background-color: var( --color-hover );
+    /* background-color: var( --color-hover ); */
 }
 
 </style>

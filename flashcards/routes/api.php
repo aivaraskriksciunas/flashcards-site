@@ -4,6 +4,9 @@ use App\Http\Controllers\Api\ApiAccountsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
+use App\Http\Controllers\Api\ApiCourseController;
+use App\Http\Controllers\Api\ApiCoursePageController;
+use App\Http\Controllers\Api\ApiCoursePageItemController;
 use App\Http\Controllers\Api\ApiDeckController;
 use App\Http\Controllers\Api\ApiForumCommentController;
 use App\Http\Controllers\Api\ApiLibraryController;
@@ -35,7 +38,7 @@ Route::post( '/register-org', [ ApiAuthController::class, 'registerOrganizationA
     ->name( 'register.org-admin');
 Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
 Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
-Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ]);
+Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ])->name( 'verify.email' );
 
 /**
  * Routes for authenticated users
@@ -123,6 +126,18 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
      */
     Route::post( 'import/quizlet', [ ApiImportController::class, 'import_quizlet_set' ] )->name( 'import-quizlet' );
     Route::post( 'import/anki', [ ApiImportController::class, 'import_anki_set' ])->name( 'import-anki' );
+
+    /**
+     * Course endpoints
+     */
+    Route::apiResource( 'courses', ApiCourseController::class );
+    Route::post( 'courses/{course}/course_pages/reorder', [ ApiCourseController::class, 'setCoursePageOrder' ] )->name( 'courses.set-page-order' );
+    Route::apiResource( 'courses.course_pages', ApiCoursePageController::class )->scoped();
+    Route::apiResource( 'courses.course_pages.course_page_items', ApiCoursePageItemController::class )->scoped();
+    Route::post( 
+            'courses/{course}/course_pages/{course_page}/course_page_items/reorder', 
+            [ ApiCoursePageController::class, 'setCoursePageItemOrder' ] 
+        )->name( 'courses.course_pages.set-page-item-order' );
 });
 
 /**

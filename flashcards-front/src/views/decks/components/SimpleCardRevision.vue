@@ -1,7 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 import FlashcardContent from './FlashcardContent.vue';
-import OutlineButton from '../../../components/ui/OutlineButton.vue';
+// import OutlineButton from '../../../components/ui/OutlineButton.vue';
+import { Button } from '@/components/ui/button';
 
 import FlashcardDisplay from './FlashcardDisplay.vue';
 import useCardRevision from '../composables/revision';
@@ -36,7 +37,7 @@ const {
         </FlashcardDisplay>
 
         <div class="flex mt-3">
-            <OutlineButton class="w-full" @click="revealItem">Flip card</OutlineButton>
+            <Button variant='secondary' class="w-full" @click="revealItem">Flip card</Button>
         </div>
     </div>
 
@@ -45,8 +46,8 @@ const {
             <FlashcardContent :card="currentItem.card"></FlashcardContent>
         </FlashcardDisplay>
         <div class="flex mt-3">
-            <OutlineButton class="flex-1 mr-1" type="danger" @click="onIncorrect">Need more practice</OutlineButton>
-            <OutlineButton class="flex-1 ml-1" type="primary" @click="onCorrect">I know this</OutlineButton>
+            <Button variant='pill' size="lg" class="flex-1 mr-1 bg-destructive hover:bg-destructive/80" @click="onIncorrect">Need more practice</Button>
+            <Button variant="pill" size="lg" class="flex-1 ml-1" @click="onCorrect">I know this</Button>
         </div>
     </div>
 </template>

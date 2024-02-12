@@ -1,7 +1,8 @@
 <script setup>
-import IconButton from '../../../components/ui/IconButton.vue';
 import { ref } from 'vue';
 import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { ThumbsUp, ThumbsDown } from 'lucide-vue-next';
 
 const props = defineProps({
     postId: {
@@ -48,12 +49,22 @@ const onVote = async ( reaction ) => {
 <template>
 <div v-if="!isLoading" class="react-button-container">
     <div class="single-react-button mr-3">
-        <IconButton @click="() => onVote( 'upvote' )" :filled="reactions.user_reaction == '1'" icon="fa-regular fa-thumbs-up"></IconButton>
-        <div class='reaction-count upvotes'>{{ reactions.upvotes }}</div>
+        <Button 
+            :variant="reactions.user_reaction == '1' ? 'default' : 'ghost'"
+            size="sm"
+            @click="() => onVote( 'upvote' )">
+            <ThumbsUp class="h-4 w-4 mr-2"/>
+            {{ reactions.upvotes }}
+        </Button>
     </div>
     <div class="single-react-button mr-2">
-        <IconButton @click="() => onVote( 'downvote' )" :filled="reactions.user_reaction == '-1'" icon="fa-regular fa-thumbs-down" type="danger"></IconButton>
-        <div class='reaction-count downvotes'>{{ reactions.downvotes }}</div>
+        <Button 
+            :variant="reactions.user_reaction == '-1' ? 'destructive' : 'ghost'"
+            size="sm"
+            @click="() => onVote( 'downvote' )" >
+            <ThumbsDown class="h-4 w-4 mr-2"/>
+            {{ reactions.downvotes }}
+        </Button>
     </div>
 </div>
 <div v-else>
@@ -66,16 +77,8 @@ const onVote = async ( reaction ) => {
     display: flex;
 }
 
-.single-react-button {
-    text-align: center;
-    display: flex;
-    align-items: center;
-}
-
 .reaction-count {
-    margin-left: 6px;
     font-weight: 300;
-    color: var( --color-text-lighter );
 }
 
 @media ( min-width: 1024px ) {

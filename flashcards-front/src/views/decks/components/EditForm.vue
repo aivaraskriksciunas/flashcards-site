@@ -1,14 +1,12 @@
 <script setup>
-import { ref, Transition } from 'vue'
+import { ref } from 'vue'
 import AjaxForm from '../../../components/forms/AjaxForm.vue';
 import TextField from '../../../components/forms/TextField.vue';
 import TextareaField from '../../../components/forms/TextareaField.vue';
 import HiddenField from '../../../components/forms/HiddenField.vue';
 import PlainButton from '../../../components/ui/PlainButton.vue';
 import Card from '../../../components/ui/Card.vue';
-import IconButton from '../../../components/ui/IconButton.vue';
 import PlainIconButton from '../../../components/ui/PlainIconButton.vue';
-import Button from '../../../components/ui/Button.vue';
 import OutlineButton from '../../../components/ui/OutlineButton.vue';
 
 const props = defineProps({
@@ -137,7 +135,7 @@ const onDeckSave = ( data ) => {
 }
 
 .card-title {
-    color: var( --color-text-lighter );
+    color: rgb( var( --muted-foreground ) );
     font-style: italic;
 }
 

@@ -40,6 +40,7 @@ const onClick = () => {
 }
 
 .dropdown-button-item:hover {
-    background-color: var( --color-hover );
+    @apply bg-background/80;
+    /* background-color: var( --color-hover ); */
 }
 </style>

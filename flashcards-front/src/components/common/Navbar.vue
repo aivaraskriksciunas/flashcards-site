@@ -15,7 +15,7 @@ const { showSidebar } = useSidebarStore()
     
 <nav class="main-navbar hidden lg:flex container py-4">
     <div class="navbar-logo flex-grow">
-        Preview version v0.7
+        Preview version v0.9
     </div>
 
     <div class="">

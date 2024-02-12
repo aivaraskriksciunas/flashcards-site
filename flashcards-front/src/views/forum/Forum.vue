@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from '../../components/common/Header.vue';
-import Button from '../../components/ui/Button.vue';
+import { Button } from '@/components/ui/button';
 import ForumPostList from './components/ForumPostList.vue';
 import TopicList from './components/TopicList.vue';
 
@@ -15,11 +15,11 @@ const route = useRoute()
     <Header>
         Forum
         <template v-slot:actions>
-            <Button 
-                v-if="route.params.topic" 
-                :to="{ name: 'create-forum-post', params: { topic: route.params.topic } }">
-                New post
-            </Button>
+            <router-link v-if="route.params.topic" :to="{ name: 'create-forum-post', params: { topic: route.params.topic } }">
+                <Button>
+                    New post
+                </Button>
+            </router-link>
         </template>
     </Header>
     

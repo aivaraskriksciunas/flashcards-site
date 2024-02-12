@@ -31,7 +31,11 @@ const refreshKey = ref( 0 )
 <template>
 <DataLoaderWrapper 
     :url="`/api/decks/${deckId}`" 
-    :query-params="{ 'choose': true, 'quiz-mode': settings.getPreferredQuizMode( deckId )}"
+    :query-params="{ 
+        'choose': true,
+        'quiz-mode': settings.getPreferredQuizMode( deckId ),
+        'quiz-size': settings.getPreferredQuizSize( deckId )
+    }"
     @load="onLoad" 
     :key="refreshKey">
     <SlimContainer>
