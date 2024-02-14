@@ -1,0 +1,6 @@
+upload_max_filesize = 10M
+
+[xdebug]
+xdebug.mode = debug
+xdebug.start_with_request = yes
+xdebug.client_host = host.docker.internal
