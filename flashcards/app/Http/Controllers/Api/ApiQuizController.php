@@ -31,7 +31,7 @@ class ApiQuizController extends Controller
      */
     public function get( Request $request, Deck $deck )
     {
-        $this->generator->set_preferred_quiz_size( $request->query( 'quiz-size' ) );
+        $this->generator->set_preferred_quiz_size( $request->query( 'quiz-size', null ) );
         
         return new QuizDetailResource(
             $this->generator->get_or_generate( $deck, $request->user() )
