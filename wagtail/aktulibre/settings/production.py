@@ -1,11 +1,11 @@
 from .base import *
 import os
 
-DEBUG = False
+DEBUG = True
 
 SECRET_KEY = os.getenv( 'SECRET_KEY' )
 
-ALLOWED_HOSTS = [ 'aktulibre.eu', 'wagtail.aktulibre.eu' ]
+ALLOWED_HOSTS = [ 'aktulibre.eu', 'wagtail.aktulibre.eu', 'www.google-analytics.com' ]
 CSRF_TRUSTED_ORIGINS = ['https://aktulibre.eu', 'https://wagtail.aktulibre.eu']
 
 DATABASES = {
@@ -32,7 +32,7 @@ LOGGING = {
         "file": {
             "level": "ERROR",
             "formatter": "verbose",
-            "class": "logging.RotatingFileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": os.path.join( BASE_DIR, 'logs', 'error.log' ),
             "maxBytes": 1024 * 1024 * 10,
             "backupCount": 5,

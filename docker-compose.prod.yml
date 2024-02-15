@@ -12,6 +12,7 @@ services:
       - ./flashcards:/var/www/
       - ./flashcards-front:/var/www-front/
       - ./logs:/var/log/nginx/
+      - ./wagtail:/var/www-wagtail/
     depends_on: 
       - php
 
@@ -32,6 +33,7 @@ services:
     restart: "no"
     volumes:
       - ./flashcards-front:/home/node/app
+      - /home/node/app/node_modules
 
   phpmyadmin:
     image: phpmyadmin
@@ -59,3 +61,4 @@ services:
 volumes:
   flashcards:
   flashcards-front:
+  wagtail:
