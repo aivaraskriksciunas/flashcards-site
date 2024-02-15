@@ -3,7 +3,7 @@ import UploadField from '../../components/forms/UploadField.vue';
 import SlimContainer from '../../components/ui/SlimContainer.vue';
 import Card from '../../components/ui/Card.vue';
 import Header from '../../components/common/Header.vue';
-import Button from '../../components/ui/Button.vue';
+import Button from '../../components/ui/_Button.vue';
 import PlainButton from '../../components/ui/PlainButton.vue';
 import AjaxForm from '../../components/forms/AjaxForm.vue';
 import CheckboxField from '../../components/forms/CheckboxField.vue';
