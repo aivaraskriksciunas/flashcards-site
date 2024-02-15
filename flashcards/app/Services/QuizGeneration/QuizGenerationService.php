@@ -149,7 +149,7 @@ class QuizGenerationService
      * @param string $size number of cards in a quiz
      * @return void
      */
-    public function set_preferred_quiz_size( string $size )
+    public function set_preferred_quiz_size( string|null $size )
     {
         switch ( $size ) {
             case '5':
