@@ -11,12 +11,13 @@ export const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-md font-medium",
         outline:
-          "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground rounded-md font-medium",
+          "border border-border bg-transparent hover:bg-accent hover:text-accent-foreground rounded-md font-medium",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md font-medium",
         ghost: "hover:bg-accent hover:text-accent-foreground rounded-md",
         link: "text-primary underline-offset-4 hover:underline rounded-md font-medium",
-        pill: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-medium"
+        pill: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-medium",
+        pillOutline: "border border-primary hover:bg-primary/80 rounded-full font-medium"
       },
       size: {
         default: "h-10 px-4 py-2",

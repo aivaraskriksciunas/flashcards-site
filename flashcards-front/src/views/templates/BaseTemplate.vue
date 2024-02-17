@@ -13,7 +13,7 @@ import UnverifiedUserWarning from './components/UnverifiedUserWarning.vue';
         <div class="sidebar lg:w-1/3">
             <Sidebar></Sidebar>
         </div>
-        <div class="content px-4 py-4">
+        <div class="content py-4">
             <Navbar/>
 
             <div class="container">

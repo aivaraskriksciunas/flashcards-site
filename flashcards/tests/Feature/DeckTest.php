@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\FlashcardType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -253,4 +254,90 @@ class DeckTest extends TestCase
         $this->assertEquals( 2, $deck->cards()->count() );
         $this->assertEquals( 'Test2', $deck->name );
     }
+
+    public function test_sets_and_updates_flashcard_types()
+    {
+        $user = User::factory()->create();
+
+        $request = $this->actingAs( $user )->postJson( 
+            route( 'api.decks.create' ),
+            [
+                'name' => 'Test2',
+                'cards' => [
+                    [ 'question' => 'A', 'answer' => 'B', 'question_type' => FlashcardType::Text, 'answer_type' => FlashcardType::List ],
+                    [ 'question' => 'C', 'answer' => 'D', 'question_type' => FlashcardType::List, 'answer_type' => FlashcardType::Text ],
+                ]
+            ] 
+        );
+
+        $request->assertSuccessful();
+
+        $deck = Deck::first();
+        $cards = $deck->cards()->get();
+        $this->assertEquals( FlashcardType::List, $cards[0]->answer_type, 'Flashcard answer type should be set' );
+        $this->assertEquals( FlashcardType::Text, $cards[0]->question_type, 'Flashcard question type should be set' );
+        $this->assertEquals( FlashcardType::List, $cards[1]->question_type, 'Flashcard question type should be set' );
+        $this->assertEquals( FlashcardType::Text, $cards[1]->answer_type, 'Flashcard answer type should be set' );
+
+        // Test upddate
+        $request = $this->actingAs( $user )->patchJson( 
+            route( 'api.decks.update', $deck ),
+            [
+                'name' => 'Test2',
+                'cards' => [
+                    [ 'question' => 'A', 'answer' => 'B', 'question_type' => FlashcardType::List, 'answer_type' => FlashcardType::Text ],
+                    [ 'question' => 'C', 'answer' => 'D', 'question_type' => FlashcardType::Text, 'answer_type' => FlashcardType::List ],
+                ]
+            ] 
+        );
+
+        $request->assertSuccessful();
+
+        $deck->refresh();
+        $cards = $deck->cards()->get();
+        $this->assertEquals( FlashcardType::List, $cards[1]->answer_type, 'Flashcard answer type should be updated' );
+        $this->assertEquals( FlashcardType::Text, $cards[1]->question_type, 'Flashcard question type should be updated' );
+        $this->assertEquals( FlashcardType::List, $cards[0]->question_type, 'Flashcard question type should be updated' );
+        $this->assertEquals( FlashcardType::Text, $cards[0]->answer_type, 'Flashcard answer type should be updated' );
+    }
+
+    public function test_validates_flashcard_types()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs( $user )->postJson( 
+            route( 'api.decks.create' ),
+            [
+                'name' => 'Test2',
+                'cards' => [ [ 'question' => 'A', 'answer' => 'B', 'question_type' => 'lala', 'answer_type' => FlashcardType::List ] ]
+            ] 
+        )->assertUnprocessable();
+
+        $this->actingAs( $user )->postJson( 
+            route( 'api.decks.create' ),
+            [
+                'name' => 'Test2',
+                'cards' => [ [ 'question' => 'A', 'answer' => 'B', 'question_type' => FlashcardType::List, 'answer_type' => 'lala' ] ]
+            ] 
+        )->assertUnprocessable();
+
+        $this->assertDatabaseCount( 'flashcards', 0 );
+
+        // Test updating
+        $deck = $user->decks()->create([ 'name' => 'Test' ]);
+        $this->actingAs( $user )->patchJson( 
+            route( 'api.decks.update', $deck ),
+            [
+                'name' => 'Test2',
+                'cards' => [ [ 'question' => 'A', 'answer' => 'B', 'question_type' => FlashcardType::List, 'answer_type' => 'lala' ] ]
+            ] 
+        )->assertUnprocessable();
+        $this->actingAs( $user )->patchJson( 
+            route( 'api.decks.update', $deck ),
+            [
+                'name' => 'Test2',
+                'cards' => [ [ 'question' => 'A', 'answer' => 'B', 'question_type' => 'lalala', 'answer_type' => FlashcardType::Text ] ]
+            ] 
+        )->assertUnprocessable();
+    }  
 }

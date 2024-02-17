@@ -1,60 +1,60 @@
 <script setup>
+import { onMounted, onUpdated, ref } from 'vue';
+import FlashcardListContent from './flashcard-content/FlashcardListContent.vue';
+import FlashcardMathContent from './flashcard-content/FlashcardMathContent.vue';
+import FlashcardTextContent from './flashcard-content/FlashcardTextContent.vue';
 
 const props = defineProps({
-    card: { required: true },
-    questionOnly: {
-        type: Boolean,
-        default: false,
+    text: {
+        required: true,
+        type: String,
     },
-    showComment: {
-        type: Boolean,
-        default: true,
+    type: {
+        type: String,
+        default: 'text'
     }
 })
 
+const contentSizer = ref( null )
+const adaptContent = () => {
+    const el = contentSizer.value;
+    const max_text_size = 36; // px
+    const min_text_size = 14; // px
+
+    const isOverflowing = ( clientHeight, scrollHeight ) => scrollHeight > clientHeight;
+
+    let fontSize = max_text_size;
+    el.style.fontSize = `${fontSize}px`;
+    while ( isOverflowing( el.clientHeight, el.scrollHeight ) && fontSize > min_text_size ) {
+        fontSize -= 2;
+        el.style.fontSize = `${fontSize}px`;
+    }
+}
+
+onMounted(() => adaptContent() )
+onUpdated(() => adaptContent() )
 </script>
 
 <template>
-    <div v-if="!props.questionOnly">
-        <div class="card-question">{{ card.question }}</div>
-        <div class="divider"></div>
-        <slot name="card-answer">
-            <div class="card-answer">{{ card.answer }}</div>  
-        </slot>
+    <div class="content-sizer" ref="contentSizer">
+        <FlashcardTextContent 
+            v-if="props.type == 'text'"
+            :text="props.text"/>
+        
+        <FlashcardListContent
+            v-else-if="props.type == 'list'"
+            :text="props.text"
+            :key="props.text"/>
 
-        <div class="card-comment py-5" v-if="props.showComment">
-            {{ card.comment }}
-        </div>
-    </div>
-    <div v-else>
-        <div class="card-question">{{ card.question }}</div>
+        <FlashcardMathContent 
+            v-else-if="props.type == 'math'"
+            :text="props.text"/>
     </div>
 </template>
 
 <style scoped>
-.card-content {
-    text-align: center;
-    padding-top: 1em;
-}
-
-.card-question {
-    font-size: 3em;
-    font-weight: 500;
-}
-
-.card-answer {
-    font-size: 2em;
-}
-
-.card-comment {
-    font-size: 1.1em;
-    color: rgb( var( --muted-foreground ) );
-}
-
-.divider {
-    display: inline-block;
-    background-color: var(--color-shadow);
-    height: 1px;
-    width: 60%;
+.content-sizer {
+    max-height: 8rem;
+    line-height: 1.5;
 }
 </style>

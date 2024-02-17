@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import FlashcardContent from './FlashcardContent.vue';
 import FlashcardDisplay from './FlashcardDisplay.vue';
 import FlashcardControls from './FlashcardControls.vue';
+import { Separator } from '@/components/ui/separator';
 
 const props = defineProps([ 'cards' ])
 
@@ -31,7 +32,15 @@ const prevCard = () => {
 
 <div v-if="props.cards">
     <FlashcardDisplay>
-        <FlashcardContent :card="card"></FlashcardContent>
+
+        <div class="flashcard-content">
+            <FlashcardContent 
+                :text="card.question" 
+                class="mb-2 font-medium text-lg"/>
+            
+            <Separator class="my-2"/>
+            <FlashcardContent class='font-light' :text="card.answer" :type="card.answer_type"/>
+        </div>
         
         <template v-slot:controls>
             <FlashcardControls @onPrev="prevCard" @onNext="nextCard">
@@ -51,5 +60,13 @@ const prevCard = () => {
     flex-grow: 1;
     text-align: center;
     color: rgb( var( --muted-foreground ) );
+}
+
+.flashcard-content {
+    @apply pb-4;
+    height: 16rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 </style>

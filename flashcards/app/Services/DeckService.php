@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\FlashcardType;
 use App\Models\Deck;
 use App\Models\Flashcard;
 use App\Models\User;
@@ -41,6 +42,8 @@ class DeckService
                     ->update([ 
                         'question' => $card['question'], 
                         'answer' => $card['answer'],
+                        'question_type' => $card['question_type'] ?? FlashcardType::Text,
+                        'answer_type' => $card['answer_type'] ?? FlashcardType::Text,
                         'comment' => $card['comment'] ?? null,
                     ]);
 
@@ -84,6 +87,8 @@ class DeckService
         $flashcard = new Flashcard();
         $flashcard->question = $card['question'];
         $flashcard->answer = $card['answer'];
+        $flashcard->question_type = $card['question_type'] ?? FlashcardType::Text;
+        $flashcard->answer_type = $card['answer_type'] ?? FlashcardType::Text;
         $deck->cards()->save( $flashcard );
     }
 }

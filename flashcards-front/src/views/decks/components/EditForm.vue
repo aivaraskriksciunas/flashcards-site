@@ -1,13 +1,18 @@
 <script setup>
 import { ref } from 'vue'
+import {
+    Plus,
+    Trash2
+} from 'lucide-vue-next';
 import AjaxForm from '../../../components/forms/AjaxForm.vue';
 import TextField from '../../../components/forms/TextField.vue';
 import TextareaField from '../../../components/forms/TextareaField.vue';
-import HiddenField from '../../../components/forms/HiddenField.vue';
 import PlainButton from '../../../components/ui/PlainButton.vue';
 import Card from '../../../components/ui/Card.vue';
 import PlainIconButton from '../../../components/ui/PlainIconButton.vue';
-import OutlineButton from '../../../components/ui/OutlineButton.vue';
+import { Button } from '@/components/ui/button';
+import FlashcardContentFields from './flashcard-content-fields/FlashcardContentFields.vue';
+import FlashcardContentTypeSelect from './flashcard-content-fields/FlashcardContentTypeSelect.vue';
 
 const props = defineProps({
     deck: {
@@ -30,6 +35,8 @@ if ( props.deck && props.deck.cards ) {
             question: card.question,
             answer: card.answer,
             comment: card.comment == '' ? null : card.comment,
+            questionType: card.question_type ?? 'text',
+            answerType: card.answer_type ?? 'text'
         })
     }
 }
@@ -49,7 +56,9 @@ const addCard = () => {
         listItemId: Symbol(),
         id: null,
         question: '',
-        answer: ''
+        answer: '',
+        questionType: 'text',
+        answerType: 'text',
     })
 }
 
@@ -80,30 +89,21 @@ const onDeckSave = ( data ) => {
                 <Card class="deck-item-form">
                     <div class="card-header flex content-center">
                         <div class="card-title">#{{ index + 1 }}</div>
-                        <div class="flex-1"></div>
-                        <PlainIconButton @click="() => removeCard( index )" type="danger" icon="fas fa-trash" size="sm">
+
+                        <div class="flex-1">
+                            <FlashcardContentTypeSelect v-model="cards[index].answerType"/>
+                        </div>
+
+                        <PlainIconButton @click="() => removeCard( index )" variant="destructive">
+                            <Trash2/>
                         </PlainIconButton>
                     </div>
 
-                    <div class="md:flex mb-2">
-                        <HiddenField v-if="card.id" :value="card.id" :name="`cards.${index}.id`"></HiddenField>
-                        <TextField 
-                            class="deck-item-control" 
-                            :value="card.question ?? ''" 
-                            :name="`cards.${index}.question`"
-                            placeholder="Question">
-                        </TextField>
-                        <TextField 
-                            class="deck-item-control"
-                            :value="card.answer ?? ''" 
-                            :name="`cards.${index}.answer`"
-                            placeholder="Answer">
-                        </TextField>
-                    </div>
+                    <FlashcardContentFields :card="card" :index="index" :answerType="card.answerType"/>
                     
                     <div class="flex justify-center text-sm" v-if="card.comment == null">
                         <PlainButton @click="() => addComment( index )">
-                            <font-awesome-icon icon="fas fa-plus" class="mr-1"></font-awesome-icon>
+                            <Plus class="mr-1" size="16"/>
                             Comment
                         </PlainButton> 
                     </div>
@@ -124,7 +124,7 @@ const onDeckSave = ( data ) => {
         </TransitionGroup>
 
         <div ref="addCardButton">
-            <OutlineButton @click="addCard" class="w-full mb-4" type="primary">New card</OutlineButton>
+            <Button variant="pillOutline" @click="addCard" class="w-full mb-4">New card</Button>
         </div>
     </AjaxForm>
 </template>

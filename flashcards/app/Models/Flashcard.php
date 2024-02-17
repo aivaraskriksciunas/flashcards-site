@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\FlashcardType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,12 @@ class Flashcard extends Model
 
     protected $fillable = [
         'question', 'answer', 'comment',
+        'question_type', 'answer_type'
+    ];
+
+    protected $casts = [
+        'question_type' => FlashcardType::class,
+        'answer_type' => FlashcardType::class
     ];
 
     public $timestamps = true;
@@ -41,14 +48,18 @@ class Flashcard extends Model
     private function getQAPair() {
         return [
             'question' => $this->question,
+            'question_type' => $this->question_type,
             'answer' => $this->answer,
+            'answer_type' => $this->answer_type,
         ];
     }
 
     private function getAQPair() {
         return [
             'question' => $this->answer,
+            'question_type' => $this->answer_type,
             'answer' => $this->question,
+            'answer_type' => $this->question_type,
         ];
     }
 }

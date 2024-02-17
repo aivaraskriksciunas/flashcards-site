@@ -32,7 +32,7 @@ class DeckDetailResource extends JsonResource
      */
     private function getCards( ?string $mode, bool $choose = false ) 
     {
-        $deck_card_collection = $this->cards;
+        $deck_card_collection = $this->cards()->orderBy( 'created_at', 'ASC' )->get();
         if ( $choose ) {
             $deck_card_collection = $deck_card_collection->shuffle()->take( 10 );
         }

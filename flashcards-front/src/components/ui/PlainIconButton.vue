@@ -1,14 +1,8 @@
 <script setup>
 
 const props = defineProps({
-    icon: {
-        required: true
-    },
-    type: {
+    variant: {
         default: 'success'
-    },
-    size: {
-        default: 'lg'
     },
     filled: {
         default: false,
@@ -21,10 +15,10 @@ const props = defineProps({
 })
 
 let iconStyle = 'icon-plain-button-success'
-if ( props.type == 'danger' ) {
+if ( props.variant == 'destructive' ) {
     iconStyle = 'icon-plain-button-danger'
 }
-if ( props.type == 'secondary' ) {
+if ( props.variant == 'secondary' ) {
     iconStyle = 'icon-plain-button-secondary'
 }
 
@@ -32,14 +26,14 @@ if ( props.type == 'secondary' ) {
 
 <template>
     <div class="icon-plain-button" :class="[ iconStyle ]">
-        <font-awesome-icon class="icon" :icon="props.icon" :size="props.size"></font-awesome-icon>
+        <slot/>
     </div>
 </template>
 
 <style>
 .icon-plain-button {
     border-radius: 1000px;
-    padding: 0 16px;
+    padding: 0 10px;
     height: 38px;
     width: 38px;
     display: flex;
@@ -56,24 +50,8 @@ if ( props.type == 'secondary' ) {
     margin-right: 0px;
 }
 
-.icon-button-success .icon path {
-    fill: rgb( var( --primary ) );
-}
-
-.icon-plain-button-danger .icon path {
-    fill: var( --color-danger );
-}
-
-.icon-plain-button-danger .icon path {
-    fill: rgb( var( --foreground ) );
-}
-
-.icon-plain-button-success:hover  .icon path {
-    fill: rgb( var( --primary-hover ) );
-}
-
-.icon-plain-button-danger:hover  .icon path {
-    fill: var( --color-danger-hover );
+.icon-plain-button-danger {
+    color: rgb( var( --destructive ) );
 }
 
 </style>

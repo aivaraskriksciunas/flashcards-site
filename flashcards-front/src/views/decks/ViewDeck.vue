@@ -110,7 +110,7 @@ const onDeleteDeck = async () => {
             <div class='deck-title'>
                 <h1>{{ deck.name }}</h1>
             </div>
-            <router-link :to="{ name: 'edit-deck', params: { id: deck.id } }">
+            <router-link v-if="isLoggedIn" :to="{ name: 'edit-deck', params: { id: deck.id } }">
                 <Button variant="ghost" size="sm" class="text-muted-foreground">
                     <Pencil class="w-4 h-4 mr-2" color="rgb( var( --muted-foreground ) )"/>
                     Edit

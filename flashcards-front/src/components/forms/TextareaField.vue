@@ -22,7 +22,8 @@ const props = defineProps({
 
 const emits = defineEmits([ 'change' ])
 
-const { data, error } = useFormElement( props.name )
+const model = defineModel()
+const { data, error } = useFormElement( props.name, model )
 
 if ( props.value ) {
     data.value = props.value

@@ -1,5 +1,11 @@
 <script setup>
-import { SelectItem, SelectItemIndicator, SelectItemText } from "radix-vue";
+import { computed } from "vue";
+import {
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  useForwardProps,
+} from "radix-vue";
 import { Check } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 
@@ -9,16 +15,24 @@ const props = defineProps({
   textValue: { type: String, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: String, required: false },
+  class: { type: null, required: false },
 });
+
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props;
+
+  return delegated;
+});
+
+const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
   <SelectItem
-    v-bind="props"
+    v-bind="forwardedProps"
     :class="
       cn(
-        'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-4 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         props.class
       )
     "

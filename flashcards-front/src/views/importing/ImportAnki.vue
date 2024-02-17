@@ -3,8 +3,7 @@ import UploadField from '../../components/forms/UploadField.vue';
 import SlimContainer from '../../components/ui/SlimContainer.vue';
 import Card from '../../components/ui/Card.vue';
 import Header from '../../components/common/Header.vue';
-import Button from '../../components/ui/_Button.vue';
-import PlainButton from '../../components/ui/PlainButton.vue';
+import { Button } from '@/components/ui/button';
 import AjaxForm from '../../components/forms/AjaxForm.vue';
 import CheckboxField from '../../components/forms/CheckboxField.vue';
 import { useRouter } from 'vue-router';
@@ -50,7 +49,7 @@ const onImport = ( data ) => {
 
             <div class="flex mt-6 items-center">
                 <Button @click="router.push({ name: 'home' })" class="mr-4">Back to home</Button>
-                <PlainButton @click="createdDecks = null">Import again</PlainButton>
+                <Button variant="ghost" @click="createdDecks = null">Import again</Button>
             </div>
             
         </Card>

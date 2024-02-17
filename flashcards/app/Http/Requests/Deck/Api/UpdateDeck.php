@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Deck\Api;
 
+use App\Enums\FlashcardType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateDeck extends FormRequest
 {
@@ -29,6 +31,14 @@ class UpdateDeck extends FormRequest
             'cards.*.question' => 'required|max:200',
             'cards.*.answer' => 'required|max:200',
             'cards.*.comment' => 'nullable|string|max:800',
+            'cards.*.question_type' => [
+                'nullable',
+                Rule::enum( FlashcardType::class )
+            ],
+            'cards.*.answer_type' => [
+                'nullable',
+                Rule::enum( FlashcardType::class )
+            ],
         ];
     }
 }

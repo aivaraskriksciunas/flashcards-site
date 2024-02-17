@@ -7,8 +7,9 @@ import FlashcardDisplay from './components/FlashcardDisplay.vue';
 import FlashcardControls from './components/FlashcardControls.vue';
 import FlashcardContent from './components/FlashcardContent.vue';
 import OutlineButton from '../../components/ui/OutlineButton.vue';
-import PlainButton from '../../components/ui/PlainButton.vue';
+import { Button } from '@/components/ui/button';
 import { useUserSettingStore } from '../../stores/user-settings';
+import { Separator } from '@/components/ui/separator';
 
 const route = useRoute()
 const deckId = route.params.id 
@@ -44,13 +45,21 @@ const refreshKey = ref( 0 )
         <div v-if="deck.cards.length">
             <FlashcardDisplay>
                 <div v-if="i_currentCard != deck.cards.length">
-                    <FlashcardContent :card="deck.cards[i_currentCard]" :show-comment="cardRevealed === i_currentCard">
-                        <template v-slot:card-answer>
-                            <div v-if="cardRevealed !== i_currentCard">
-                                <PlainButton @click="cardRevealed = i_currentCard">View answer</PlainButton>
-                            </div>
-                        </template>
-                    </FlashcardContent>
+                    <FlashcardContent 
+                        :text="deck.cards[i_currentCard].question" 
+                        :type="deck.cards[i_currentCard].question_type"/>
+
+                    <div v-if="cardRevealed !== i_currentCard">
+                        <Button variant="ghost" @click="cardRevealed = i_currentCard">View answer</Button>
+                    </div>
+
+                    <Separator class="my-2" v-if="cardRevealed === i_currentCard"/>
+
+                    <FlashcardContent 
+                        v-if="cardRevealed === i_currentCard"
+                        :text="deck.cards[i_currentCard].answer" 
+                        :type="deck.cards[i_currentCard].answer_type"/>
+                    
                 </div>
                 <div v-else>
                     <div class='learn-report mb-3'>You reviewed {{ deck.cards.length }} cards.</div>

@@ -1,10 +1,11 @@
 <script setup>
+import { watch, ref } from "vue";
 import { useFormElement } from "./composables/FormElement";
 
 /**
  * Element Properties
  */
- const props = defineProps({
+const props = defineProps({
     name: {
         type: String,
         required: true,
@@ -14,7 +15,8 @@ import { useFormElement } from "./composables/FormElement";
     }
 })
 
-const { data, error } = useFormElement( props.name );
+const model = defineModel()
+const { data, error } = useFormElement( props.name, model );
 
 if ( props.value ) {
     data.value = props.value

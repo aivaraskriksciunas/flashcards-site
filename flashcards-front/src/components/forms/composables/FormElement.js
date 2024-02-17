@@ -1,9 +1,9 @@
 import { ref, inject, onUnmounted } from "vue"
 import { FormDiscovery, FormDeregister } from '../../../keys'
 
-export function useFormElement( name ) {
+export function useFormElement( name, model ) {
 
-    const data = ref( null )
+    const data = model == null ? ref( null ) : model
     const error = ref( null )
 
     const elementModifier = {
