@@ -126,7 +126,7 @@ class AccountManager
         $user->is_valid = true;
         $user->password = $newPassword;
         $user->organization()->associate(
-            $invitation->creator()->organization()
+            $invitation->creator->organization
         );
 
         if ( $parent ) {

@@ -76,7 +76,7 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
     /**
      * Deck endpoints
      */
-    Route::get( '/decks', [ ApiDeckController::class, 'index' ] )->name( 'decks.get' );
+    Route::get( '/decks', [ ApiDeckController::class, 'index' ] )->name( 'decks.show' );
     Route::post( '/decks', [ ApiDeckController::class, 'create' ] )->name( 'decks.create' );
     Route::patch( '/decks/{deck}', [ ApiDeckController::class, 'update' ] )
         ->middleware( 'can:update,deck')

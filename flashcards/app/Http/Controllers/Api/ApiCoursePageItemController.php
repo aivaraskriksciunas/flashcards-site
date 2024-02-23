@@ -16,7 +16,7 @@ class ApiCoursePageItemController extends Controller
     public function __construct()
     {
         $this->middleware( 'can:view,course' );   
-        $this->authorizeResource( Course::class );
+        // $this->authorizeResource( Course::class );
     }
 
     /**
