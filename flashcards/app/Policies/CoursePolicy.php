@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\Models\Course;
 use App\Models\User;
+use App\Services\AccountLimiter\AccountLimiter;
+use App\Services\AccountLimiter\LimiterAction;
 use Illuminate\Auth\Access\Response;
 
 class CoursePolicy
@@ -39,7 +41,8 @@ class CoursePolicy
 
     public function create( User $user )
     {
-        // TODO: use dynamic permission policy
+        AccountLimiter::limit( $user, LimiterAction::Create, Course::class );
+        
         return $user->isOrgAdmin() || $user->isStudent();
     }
 

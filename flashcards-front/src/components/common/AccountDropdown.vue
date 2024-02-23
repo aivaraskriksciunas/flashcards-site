@@ -3,8 +3,14 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/user';
 import useAccountSwitcher from '../../composables/useAccountSwitcher';
 import AccountButton from '../ui/AccountButton.vue';
-import DropdownContainer from '../ui/DropdownContainer.vue';
-import PlainButton from '../ui/PlainButton.vue';
+import { 
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { Button } from '../ui/button';
+import { UserRound, LogOut } from 'lucide-vue-next';
 
 const props = defineProps({
     showLogout: {
@@ -20,29 +26,80 @@ const { switchAccount } = useAccountSwitcher( () => {
     router.go() // Refresh the page
 })
 
+const getAccountTypeName = ( type ) => {
+    switch ( type ) {
+        case 'admin':
+            return 'Administrator';
+        case 'orgadmin': 
+            return 'Organization';
+        case 'student':
+        default: 
+            return 'Student'
+    }
+}
+
 </script>
 
 <template>
 
-<DropdownContainer>
-    <template v-slot:dropdown-button>
-        <PlainButton class="flex">
-            <div class="pr-2">
-                <font-awesome-icon icon="fa-regular fa-user"></font-awesome-icon>
-            </div>
+<DropdownMenu>
+    <DropdownMenuTrigger>
+        <Button variant="ghost">
+            <UserRound class="mr-2" />
             {{ userStore.user.name }}
-        </PlainButton>
-    </template>
+        </Button>
+    </DropdownMenuTrigger>
 
-    <AccountButton v-for="account of userStore.user.accounts" :account="account" @click="switchAccount"></AccountButton>
-    <router-link :to="{ name: 'logout' }">
-        <PlainButton v-if="props.showLogout" class="px-2 flex items-center">
-            <div class="p-2">
-                <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket"></font-awesome-icon>
+    <DropdownMenuContent>
+        <DropdownMenuItem v-for="account of userStore.user.accounts" @click="() => switchAccount( account.id )">
+            <div class="flex account-button">
+                <div class="account-button__icon">
+                    <UserRound/>
+                </div>
+                <div class="account-button__info">
+                    <div class="account-button__name">
+                        {{ account.name }}
+                    </div>
+                    <div class="account-button__type">
+                        {{ getAccountTypeName( account.account_type ) }}
+                    </div>
+                </div>
             </div>
-            Logout
-        </PlainButton>
-    </router-link>
-</DropdownContainer>
+        </DropdownMenuItem>
+        <router-link :to="{ name: 'logout' }">
+            <DropdownMenuItem v-if="props.showLogout">
+                <LogOut class="mr-2" size="16"/>
+                Logout
+            </DropdownMenuItem>
+        </router-link>
+    </DropdownMenuContent>
+    
+</DropdownMenu>
 
 </template>
+
+<style scoped>
+.account-button {
+    
+}
+
+.account-button__info {
+    @apply p-2;
+}
+
+.account-button__icon {
+    @apply px-1;
+    display: flex;
+    align-items: center;
+    color: rgb( var( --muted-foreground ) );
+}
+
+.account-button__name {
+    font-weight: 500;
+}
+
+.account-button__type {
+    font-weight: 300;
+    font-size: 0.9em;
+}
+</style>

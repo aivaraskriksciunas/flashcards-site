@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -24,7 +25,7 @@ class UserTest extends TestCase
             'email' => $email,
             'password' => $password,
             'name' => 'Testing',
-            'account_type' => User::USER_STUDENT,
+            'account_type' => UserType::STUDENT,
         ]);
         $user->save();
 
@@ -52,7 +53,7 @@ class UserTest extends TestCase
         
         $user = User::where( 'email', $email )->first();
         $this->assertFalse( $user->is_valid, 'New user should be invalid until email confirmed.' );
-        $this->assertEquals( $user->account_type, User::USER_STUDENT, 'New user should be a student.' );
+        $this->assertEquals( $user->account_type, UserType::STUDENT, 'New user should be a student.' );
     }
 
     public function test_register_org_admin()
@@ -70,7 +71,7 @@ class UserTest extends TestCase
         
         $user = User::where( 'email', $email )->first();
         $this->assertFalse( $user->is_valid, 'New user should be invalid until email confirmed.' );
-        $this->assertEquals( $user->account_type, User::USER_ORG_ADMIN, 'New user should be an organization admin.' );
+        $this->assertEquals( $user->account_type, UserType::ORG_ADMIN, 'New user should be an organization admin.' );
     }
 
     public function test_register_with_existing_email()
@@ -112,7 +113,7 @@ class UserTest extends TestCase
         $response->assertSuccessful();
         $this->assertDatabaseCount( 'users', 2 );
         $related_student = $admin->subAccounts()->first();
-        $this->assertEquals( User::USER_STUDENT, $related_student->account_type, 'Sub account should be student account' );
+        $this->assertEquals( UserType::STUDENT, $related_student->account_type, 'Sub account should be student account' );
     }
 
     public function test_prevents_two_student_subaccounts_when_parent_student()

@@ -22,6 +22,15 @@ use App\Http\Controllers\UserLogController;
 |
 */
 
+Route::domain( 'pma.aktulibre.eu' )
+    ->middleware([ 'auth', 'is-admin' ])
+    ->group( 
+        function() {
+            Route::any( '{path}', [ PageController::class, 'phpmyadmin' ] )
+                ->where( 'path', '.*' );
+        }
+    );
+
 Route::get('/', function () {
     return view('welcome');
 });

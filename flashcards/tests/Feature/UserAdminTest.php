@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -23,7 +24,7 @@ class UserAdminTest extends TestCase
             'email' => $email,
             'password' => $password,
             'name' => 'Testing',
-            'account_type' => User::USER_ADMIN,
+            'account_type' => UserType::ADMIN,
         ]);
         $user->save();
 
@@ -46,7 +47,7 @@ class UserAdminTest extends TestCase
             'email' => $email,
             'password' => $password,
             'name' => 'Testing',
-            'account_type' => User::USER_STUDENT,
+            'account_type' => UserType::STUDENT,
         ]);
         $user->save();
 
@@ -69,13 +70,13 @@ class UserAdminTest extends TestCase
             'email' => $email,
             'password' => $password,
             'name' => 'Testing',
-            'account_type' => User::USER_STUDENT,
+            'account_type' => UserType::STUDENT,
         ]);
         $parent->save();
 
         // Create admin subaccount
         $sub = new User([
-            'account_type' => User::USER_ADMIN,
+            'account_type' => UserType::ADMIN,
             'name' => 'Testing',
         ]);
         $parent->subAccounts()->save( $sub );

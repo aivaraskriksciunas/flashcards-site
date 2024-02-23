@@ -2,6 +2,7 @@
 import Card from '../../../components/ui/Card.vue';
 import DataLoaderWrapper from '../../../components/wrappers/DataLoaderWrapper.vue';
 import { ref } from 'vue';
+import { CheckCircle, XCircle } from 'lucide-vue-next';
 
 const props = defineProps({
     quiz: {
@@ -33,8 +34,8 @@ const onLoad = ( data ) => {
                 </div>
             </div>
             <div class="summary-icon">
-                <font-awesome-icon class='icon' v-if="item.is_correct" icon="fa-regular fa-circle-check"></font-awesome-icon>
-                <font-awesome-icon class='icon' v-else icon="fa-regular fa-circle-xmark"></font-awesome-icon>
+                <CheckCircle v-if="item.is_correct" />
+                <XCircle v-else />
             </div>
         </div>
         
@@ -70,13 +71,10 @@ const onLoad = ( data ) => {
     font-size: 2em;
     display: flex;
     align-items: center;
+    color: rgb( var( --primary ) );
 }
 
-.summary-icon .icon path {
-    fill: rgb( var( --primary ) );
-}
-
-.incorrect .summary-icon .icon path {
-    fill: rgb( var( --destructive ) );
+.incorrect .summary-icon {
+    color: rgb( var( --destructive ) );
 }
 </style>

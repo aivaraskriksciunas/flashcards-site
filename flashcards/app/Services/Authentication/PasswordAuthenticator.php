@@ -2,6 +2,7 @@
 
 namespace App\Services\Authentication;
 
+use App\Enums\UserType;
 use App\Models\User;
 use App\Exceptions\Auth\IncorrectCredentials;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,7 @@ class PasswordAuthenticator extends BaseAuthenticator {
     
     public function __construct( 
         private array $credentials,
-        private string $accountType = '',
+        private UserType|null $accountType = null,
     ) {}
 
     /**
@@ -26,7 +27,7 @@ class PasswordAuthenticator extends BaseAuthenticator {
         $user = User::where( 'email', $this->credentials[ 'email' ] )->first();
         $account = $user;
         // If a specific account type was specified, retrieve it
-        if ( $this->accountType !== '' ) 
+        if ( $this->accountType !== null ) 
         {
             $account = $this->getSubaccountByType( $user );
         }

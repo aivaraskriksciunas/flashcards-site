@@ -1,4 +1,5 @@
 <script setup>
+import { UserRound } from 'lucide-vue-next';
 import ReactButtons from './ReactButtons.vue';
 
 
@@ -14,7 +15,7 @@ const props = defineProps({
 <div class="forum-post-comment flex">
     <div class="flex-grow">
         <div class="comment-meta">
-            <font-awesome-icon class='icon' icon="fa-regular fa-user"></font-awesome-icon>
+            <UserRound/>
             {{ props.comment.user.name }}
             <span class="comment-date">
                 Posted 

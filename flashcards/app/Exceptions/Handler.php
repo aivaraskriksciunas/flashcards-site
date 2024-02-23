@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Account\AccountAlreadyInOrganization;
 use App\Exceptions\Account\OrganizationNotAssigned;
 use App\Exceptions\Account\StudentAccountAlreadyExists;
 use App\Exceptions\Auth\GoogleAccountAlreadyExists;
@@ -13,6 +14,8 @@ use App\Exceptions\Forum\ForumPostRateLimitReached;
 use App\Exceptions\Import\DeckImportException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Exceptions\Quiz\QuizItemAlreadyAnswered;
+use App\Exceptions\Tier\AccountLimitReached;
+use App\Exceptions\Tier\UnsupportedAction;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -33,6 +36,9 @@ class Handler extends ExceptionHandler
         InvalidCaptcha::class,
         StudentAccountAlreadyExists::class,
         OrganizationNotAssigned::class,
+        AccountLimitReached::class,
+        UnsupportedAction::class,
+        AccountAlreadyInOrganization::class,
     ];
 
     /**

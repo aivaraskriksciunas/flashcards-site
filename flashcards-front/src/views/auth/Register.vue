@@ -1,11 +1,11 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import jsCookie from 'js-cookie';
 import StudentRegisterForm from './components/StudentRegisterForm.vue';
 import OrganizationRegisterForm from './components/OrganizationRegisterForm.vue';
 import PlainButton from '../../components/ui/PlainButton.vue';
 import { ref } from 'vue';
 import useAuthentication from './composables/useAuthentication';
+import { UserRound, Building2 } from 'lucide-vue-next';
 
 const router = useRouter()
 const accountType = ref( 'student' )
@@ -35,7 +35,7 @@ function onRegister( data ) {
         <PlainButton @click="accountType = 'student'" :selected="accountType == 'student'" class="mb-2">
             <div class="flex account-type-btn">
                 <div class="account-type-btn__icon">
-                    <font-awesome-icon icon="fa-regular fa-user"></font-awesome-icon>
+                    <UserRound/>
                 </div>
                 <div class="account-type-btn__text">
                     Student
@@ -46,7 +46,7 @@ function onRegister( data ) {
         <PlainButton @click="accountType = 'organization'" :selected="accountType == 'organization'">
             <div class="flex account-type-btn">
                 <div class="account-type-btn__icon">
-                    <font-awesome-icon icon="fa-regular fa-building"></font-awesome-icon>
+                    <Building2 />
                 </div>
                 <div class="account-type-btn__text">
                     Organization

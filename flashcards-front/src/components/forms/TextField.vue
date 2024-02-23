@@ -29,6 +29,10 @@ const props = defineProps({
     note: {
         type: String,
         default: null,
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
     }
 })
 
@@ -54,11 +58,13 @@ const onChange = ( ev ) => {
         </label>
 
         <input class='form-control' 
+            :class="{ 'form-control-disabled': props.disabled }"
             v-model='data' 
             :type='props.type' 
             :name='props.name'
             :placeholder="props.placeholder"
             :autocomplete="props.autocomplete"
+            :disabled="props.disabled"
             @change="onChange">
 
         <small v-if="props.note">{{ props.note }}</small>
@@ -94,5 +100,14 @@ label {
     background-color: var( --color-bg-form-control-active );
     outline: 1px solid rgb( var( --primary ) );
     box-shadow: 0 2px 6px 2px rgb( var( --shadow ) );
+}
+
+.form-control-disabled {
+    color: rgb( var( --muted-foreground ) );
+    background-color: rgb( var( --muted ) ) !important;
+}
+
+small {
+    color: rgb( var( --muted-foreground ) );
 }
 </style>

@@ -2,8 +2,13 @@
 import { ref } from 'vue';
 import DataLoaderWrapper from '../../../components/wrappers/DataLoaderWrapper.vue';
 import Card from '@/components/ui/Card.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Play } from 'lucide-vue-next';
+import { Pencil } from 'lucide-vue-next';
+import { useUserStore } from '@/stores/user';
 
 const courses = ref([])
+const userStore = useUserStore();
 
 const onDataLoad = ( data ) => { courses.value = data }
 
@@ -12,37 +17,49 @@ const onDataLoad = ( data ) => { courses.value = data }
 <template>
     <DataLoaderWrapper url="/api/courses" @load="onDataLoad">
         
-        <div class="md:flex deck-list">
-            <div v-for="course of courses" :key="course.id">
-                <router-link :to="{ name: 'edit-course', params: { id: course.id }}">
-                    <Card hover>
-                        <div class="deck-name">{{ course.title }}</div>
-                    </Card>
-                </router-link>
+        <Card class="xl:w-3/4">
+            <div v-for="course of courses" :key="course.id" class="course-list-item md:flex">
+                <div class="course-info flex-grow">
+                    <div class="course-title">
+                        <router-link :to="{ name: 'edit-course', params: { id: course.id }}">
+                            {{ course.title }}
+                        </router-link>
+                    </div>
+                </div>
+                <div class="course-actions">
+                    <Button variant="default" size="icon" class="mr-2">
+                        <Play size="16"/>
+                    </Button>
+                    <router-link v-if="userStore.isOrgManager()" 
+                        :to="{ name: 'edit-course', params: { id: course.id }}">
+                        <Button variant="ghost" size="icon" class='text-foreground'>
+                            <Pencil size="16" />
+                        </Button>
+                    </router-link>
+                    
+                </div>
             </div>
-            
-        </div>
+        </Card>
     </DataLoaderWrapper>
 </template>
 
 <style scoped>
-.deck-list {
-    margin: 0 -12px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 12px;
+.course-list-item {
+    @apply p-4;
+    display: flex;
+    border-bottom: 1px dashed rgb( var( --border ) );
+    align-items: center;
 }
 
-.deck-list-item {
-    margin-bottom: 1em;
+.course-list-item:last-child {
+    border: none;
 }
 
-@media screen and ( min-width: 768px ) {
-    .deck-list-item {
-        width: 30%;
-        max-width: 280px;
-        margin-bottom: 0em;
-    }
+.course-title {
+    font-size: 1.3em;
+    font-weight: 500;
 }
+
+
 </style>
 

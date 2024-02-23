@@ -53,12 +53,11 @@ services:
   phpmyadmin:
     image: phpmyadmin
     ports:
-      - 8008:80
+      - "8008:80"
     environment:
       PMA_HOST: db
       PMA_USER: root
-      PMA_PASSWORD: admin 
-
+      PMA_PASSWORD: admin
 volumes:
   flashcards:
   flashcards-front:

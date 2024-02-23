@@ -13,7 +13,9 @@ use App\Http\Controllers\Api\ApiLibraryController;
 use App\Http\Controllers\Api\ApiQuizController;
 use App\Http\Controllers\Api\ApiForumPostController;
 use App\Http\Controllers\Api\ApiImportController;
+use App\Http\Controllers\Api\ApiInvitationController;
 use App\Http\Controllers\Api\ApiOrganizationController;
+use App\Http\Middleware\Invitations\EnsureInvitationIsValid;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +41,7 @@ Route::post( '/register-org', [ ApiAuthController::class, 'registerOrganizationA
 Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
 Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ])->name( 'verify.email' );
+Route::post( '/invitations/{invitation}/accept', [ ApiInvitationController::class, 'accept' ] )->name( 'invitation.accept' );
 
 /**
  * Routes for authenticated users
@@ -128,6 +131,12 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
     Route::post( 'import/anki', [ ApiImportController::class, 'import_anki_set' ])->name( 'import-anki' );
 
     /**
+     * Organization endpoints
+     */
+    Route::get( 'organizations/members', [ ApiOrganizationController::class, 'showMembers' ] )->name( 'organizations.members.show' );
+    Route::get( 'organizations/invitations', [ ApiOrganizationController::class, 'showInvitations' ] )->name( 'organizations.invitations.show' );
+
+    /**
      * Course endpoints
      */
     Route::apiResource( 'courses', ApiCourseController::class );
@@ -138,6 +147,13 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
             'courses/{course}/course_pages/{course_page}/course_page_items/reorder', 
             [ ApiCoursePageController::class, 'setCoursePageItemOrder' ] 
         )->name( 'courses.course_pages.set-page-item-order' );
+
+    /**
+     * Invitation endpoints
+     */
+    Route::post( 'invitations/create', [ ApiInvitationController::class, 'create' ] )->name( 'invitation.create' );
+    Route::get( 'invitations/{invitation}', [ ApiInvitationController::class, 'show' ] )->name( 'invitation.show' )
+        ->middleware( EnsureInvitationIsValid::class );
 });
 
 /**

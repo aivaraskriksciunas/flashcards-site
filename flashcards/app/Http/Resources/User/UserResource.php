@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Enums\UserType;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\User;
 
@@ -19,7 +20,7 @@ class UserResource extends JsonResource
 
         return [
             'name' => $parent->name,
-            'is_admin' => $this->when( $this->account_type == User::USER_ADMIN, true ),
+            'is_admin' => $this->when( $this->account_type == UserType::ADMIN, true ),
             'date_joined' => $this->created_at,
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserType;
 use App\Models\EmailConfirmation;
 use App\Models\Utils\HasActivityLogging;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,7 @@ class User extends Model implements AuthenticatableContract
     const PASSWORD_LOGIN_TOKEN = 'browser-token';
     const GOOGLE_LOGIN_TOKEN = 'google-token';
     const SWITCH_ACCOUNT_LOGIN_TOKEN = 'switch-token';
+    const INVITATION_LOGIN_TOKEN = 'invitation-token';
 
     protected $fillable = [
         'name', 'email', 'password', 'account_type',
@@ -39,7 +41,8 @@ class User extends Model implements AuthenticatableContract
     ];
 
     protected $casts = [
-        'is_valid' => 'boolean'
+        'is_valid' => 'boolean',
+        'account_type' => UserType::class,
     ];
 
     public $timestamps = true;
@@ -93,15 +96,20 @@ class User extends Model implements AuthenticatableContract
     }
 
     public function isAdmin() {
-        return $this->account_type === User::USER_ADMIN;
+        return $this->account_type === UserType::ADMIN;
     }
 
     public function isOrgAdmin() {
-        return $this->account_type === User::USER_ORG_ADMIN;
+        return $this->account_type === UserType::ORG_ADMIN;
+    }
+
+    public function isOrgManager() {
+        return $this->account_type === UserType::ORG_ADMIN || 
+            $this->account_type === UserType::ORG_MANAGER;
     }
 
     public function isStudent() {
-        return $this->account_type === User::USER_STUDENT;
+        return $this->account_type === UserType::STUDENT;
     }
 
     public function userLogs() {

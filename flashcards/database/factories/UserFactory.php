@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -21,7 +22,7 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'is_valid' => true,
-            'account_type' => User::USER_STUDENT,
+            'account_type' => UserType::STUDENT,
         ];
     }
 
@@ -43,7 +44,7 @@ class UserFactory extends Factory
     {
         return $this->state( function ( array $attributes ) {
             return [
-                'account_type' => User::USER_ADMIN
+                'account_type' => UserType::ADMIN,
             ];
         });
     }
@@ -52,7 +53,16 @@ class UserFactory extends Factory
     {
         return $this->state( function ( array $attributes ) {
             return [
-                'account_type' => User::USER_ORG_ADMIN
+                'account_type' => UserType::ORG_ADMIN,
+            ];
+        });
+    }
+
+    public function orgMember()
+    {
+        return $this->state( function ( array $attributes ) {
+            return [
+                'account_type' => UserType::ORG_MEMBER,
             ];
         });
     }

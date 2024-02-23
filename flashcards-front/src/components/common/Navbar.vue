@@ -15,13 +15,12 @@ const { showSidebar } = useSidebarStore()
     
 <nav class="main-navbar hidden lg:flex container py-4">
     <div class="navbar-logo flex-grow">
-        Preview version v0.9
+        Preview version v0.10
     </div>
 
     <div class="">
         <div v-if="isLoggedIn" class="flex items-center">
             <AccountDropdown/>
-            <router-link :to="{ name: 'logout' }">Log out</router-link>
         </div>
         <div v-else>
             <router-link :to="{ name: 'login' }">Log in</router-link>

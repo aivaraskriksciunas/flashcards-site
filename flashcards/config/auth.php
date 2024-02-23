@@ -108,4 +108,15 @@ return [
 
     'password_timeout' => 10800,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Organization invitation timeout
+    |--------------------------------------------------------------------------
+    |
+    | Maximum amount of time before the invitation to join an organization
+    | expires, set in seconds.
+    */
+
+    'invitation_timeout' => 48*60*60
+
 ];

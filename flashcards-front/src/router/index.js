@@ -110,6 +110,11 @@ const router = createRouter({
                             component: () => import( '../views/courses/EditCoursePage.vue' ),
                         }
                     ]
+                },
+                {
+                    path: '/members',
+                    name: 'org-members',
+                    component: () => import( '../views/org-members/ShowMembers.vue' ),
                 }
             ]
         },
@@ -141,6 +146,12 @@ const router = createRouter({
                     name: 'verify-email',
                     component: () => import( '../views/auth/VerifyEmail.vue' ),
                     meta: { allowGuest: true }
+                },
+                {
+                    path: '/invitation/:invitation_code',
+                    name: 'view-invitation',
+                    component: () => import( '../views/auth/Invitation.vue' ),
+                    meta: { allowGuest: true },
                 },
                 {
                     path: '/login/accounts',

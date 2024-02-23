@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Auth;
 
+use App\Enums\UserType;
 use App\Exceptions\Account\OrganizationNotAssigned;
 use App\Models\User;
 use Closure;
@@ -19,7 +20,7 @@ class IsValidOrgAdmin
     public function handle(Request $request, Closure $next)
     {
         // An organization admin is valid when it has an organization assigned to it
-        if ( $request->user()->account_type !== User::USER_ORG_ADMIN ) {
+        if ( $request->user()->account_type !== UserType::ORG_ADMIN ) {
             return $next( $request );
         }
 

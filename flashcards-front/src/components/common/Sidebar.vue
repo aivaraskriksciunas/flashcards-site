@@ -20,7 +20,8 @@ import AccountDropdown from "./AccountDropdown.vue";
 const router = useRouter()
 const userSettings = useUserSettingStore();
 const sidebar = useSidebarStore();
-const { user, isLoggedIn } = storeToRefs( useUserStore() )
+const userStore = useUserStore()
+const { user, isLoggedIn } = storeToRefs( userStore )
 
 router.afterEach( ( from, to, failure ) => {
     if ( failure ) return;
@@ -46,7 +47,6 @@ router.afterEach( ( from, to, failure ) => {
 
         <div class="sidebar-profile md:hidden" v-if="isLoggedIn">
             <AccountDropdown/>
-            <router-link :to="{ name: 'logout' }">Log out</router-link>
         </div>
         <div class="sidebar-profile md:hidden" v-else>
             <router-link :to="{ name: 'login' }">Log in</router-link>
@@ -60,6 +60,9 @@ router.afterEach( ( from, to, failure ) => {
             </router-link>
             <router-link :to="{name: 'profile'}">
                 <div class='sidebar-link'>Profile</div>
+            </router-link>
+            <router-link v-if="userStore.isOrgManager()" :to="{name: 'org-members'}">
+                <div class="sidebar-link">Members</div>
             </router-link>
             <router-link :to="{name: 'forum'}">
                 <div class='sidebar-link'>Forum</div>

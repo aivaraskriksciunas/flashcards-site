@@ -9,7 +9,7 @@ import Card from '@/components/ui/Card.vue';
 const router = useRouter();
 
 const onCourseCreate = ( data ) => {
-    router.push({ name: 'view-course', params: { id: data.id } } );
+    router.push({ name: 'edit-course', params: { id: data.id } } );
 }
 
 </script>

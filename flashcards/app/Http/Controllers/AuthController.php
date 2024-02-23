@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Exceptions\Auth\IncorrectCredentials;
 use App\Models\User;
 use App\Services\Authentication\PasswordAuthenticator;
@@ -25,7 +26,7 @@ class AuthController extends Controller
 
         $authenticator = new PasswordAuthenticator(
             $creds,
-            User::USER_ADMIN,
+            UserType::ADMIN,
         );
 
         try {

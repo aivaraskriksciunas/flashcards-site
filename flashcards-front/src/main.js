@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import FontAwesomeIcon from './fontawesome'
 import axios from 'axios'
 
 import App from './App.vue'
@@ -26,6 +25,6 @@ if ( api_key ) {
     Cookies.set( 'api_key', api_key, { expires: 40, sameSite: 'strict' } );
 }
 
-app.component( 'font-awesome-icon', FontAwesomeIcon ).mount('#app')
+app.mount('#app')
 
 

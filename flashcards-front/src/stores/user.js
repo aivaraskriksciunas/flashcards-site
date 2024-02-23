@@ -31,5 +31,38 @@ export const useUserStore = defineStore( 'user', () => {
         return user.value.accounts;
     })
 
-    return { user, isLoggedIn, setCurrentUser, refreshUserInfo, resendVerificationCode, logout, userAccounts }
+    // User levels
+    const isStudent = () => {
+        if ( !isLoggedIn.value ) return false;
+        return user.value.account_type === 'student';
+    }
+
+    const isOrgAdmin = () => {
+        if ( !isLoggedIn.value ) return false;
+        return user.value.account_type === 'orgadmin';
+    }
+
+    const isOrgManager = () => {
+        if ( !isLoggedIn.value ) return false;
+        return user.value.account_type === 'orgmanager' || user.value.account_type === 'orgadmin';
+    }
+
+    const isAdmin = () => {
+        if ( !isLoggedIn.value ) return false;
+        return user.value.account_type === 'admin';
+    }
+
+    return { 
+        user, 
+        isLoggedIn, 
+        setCurrentUser, 
+        refreshUserInfo, 
+        resendVerificationCode, 
+        logout, 
+        userAccounts,
+        isStudent,
+        isOrgAdmin,
+        isAdmin,
+        isOrgManager,
+    }
 } )

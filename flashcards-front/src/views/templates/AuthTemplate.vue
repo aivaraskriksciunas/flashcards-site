@@ -63,6 +63,11 @@ import StatusMessages from '../../components/common/StatusMessages.vue';
     border-bottom: 1px solid rgba( 200, 200, 200, 1 );
 }
 
+.auth-form-container .form-control-disabled {
+    background-color: rgb( var( --muted ) );
+    color: rgb( var( --muted-foreground ) );
+}
+
 
 
 </style>

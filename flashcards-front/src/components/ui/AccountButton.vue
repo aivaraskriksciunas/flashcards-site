@@ -1,4 +1,5 @@
 <script setup>
+import { UserRound } from 'lucide-vue-next';
 import PlainButton from './PlainButton.vue';
 
 const props = defineProps({
@@ -31,7 +32,7 @@ const onSelect = () => {
 <template>
 <PlainButton class="flex items-center" @click="onSelect">
     <div class="p-2">
-        <font-awesome-icon icon="fa-regular fa-user" size="xl"></font-awesome-icon>
+        <UserRound color="rgb( var( --muted-foreground ))"/>
     </div>
     <div class="p-2">
         <div class="account-name">{{ account.name }}</div>
