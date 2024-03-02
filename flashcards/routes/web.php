@@ -35,8 +35,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get( '/login', [ AuthController::class, 'show_login' ] )->name( 'login.show' );
-Route::post( '/login', [ AuthController::class, 'login' ] )->name( 'login' );
+Route::middleware([ 'throttle:login' ])->group( function() {
+    Route::get( '/login', [ AuthController::class, 'show_login' ] )->name( 'login.show' );
+    Route::post( '/login', [ AuthController::class, 'login' ] )->name( 'login' );
+});
+
 Route::get( '/logout', [ AuthController::class, 'logout' ] )->name( 'logout' );
 
 Route::middleware([ 'auth', 'is-admin' ])->group( function () {

@@ -14,7 +14,8 @@ RUN apk add --no-cache \
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug \
-    && docker-php-ext-enable xdebug
+    && docker-php-ext-enable xdebug \
+    && pecl install redis
 
 COPY ./production/php.ini /usr/local/etc/php/
 

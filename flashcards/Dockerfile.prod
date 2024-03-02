@@ -12,7 +12,8 @@ RUN apk add --no-cache \
     npm \
     linux-headers
 
-RUN apk add --no-cache $PHPIZE_DEPS
+RUN apk add --no-cache $PHPIZE_DEPS \
+    && pecl install redis
     
 COPY ./production/php.ini /usr/local/etc/php/
 

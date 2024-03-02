@@ -50,6 +50,9 @@ services:
       MARIADB_ROOT_PASSWORD: admin
       MARIADB_DATABASE: flashcards_db
 
+  redis:
+    image: redis
+
   phpmyadmin:
     image: phpmyadmin
     ports:
