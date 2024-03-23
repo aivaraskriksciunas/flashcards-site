@@ -12,6 +12,12 @@ import LearnDeck from '../views/decks/LearnDeck.vue'
 import PracticeDeck from '../views/decks/PracticeDeck.vue'
 import { useUserStore } from '../stores/user'
 
+const isOrgManager = ( to ) => {
+    const { isOrgManager: isManager } = useUserStore();
+    
+    if ( !isManager() ) return false;
+}
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -96,6 +102,17 @@ const router = createRouter({
                     component: () => import( '../views/courses/CreateCourse.vue' ),
                 },
                 {
+                    path: '/course/:id/view',
+                    name: 'course-summary',
+                    component: () => import( '../views/courses/CourseSummary.vue' ),
+                },
+                {
+                    path: '/course/:id/invite',
+                    name: 'course-assign-members',
+                    component: () => import( '../views/courses/InviteMembers.vue' ),
+                    beforeEnter: [ isOrgManager ],
+                },
+                {
                     path: '/course/:id/edit',
                     component: () => import( '../views/courses/EditCourse.vue' ),
                     children: [
@@ -117,6 +134,19 @@ const router = createRouter({
                     component: () => import( '../views/org-members/ShowMembers.vue' ),
                 }
             ]
+        },
+
+        {
+            path: '/course/:id',
+            name: 'view-course',
+            component: () => import( '../views/view-course/ViewCourse.vue' ),
+            children: [
+                {
+                    path: 'page/:page_id',
+                    name: 'view-course-page',
+                    component: () => import( '../views/view-course/ViewCoursePage.vue' ),
+                },
+            ],
         },
         
         {

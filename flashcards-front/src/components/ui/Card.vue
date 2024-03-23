@@ -20,7 +20,7 @@ const emit = defineEmits([ 'click' ])
 
 .card-component {
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: rgb( var( --content ) );
     box-shadow: 3px 3px 0 rgb( var( --shadow ) );
 }

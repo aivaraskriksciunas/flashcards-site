@@ -21,15 +21,17 @@ const onDataLoad = ( data ) => { courses.value = data }
             <div v-for="course of courses" :key="course.id" class="course-list-item md:flex">
                 <div class="course-info flex-grow">
                     <div class="course-title">
-                        <router-link :to="{ name: 'edit-course', params: { id: course.id }}">
+                        <router-link :to="{ name: 'course-summary', params: { id: course.id }}">
                             {{ course.title }}
                         </router-link>
                     </div>
                 </div>
                 <div class="course-actions">
-                    <Button variant="default" size="icon" class="mr-2">
-                        <Play size="16"/>
-                    </Button>
+                    <router-link :to="{ name: 'view-course', params: { id: course.id } }">
+                        <Button variant="default" size="icon" class="mr-2">
+                            <Play size="16"/>
+                        </Button>
+                    </router-link>
                     <router-link v-if="userStore.isOrgManager()" 
                         :to="{ name: 'edit-course', params: { id: course.id }}">
                         <Button variant="ghost" size="icon" class='text-foreground'>

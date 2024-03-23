@@ -1,27 +1,18 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { useUserSettingStore } from "../../stores/user-settings";
 import { useSidebarStore } from "../../stores/sidebar";
 import { useUserStore } from "../../stores/user";
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
+import ThemeSwitcher from './ThemeSwitcher.vue';
 import Logo from './Logo.vue'
-import { 
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectItem,
-    SelectGroup,
-} from '@/components/ui/select';
-import { Palette } from 'lucide-vue-next';
+
 import { useRouter } from "vue-router";
 import AccountDropdown from "./AccountDropdown.vue";
 
 const router = useRouter()
-const userSettings = useUserSettingStore();
 const sidebar = useSidebarStore();
 const userStore = useUserStore()
-const { user, isLoggedIn } = storeToRefs( userStore )
+const { isLoggedIn } = storeToRefs( userStore )
 
 router.afterEach( ( from, to, failure ) => {
     if ( failure ) return;
@@ -77,24 +68,7 @@ router.afterEach( ( from, to, failure ) => {
             <Button class='mb-3' size="sm" variant="pill">New deck</Button>
         </router-link>
 
-        <Select :model-value="userSettings.colorTheme">
-            <SelectTrigger>
-                <div class="flex items-center">
-                    <Palette size="16" class="mr-2" />
-                    <SelectValue></SelectValue>
-                </div>
-            </SelectTrigger>
-            <SelectContent>
-                <SelectGroup>
-                    <SelectItem value="light" @click="userSettings.setColorTheme( 'light' )">
-                        Light
-                    </SelectItem>
-                    <SelectItem value="dark" @click="userSettings.setColorTheme( 'dark' )">
-                        Dark
-                    </SelectItem>
-                </SelectGroup>
-            </SelectContent>
-        </Select>
+        <ThemeSwitcher/>
 
     </aside>
 </template>

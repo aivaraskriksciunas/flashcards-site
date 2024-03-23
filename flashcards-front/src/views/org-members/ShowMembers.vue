@@ -11,18 +11,18 @@ import InvitationList from './components/InvitationList.vue';
 
     <div class="md:flex">
         <div class="md:w-1/2 p-4">
-            <Header level="2">Members</Header>
+            <Header :level="2">Members</Header>
             <Card class="mb-4">
                 <MemberList/>
             </Card>
 
-            <Header level="2">Pending invitations</Header>
+            <Header :level="2">Pending invitations</Header>
             <Card class="mb-4">
                 <InvitationList/>
             </Card>
         </div>
         <div class="md:w-1/2 p-4">
-            <Header level="2">Invite member</Header>
+            <Header :level="2">Invite member</Header>
             <Card>
                 <InvitationForm/>
             </Card>

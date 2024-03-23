@@ -10,6 +10,7 @@ use App\Http\Resources\Organization\OrganizationMemberResource;
 use App\Http\Resources\Organization\OrganizationResource;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use App\Services\DataTable\DataTable;
 
 class ApiOrganizationController extends Controller
 {
@@ -33,8 +34,11 @@ class ApiOrganizationController extends Controller
     {
         $this->authorize( 'viewMembers', Organization::class );
 
+        $dt = new DataTable([ 'name' ]);
+        $dt->applyUserFilters( $request->user()->organization->users(), $request, );
+
         return OrganizationMemberResource::collection(
-            $request->user()->organization->users()->paginate( 25 )
+            $dt->getPaginated()
         );
     }
 
@@ -43,7 +47,7 @@ class ApiOrganizationController extends Controller
         $this->authorize( 'viewMembers', Organization::class );
 
         return InvitationResource::collection(
-            $request->user()->organization->getValidInvitations()->paginate( 25 )
+            $request->user()->organization->getValidInvitations()->paginate( 25 )->withQueryString()
         );
     }
 }
