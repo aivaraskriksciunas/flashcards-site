@@ -13,8 +13,6 @@ services:
       - ./flashcards-front:/var/www-front/
       - ./logs:/var/log/nginx/
       - ./wagtail:/var/www-wagtail/
-    depends_on: 
-      - php
 
   php:
     build: 
@@ -41,9 +39,10 @@ services:
     restart: always
     environment:
       PMA_HOST: host.docker.internal
-      PMA_USER: flashcards
-      PMA_PASSWORD: admin
-      PMA_DATABASE: flashcards_db
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8008:80"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

@@ -23,6 +23,13 @@ class Course extends Model
         return $this->hasMany( CoursePage::class );
     }
 
+    public function assignedUsers() {
+        return $this->belongsToMany( User::class, 'assigned_user_courses' )
+            ->withTimestamps()
+            ->withPivot([ 'assigned_by' ])
+            ->using( AssignedUserCourse::class );
+    }
+
     /**
      * Creates a page from the provided attribute array
      * If order is not set, sets this page as the last in the course

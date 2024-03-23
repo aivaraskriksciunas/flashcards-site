@@ -19,7 +19,7 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => 'secret',
             'remember_token' => Str::random(10),
             'is_valid' => true,
             'account_type' => UserType::STUDENT,
@@ -54,6 +54,15 @@ class UserFactory extends Factory
         return $this->state( function ( array $attributes ) {
             return [
                 'account_type' => UserType::ORG_ADMIN,
+            ];
+        });
+    }
+
+    public function orgManager() 
+    {
+        return $this->state( function ( array $attributes ) {
+            return [
+                'account_type' => UserType::ORG_MANAGER,
             ];
         });
     }

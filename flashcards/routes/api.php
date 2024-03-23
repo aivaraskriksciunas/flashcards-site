@@ -147,6 +147,8 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
             'courses/{course}/course_pages/{course_page}/course_page_items/reorder', 
             [ ApiCoursePageController::class, 'setCoursePageItemOrder' ] 
         )->name( 'courses.course_pages.set-page-item-order' );
+    Route::post( 'courses/{course}/assign', [ ApiCourseController::class, 'assignToOrgMember' ])->name( 'courses.assigned.add' );
+    Route::get( 'courses/{course}/assigned', [ ApiCourseController::class, 'getAssignedUsers' ])->name( 'courses.assigned.list' );
 
     /**
      * Invitation endpoints

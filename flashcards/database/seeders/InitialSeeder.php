@@ -20,7 +20,7 @@ class InitialSeeder extends Seeder
             'email' => 'aiviskri@gmail.com'
         ]);
 
-        $initialUser->is_admin = true;
+        $initialUser->account_type = User::USER_ADMIN;
 
         $initialUser->save();
     }

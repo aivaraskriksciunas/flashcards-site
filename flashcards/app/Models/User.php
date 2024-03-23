@@ -120,6 +120,13 @@ class User extends Model implements AuthenticatableContract
         return $this->hasMany( Course::class );
     }
 
+    public function assignedCourses() {
+        return $this->belongsToMany( Course::class, 'assigned_user_courses' )
+            ->withTimestamps()
+            ->withPivot([ 'assigned_by' ])
+            ->using( AssignedUserCourse::class );
+    }
+
     protected function isValid() : Attribute {
         return Attribute::make(
             get: function ( bool $value ) {
