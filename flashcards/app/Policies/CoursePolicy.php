@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Course;
+use App\Models\Organization;
 use App\Models\User;
 use App\Services\AccountLimiter\AccountLimiter;
 use App\Services\AccountLimiter\LimiterAction;
@@ -34,29 +35,64 @@ class CoursePolicy
 
     public function view( User $user, Course $course )
     {
-        return $user->id === $course->user_id ?
-            Response::allow() :
-            Response::denyAsNotFound();
+        if ( $user->id === $course->user_id ) {
+            return Response::allow();
+        }
+        
+        return Response::denyAsNotFound();
     }
 
     public function create( User $user )
     {
         AccountLimiter::limit( $user, LimiterAction::Create, Course::class );
         
-        return $user->isOrgAdmin() || $user->isStudent();
+        return $user->isOrgManager() || $user->isStudent();
     }
 
     public function update( User $user, Course $course )
     {
-        return $user->id === $course->user_id ?
+        return $this->isOwner( $user, $course ) || $this->isManagerOfSameOrg( $user, $course ) ?
             Response::allow() : 
             Response::denyAsNotFound();
     }
 
     public function delete( User $user, Course $course )
     {
-        return $user->id === $course->user_id ?
-            Response::allow() : 
-            Response::denyAsNotFound();
+        return $this->update( $user, $course );
+    }
+
+    /**
+     * Check if user is the creator of the course
+     *
+     * @param User $user
+     * @param Course $course
+     * @return boolean
+     */
+    private function isOwner( User $user, Course $course ): bool 
+    {
+        return $course->user_id == $user->id;
+    }
+
+    /**
+     * Check if the user belongs to the same org as the course, and that the user is at least a manager
+     *
+     * @param User $user
+     * @param Course $course
+     * @return boolean
+     */
+    private function isManagerOfSameOrg( User $user, Course $course ): bool
+    {
+        return $user->isOrgManager() && $user->organization == $this->getOrganization( $course );
+    }
+
+    /**
+     * Retrieves the organization to which the course belongs
+     *
+     * @param Course $course
+     * @return Organization
+     */
+    private function getOrganization( Course $course ): Organization 
+    {
+        return $course->user->organization;
     }
 }
