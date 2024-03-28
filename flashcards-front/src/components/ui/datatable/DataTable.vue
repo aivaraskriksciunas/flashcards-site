@@ -153,7 +153,7 @@ provide( 'queryManager', queryManager )
     </TableBody>
 </Table>
 
-<div v-if="!isLoading && pagination" class="px-4 flex items-center mt-2">
+<div v-if="!isLoading && pagination && data.length > 0" class="px-4 flex items-center mt-2">
     <div class="text-sm italic text-muted-foreground">
         Total: {{ pagination.total }}
     </div>
@@ -188,6 +188,10 @@ provide( 'queryManager', queryManager )
     <Skeleton class="w-full h-4 mb-4"></Skeleton>
     <Skeleton class="w-full h-4 mb-4"></Skeleton>
     <Skeleton class="w-full h-4 mb-4"></Skeleton>
+</div>
+
+<div v-if="!isLoading && data.length == 0">
+    <slot name="empty"></slot>
 </div>
 
 <NumberPaginator 

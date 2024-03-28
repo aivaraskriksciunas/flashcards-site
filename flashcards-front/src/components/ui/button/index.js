@@ -20,7 +20,7 @@ export const buttonVariants = cva(
         pillOutline: "border border-primary hover:bg-primary/80 rounded-full font-medium"
       },
       size: {
-        default: "h-10 px-4 py-2",
+        default: "px-4 py-2",
         sm: "h-9 px-3",
         lg: "h-11 px-8",
         icon: "h-10 w-10",

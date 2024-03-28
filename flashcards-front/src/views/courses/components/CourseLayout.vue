@@ -28,7 +28,7 @@ const onOrderChange = ( from, to ) => {
                 <TransitionGroup name="list" >
                     <div v-for="page of course.pages" :key="page.id" class="draggable-item">
                         <router-link :to="{ name: 'edit-course-page', params: { id: course.id, page_id: page.id } }" class='block'>
-                            <Button variant="ghost" class="course-page-link w-full text-left" as="div">
+                            <Button variant="ghost" class="course-page-link w-full text-left " as="div">
                                 {{ page.title }}
                             </Button>
                         </router-link>

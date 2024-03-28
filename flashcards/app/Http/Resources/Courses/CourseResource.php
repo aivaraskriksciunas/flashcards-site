@@ -21,6 +21,9 @@ class CourseResource extends JsonResource
             'user' => new UserResource( $this->user ),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'assigned_at' => $this->when( $this->pivot, function () {
+                return $this->pivot->created_at;
+            }),
         ];
     }
 }

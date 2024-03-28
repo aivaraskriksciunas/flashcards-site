@@ -38,7 +38,9 @@ loadData( props.url )
 
 <template>
     
-<div v-if="state == 'loading'">Loading...</div>
+<div v-if="state == 'loading'">
+    <slot name='loading'>Loading...</slot>
+</div>
 <div v-else-if="state == 'loaded'">
     <slot></slot>
     

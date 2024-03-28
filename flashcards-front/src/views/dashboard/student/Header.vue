@@ -1,6 +1,5 @@
 <script setup>
 import Header from '../../../components/common/Header.vue'
-import DeckList from '../components/DeckList.vue'
 import { 
     DropdownMenu, 
     DropdownMenuTrigger,
@@ -8,7 +7,7 @@ import {
     DropdownMenuContent,
 } from '@/components/ui/dropdown-menu'
 import Button from '@/components/ui/button/Button.vue';
-import { Plus } from 'lucide-vue-next';
+import { Plus, Book, Layers3 } from 'lucide-vue-next';
 
 </script>
 
@@ -26,7 +25,7 @@ import { Plus } from 'lucide-vue-next';
 
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <Button variant="outline">Import from</Button>
+                        <Button variant="outline" class="mr-2">Import deck</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <router-link :to="{name: 'import-quizlet'}">
@@ -37,10 +36,29 @@ import { Plus } from 'lucide-vue-next';
                         </router-link>
                     </DropdownMenuContent>
                 </DropdownMenu>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <Button variant="" class="bg-transparent border border-border text-foreground hover:text-accent-foreground rounded-full hover:bg-accent" size="icon">
+                            <Plus size="16"/>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <router-link :to="{name: 'create-deck'}">
+                            <DropdownMenuItem>
+                                <Layers3 size="16" class="mr-2"/>
+                                Deck
+                            </DropdownMenuItem>
+                        </router-link>
+                        <router-link :to="{name: 'create-course'}">
+                            <DropdownMenuItem>
+                                <Book size="16" class="mr-2"/>
+                                Course
+                            </DropdownMenuItem>
+                        </router-link>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </template>
     </Header>
-
-    <DeckList></DeckList>
-
 </template>

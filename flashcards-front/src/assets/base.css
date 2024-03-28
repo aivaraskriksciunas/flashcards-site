@@ -23,7 +23,7 @@
     --sidebar: 255 255 255;
     --content: 255 255 255;
 
-    --muted: 245 245 245;
+    --muted: 235 235 235;
     --muted-foreground: 112 112 112;
 
     --popover: var( --content );

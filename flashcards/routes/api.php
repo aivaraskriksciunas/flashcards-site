@@ -139,7 +139,7 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
     /**
      * Course endpoints
      */
-    Route::apiResource( 'courses', ApiCourseController::class );
+    Route::apiResource( 'courses', ApiCourseController::class )->except([ 'index' ]);
     Route::post( 'courses/{course}/course_pages/reorder', [ ApiCourseController::class, 'setCoursePageOrder' ] )->name( 'courses.set-page-order' );
     Route::apiResource( 'courses.course_pages', ApiCoursePageController::class )->scoped();
     Route::apiResource( 'courses.course_pages.course_page_items', ApiCoursePageItemController::class )->scoped();
@@ -149,6 +149,13 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
         )->name( 'courses.course_pages.set-page-item-order' );
     Route::post( 'courses/{course}/assign', [ ApiCourseController::class, 'assignToOrgMember' ])->name( 'courses.assigned.add' );
     Route::get( 'courses/{course}/assigned', [ ApiCourseController::class, 'getAssignedUsers' ])->name( 'courses.assigned.list' );
+    Route::get( 'courses/{course}/assignable', [ ApiCourseController::class, 'getAssignableUsers' ])->name( 'courses.assignable.list' );
+
+    /**
+     * My course endpoints
+     */
+    Route::get( 'my-courses', [ ApiCourseController::class, 'getUserCourses' ] )->name( 'my-courses.list' );
+    Route::get( 'my-courses/assigned', [ ApiCourseController::class, 'getAssignedUserCourses' ] )->name( 'my-courses.list' );
 
     /**
      * Invitation endpoints

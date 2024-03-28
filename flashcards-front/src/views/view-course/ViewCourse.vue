@@ -62,10 +62,11 @@ const nextPage = () => {
                         <router-link 
                             v-for="page of course.pages" 
                             :key="page.id" 
-                            :to="{ name: 'view-course-page', params: { page_id: page.id } }">
-                            <Button  variant="ghost" class="w-full ">
-                                <div class="text-left w-full flex items-center">
-                                    <PlaySquare size="16" color="rgb( var( --muted-foreground ) )" class="mr-2"/>
+                            :to="{ name: 'view-course-page', params: { page_id: page.id } }"
+                            class="block">
+                            <Button variant="ghost" class="flex items-center w-full justify-start">
+                                <PlaySquare size="16" color="rgb( var( --muted-foreground ) )" class="flex-shrink-0 mr-2"/>
+                                <div class="text-left flex-shrink">
                                     {{ page.title }}
                                 </div>
                             </Button>

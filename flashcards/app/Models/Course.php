@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CourseVisibility;
 use App\Models\Utils\HasActivityLogging;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,10 @@ class Course extends Model
 
     protected $fillable = [
         'title'
+    ];
+
+    protected $casts = [
+        'visibility' => CourseVisibility::class,
     ];
 
     public function user() {

@@ -45,7 +45,7 @@ const onSubmitted = ( data ) => {
                 </Badge>
             </div>
 
-            <DataTable url="/api/organizations/members">
+            <DataTable :url="`/api/courses/${route.params.id}/assignable`">
                 <template #header>
                     <DataTableHead sortable="name">Name</DataTableHead>
                     <DataTableHead>Email</DataTableHead>

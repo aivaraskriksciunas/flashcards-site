@@ -12,7 +12,7 @@ const onDataLoad = ( data ) => { decks.value = data }
 <template>
     <DataLoaderWrapper url="/api/library" @load="onDataLoad">
         
-        <div class="md:flex deck-list">
+        <div class="md:flex deck-list" v-if="decks.length">
             <DeckListItem 
                 v-for="deck of decks" :key="deck.id" 
                 :deck="deck" 
@@ -24,7 +24,6 @@ const onDataLoad = ( data ) => { decks.value = data }
 
 <style scoped>
 .deck-list {
-    margin: 0 -12px;
     flex-wrap: wrap;
     align-items: flex-start;
     gap: 12px;

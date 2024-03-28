@@ -8,30 +8,48 @@ use App\Http\Requests\Courses\Api\CreateCourse;
 use App\Http\Requests\Courses\Api\SetCoursePageOrder;
 use App\Http\Resources\Courses\CourseDetailResource;
 use App\Http\Resources\Courses\CourseResource;
+use App\Http\Resources\Organization\OrganizationMemberResource;
 use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\Course;
 use App\Models\User;
+use App\Services\Courses\CourseService;
 use App\Services\DataTable\DataTable;
 use Illuminate\Http\Request;
 
 class ApiCourseController extends Controller
 {
 
-    public function __construct()
+    public function __construct(
+        private CourseService $courseService
+    )
     { 
         $this->authorizeResource( Course::class );
     }
 
     /**
-     * Display a listing of the resource.
+     * Retrieves a list of courses created by this user
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function index( Request $request )
+    public function getUserCourses( Request $request )
+    {
+        $dt = new DataTable( sortable:[ 'title' ] );
+        $dt->applyUserFilters( $request->user()->courses(), $request );
+        return CourseResource::collection( $dt->getPaginated() );
+    }
+
+    /**
+     * Retrieves a list of courses assigned to this user
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function getAssignedUserCourses( Request $request )
     {
         return CourseResource::collection( 
-            $request->user()->courses()->get()
+            $this->courseService->getUserAssignedCourses( $request->user() )->limit( 5 )->get()
         );
     }
 
@@ -87,6 +105,26 @@ class ApiCourseController extends Controller
         $dt = new DataTable( sortable:[ 'name' ] );
         $dt->applyUserFilters( $course->assignedUsers(), $request );
         return UserResource::collection( $dt->getPaginated() );
+    }
+
+    /**
+     * Retrieve a list of users who can be assigned to this course
+     */
+    public function getAssignableUsers( Request $request, Course $course )
+    {
+        $this->authorize( 'update', $course );
+        $dt = new DataTable( sortable:[ 'name' ] );
+        $members = $request->user()->organization->users()
+            ->whereNotIn('id', function ( $query ) use ( $course ) {
+                $query->select( 'user_id' )
+                    ->from( 'assigned_user_courses' )
+                    ->where( 'course_id', $course->id );
+            })
+            ->whereNot( 'id', $request->user()->id );
+
+        return OrganizationMemberResource::collection( 
+            $dt->applyUserFilters( $members, $request )->getPaginated()
+        );
     }
 
     /**
