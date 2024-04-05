@@ -24,7 +24,7 @@ class CreateCourse extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:150'
+            'title' => 'required|min:3|max:150'
         ];
     }
 }

@@ -17,7 +17,7 @@ const props = defineProps({
     },
     answerType: {
         required: false,
-        type: Boolean,
+        type: String,
         default: 'text',
     }
 })

@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Import\ImportAnkiRequest;
-use App\Http\Requests\Import\ImportQuizletRequest;
+use App\Http\Requests\Import\ImportWordlistRequest;
 use App\Http\Resources\Deck\DeckResource;
 use App\Services\DeckService;
 use App\Services\Importing\AnkiImport;
-use App\Services\Importing\QuizletImport;
-use Illuminate\Http\Request;
+use App\Services\Importing\WordlistImport;
 
 class ApiImportController extends Controller
 {
@@ -17,7 +16,7 @@ class ApiImportController extends Controller
         private DeckService $deckService 
     ) {}
 
-    public function import_quizlet_set( ImportQuizletRequest $request, QuizletImport $importService )
+    public function import_wordlist_set( ImportWordlistRequest $request, WordlistImport $importService )
     {
         $flashcards = $importService->parse_set( $request->input( 'content' ) );
 

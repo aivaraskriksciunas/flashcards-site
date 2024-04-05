@@ -2,14 +2,17 @@
 
 namespace App\Policies;
 
+use App\Enums\CourseVisibility;
+use App\Enums\UserType;
 use App\Models\Course;
 use App\Models\Organization;
 use App\Models\User;
+use App\Policies\Utils\CoursePolicyBase;
 use App\Services\AccountLimiter\AccountLimiter;
 use App\Services\AccountLimiter\LimiterAction;
 use Illuminate\Auth\Access\Response;
 
-class CoursePolicy
+class CoursePolicy extends CoursePolicyBase
 {
     /**
      * Create a new policy instance.
@@ -35,11 +38,39 @@ class CoursePolicy
 
     public function view( User $user, Course $course )
     {
-        if ( $user->id === $course->user_id ) {
+        if ( $this->isOwner( $user, $course ) ) {
+            return Response::allow();
+        }
+
+        else if ( $course->assignedUsers->contains( $user ) ) {
+            return Response::allow();
+        }
+
+        else if ( $course->visibility == CourseVisibility::OrgAdmin && 
+            $this->isOfSameOrg( $user, $course ) && 
+            $user->account_type == UserType::ORG_ADMIN
+        ) 
+        {
+            return Response::allow();
+        }
+
+        else if ( $course->visibility == CourseVisibility::OrgManager &&
+            $this->isManagerOfSameOrg( $user, $course )
+        )
+        {
+            return Response::allow();
+        }
+
+        else if ( $course->visibility == CourseVisibility::OrgEveryone && 
+            $this->isOfSameOrg( $user, $course )
+        )
+        {
             return Response::allow();
         }
         
-        return Response::denyAsNotFound();
+        return $course->visibility == CourseVisibility::Public ? 
+            Response::allow() :
+            Response::denyAsNotFound();
     }
 
     public function create( User $user )
@@ -51,7 +82,12 @@ class CoursePolicy
 
     public function update( User $user, Course $course )
     {
-        return $this->isOwner( $user, $course ) || $this->isManagerOfSameOrg( $user, $course ) ?
+        if ( $this->isOwner( $user, $course ) )
+        {
+            return Response::allow();
+        }
+
+        return $course->visibility != CourseVisibility::Private && $this->isManagerOfSameOrg( $user, $course ) ?
             Response::allow() : 
             Response::denyAsNotFound();
     }
@@ -59,40 +95,5 @@ class CoursePolicy
     public function delete( User $user, Course $course )
     {
         return $this->update( $user, $course );
-    }
-
-    /**
-     * Check if user is the creator of the course
-     *
-     * @param User $user
-     * @param Course $course
-     * @return boolean
-     */
-    private function isOwner( User $user, Course $course ): bool 
-    {
-        return $course->user_id == $user->id;
-    }
-
-    /**
-     * Check if the user belongs to the same org as the course, and that the user is at least a manager
-     *
-     * @param User $user
-     * @param Course $course
-     * @return boolean
-     */
-    private function isManagerOfSameOrg( User $user, Course $course ): bool
-    {
-        return $user->isOrgManager() && $user->organization == $this->getOrganization( $course );
-    }
-
-    /**
-     * Retrieves the organization to which the course belongs
-     *
-     * @param Course $course
-     * @return Organization
-     */
-    private function getOrganization( Course $course ): Organization 
-    {
-        return $course->user->organization;
     }
 }

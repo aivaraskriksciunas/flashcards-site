@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Enums\CourseVisibility;
 use App\Models\Course;
 use App\Models\CoursePage;
 use App\Models\CoursePageItem;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -51,9 +53,46 @@ class CoursePermissionTest extends TestCase
      * Course page permissions
      */
 
-    public function test_cannot_get_course_page(): void
+    public function test_read_course_page_permissions(): void
     {
-        $this->doRequest( 'api.courses.course_pages.show' );
+        $org = Organization::factory()->create();
+        $owner = User::factory()->for( $org )->create();
+        $this->course->user()->associate( $owner );
+        $this->course->save();
+        
+        $orgadmin = User::factory()->for( $org )->orgAdmin()->create();
+        $orgmanager = User::factory()->for( $org )->orgManager()->create();
+        $orgmember = User::factory()->for( $org )->create();
+
+        $this->course->update([ 'visibility' => CourseVisibility::Private ]);
+        $this->runValidation( 'api.courses.course_pages.show', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ] 
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgAdmin ]);
+        $this->runValidation( 'api.courses.course_pages.show', 
+            fail_users:[ $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner, $orgadmin ] 
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgManager ]);
+        $this->runValidation( 'api.courses.course_pages.show', 
+            fail_users:[ $orgmember, $this->other ],
+            success_users:[ $owner, $orgadmin, $orgmanager ] 
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgEveryone ]);
+        $this->runValidation( 'api.courses.course_pages.show', 
+            fail_users:[ $this->other ],
+            success_users:[ $owner, $orgadmin, $orgmanager, $orgmember ] 
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::Public ]);
+        $this->runValidation( 'api.courses.course_pages.show', 
+            fail_users:[],
+            success_users:[ $owner, $orgadmin, $orgmanager, $orgmember, $this->other  ] 
+        );
     }
 
     public function test_cannot_create_course_page(): void
@@ -82,7 +121,7 @@ class CoursePermissionTest extends TestCase
     
     public function test_cannot_get_course_page_item(): void
     {
-        $this->doRequest( 'api.courses.course_pages.course_page_items.show' );
+        $this->doRequest( 'api.courses.course_pages.course_page_items.show', CoursePageItem::factory()->make()->toArray() );
     }
 
     public function test_cannot_create_course_page_item(): void
@@ -104,16 +143,26 @@ class CoursePermissionTest extends TestCase
     
     private function doRequest( $route, $data = [] )
     {
+        $this->runValidation( $route, [ $this->other ], [ $this->owner ], $data );
+    }
+
+    private function runValidation( $route, $fail_users = [], $success_users = [], $data = [],  )
+    {
         // Get route object
         $route = \Illuminate\Support\Facades\Route::getRoutes()->getByName( $route );
         if ( $route == null ) return;
 
-        $response = $this->requestAs( $route, $this->other, $data );
-        $response->assertNotFound();
+        foreach ( $fail_users as $other )
+        {
+            $response = $this->requestAs( $route, $other, $data );
+            $response->assertNotFound();
+        }
 
-        // Control request
-        $response = $this->requestAs( $route, $this->owner, $data );
-        $response->assertSuccessful();
+        foreach ( $success_users as $success )
+        {
+            $response = $this->requestAs( $route, $success, $data );
+            $response->assertSuccessful();
+        }
     }
 
     private function requestAs( Route $route, User $user, $data = [] )

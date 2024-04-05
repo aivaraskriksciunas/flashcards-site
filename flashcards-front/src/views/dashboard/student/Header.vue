@@ -5,9 +5,11 @@ import {
     DropdownMenuTrigger,
     DropdownMenuItem,
     DropdownMenuContent,
+    DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import Button from '@/components/ui/button/Button.vue';
 import { Plus, Book, Layers3 } from 'lucide-vue-next';
+import DropdownMenuLabel from '@/components/ui/dropdown-menu/DropdownMenuLabel.vue';
 
 </script>
 
@@ -16,7 +18,7 @@ import { Plus, Book, Layers3 } from 'lucide-vue-next';
         Your decks
         <template v-slot:actions>
             <div class="flex">
-                <router-link :to="{ name: 'create-deck' }">
+                <router-link :to="{ name: 'create-deck' }" class="hidden sm:block">
                     <Button class='mr-2' icon="fas fa-plus">
                         <Plus size="16" class="mr-2"/>
                         Create deck
@@ -25,14 +27,14 @@ import { Plus, Book, Layers3 } from 'lucide-vue-next';
 
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <Button variant="outline" class="mr-2">Import deck</Button>
+                        <Button variant="outline" class="mr-2 hidden lg:block">Import deck</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <router-link :to="{name: 'import-quizlet'}">
-                            <DropdownMenuItem>Quizlet</DropdownMenuItem>
-                        </router-link>
                         <router-link :to="{name: 'import-anki'}">
                             <DropdownMenuItem>Anki</DropdownMenuItem>
+                        </router-link>
+                        <router-link :to="{name: 'import-wordlist'}">
+                            <DropdownMenuItem>Word list</DropdownMenuItem>
                         </router-link>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -47,14 +49,24 @@ import { Plus, Book, Layers3 } from 'lucide-vue-next';
                         <router-link :to="{name: 'create-deck'}">
                             <DropdownMenuItem>
                                 <Layers3 size="16" class="mr-2"/>
-                                Deck
+                                New deck
                             </DropdownMenuItem>
                         </router-link>
                         <router-link :to="{name: 'create-course'}">
                             <DropdownMenuItem>
                                 <Book size="16" class="mr-2"/>
-                                Course
+                                New course
                             </DropdownMenuItem>
+                        </router-link>
+
+                        <DropdownMenuSeparator/>
+
+                        <DropdownMenuLabel>Import deck</DropdownMenuLabel>
+                        <router-link :to="{name: 'import-wordlist'}">
+                            <DropdownMenuItem>From word list</DropdownMenuItem>
+                        </router-link>
+                        <router-link :to="{name: 'import-anki'}">
+                            <DropdownMenuItem>From Anki</DropdownMenuItem>
                         </router-link>
                     </DropdownMenuContent>
                 </DropdownMenu>

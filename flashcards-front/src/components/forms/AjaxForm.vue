@@ -42,7 +42,7 @@ const props = defineProps({
         default: 'on',
     }
 })
-const emit = defineEmits([ 'success' ])
+const emit = defineEmits([ 'success', 'change' ])
 
 const isLoading = ref( false )
 
@@ -51,7 +51,7 @@ const statusMessage = useStatusMessageService()
 /**
  * 
  */
-// List of all discovered for elements in this form
+// List of all discovered form elements in this form
 const formItems = {}
 
 // Interface for nested form items to register themselves
@@ -106,7 +106,10 @@ function handleSubmit( token ) {
     axios({
         url: props.action,
         method: props.method.toLocaleLowerCase(),
-        data
+        data,
+        headers: {
+            'Content-Type': props.multipart ? 'multipart/form-data' : 'application/json'
+        }
     })
     .then( ( response ) => {
         emit( 'success', response.data )
@@ -197,10 +200,14 @@ function clearForm() {
     }
 }
 
+function onFormChange() {
+    emit( 'change', getFormData() )
+}
+
 </script>
 
 <template>
-    <form @submit='onFormSubmit' :autocomplete="props.autocomplete">
+    <form @submit='onFormSubmit' :autocomplete="props.autocomplete" @change="onFormChange">
 
         <slot></slot>
 

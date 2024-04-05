@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\ApiImportController;
 use App\Http\Controllers\Api\ApiInvitationController;
 use App\Http\Controllers\Api\ApiOrganizationController;
 use App\Http\Middleware\Invitations\EnsureInvitationIsValid;
+use Google\Service\ApigeeRegistry\ApiDeployment;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,11 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
         ->name( 'decks.update' );
     Route::delete( '/decks/{deck}', [ ApiDeckController::class, 'delete' ] )->name( 'decks.delete' );
     Route::get( '/decks/{deck}/summary', [ ApiDeckController::class, 'get_deck_summary' ] );
+    Route::post( '/decks/{deck}/draft', [ ApiDeckController::class, 'store_draft' ] )->name( 'decks.draft.create' );
+    Route::get( '/decks/{deck}/draft', [ ApiDeckController::class, 'get_draft' ] )->name( 'decks.draft.show' );
+    Route::post( '/notes', [ ApiDeckController::class, 'save_note' ] )->name( 'decks.note.create' );
+    Route::get( '/notes', [ ApiDeckController::class, 'get_note' ] )->name( 'decks.note.show' );
+    Route::delete( '/notes', [ ApiDeckController::class, 'delete_note' ] )->name( 'decks.note.delete' );
 
     /**
      * Quiz endpoints
@@ -127,7 +133,7 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
     /**
      * Importing
      */
-    Route::post( 'import/quizlet', [ ApiImportController::class, 'import_quizlet_set' ] )->name( 'import-quizlet' );
+    Route::post( 'import/wordlist', [ ApiImportController::class, 'import_wordlist_set' ] )->name( 'import-wordlist' );
     Route::post( 'import/anki', [ ApiImportController::class, 'import_anki_set' ])->name( 'import-anki' );
 
     /**
@@ -150,12 +156,13 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
     Route::post( 'courses/{course}/assign', [ ApiCourseController::class, 'assignToOrgMember' ])->name( 'courses.assigned.add' );
     Route::get( 'courses/{course}/assigned', [ ApiCourseController::class, 'getAssignedUsers' ])->name( 'courses.assigned.list' );
     Route::get( 'courses/{course}/assignable', [ ApiCourseController::class, 'getAssignableUsers' ])->name( 'courses.assignable.list' );
+    Route::post( 'courses/{course}/course_pages/{course_page}/progress', [ ApiCoursePageController::class, 'storeUserCourseProgress' ])->name( 'courses.progress' );
 
     /**
      * My course endpoints
      */
     Route::get( 'my-courses', [ ApiCourseController::class, 'getUserCourses' ] )->name( 'my-courses.list' );
-    Route::get( 'my-courses/assigned', [ ApiCourseController::class, 'getAssignedUserCourses' ] )->name( 'my-courses.list' );
+    Route::get( 'my-courses/assigned', [ ApiCourseController::class, 'getAssignedUserCourses' ] )->name( 'my-courses.assigned.list' );
 
     /**
      * Invitation endpoints

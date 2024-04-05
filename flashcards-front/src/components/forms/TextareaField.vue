@@ -17,6 +17,14 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: ''
+    },
+    autogrow: {
+        type: Boolean,
+        default: false,
+    },
+    autogrowMax: {
+        type: Number,
+        default: 200,
     }
 })
 
@@ -33,6 +41,13 @@ const onChange = ( ev ) => {
     emits( 'change', data.value )
 }
 
+const autogrow = ( ev ) => {
+    if ( !props.autogrow ) return;
+
+    ev.target.style.height = 'auto';
+    ev.target.style.height = Math.min( props.autogrowMax, ev.target.scrollHeight ) + 'px';
+}
+
 </script>
 
 <template>
@@ -45,7 +60,8 @@ const onChange = ( ev ) => {
             v-model='data'
             :name='props.name'
             :placeholder="props.placeholder"
-            @change="onChange">
+            @change="onChange"
+            @input="autogrow">
         </textarea>
 
         <FieldErrors :errors="error"></FieldErrors>

@@ -9,7 +9,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
 
 class AccountLimiter
 {
@@ -20,10 +19,11 @@ class AccountLimiter
      * @param User $user
      * @param LimiterAction $action action the user wants to perform
      * @param [type] $model Model or class on which the action will be performed
+     * @param Model $relatedModel optional model if limiting is based on a relationship
      * @return void
      * @throws \App\Exceptions\Tier\AccountLimitReached
      */
-    public static function limit( User $user, LimiterAction $action, string|Model $model = null )
+    public static function limit( User $user, LimiterAction $action, string|Model $model = null, Model $relatedModel = null )
     {
         $object_class = class_basename( $model );
         $limiter_class = "\\App\\Limiters\\{$object_class}Limiter";
@@ -36,7 +36,7 @@ class AccountLimiter
 
         if ( !method_exists( $limiter_class, $action->value ) ) 
         {
-            // No limits for this action were set, allo by default
+            // No limits for this action were set, allow by default
             return true;
         }
 
@@ -49,7 +49,7 @@ class AccountLimiter
 
         // Perform checking action
         $limiter->before( $user );
-        $result = $limiter->{$action->value}( $user, $model );
+        $result = $limiter->{$action->value}( $user, $model, $relatedModel );
         $limiter->after( $user );
 
         if ( !$result )

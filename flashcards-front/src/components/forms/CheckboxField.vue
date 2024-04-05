@@ -1,5 +1,6 @@
 <script setup>
 import { useFormElement } from "./composables/FormElement";
+import FieldErrors from "./_FieldErrors.vue";
 
 /**
  * Element Properties
@@ -24,7 +25,7 @@ data.value = props.value ? true : false;
 <template>
     <div class="checkbox-input">
         <input class='form-control' v-model="data" type='checkbox' :name='props.name' :id="`${props.name}-checkbox`">
-        <label :for="`${props.name}-checkbox`"><slot/></label>
+        <label :for="`${props.name}-checkbox`"><slot></slot></label>
     </div>
     <FieldErrors :errors="error"></FieldErrors>
 </template>

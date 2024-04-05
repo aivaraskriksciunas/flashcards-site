@@ -15,11 +15,11 @@ const onImport = ( data ) => {
 
 <template>
 <SlimContainer>
-    <h1>Import from Quizlet/Excel/Word list</h1>
+    <h1>Import from Excel/Word list</h1>
     <p class="mb-4">Create an Aktulibre deck from a Quizlet, Excel, or any text list.</p>
 
     <Card>
-        <AjaxForm action="/api/import/quizlet" @success="onImport">
+        <AjaxForm action="/api/import/wordlist" @success="onImport">
             <TextareaField name="content" placeholder="word&Tab;definition&NewLine;question&Tab;answer">
                 Words separated by tab
             </TextareaField>

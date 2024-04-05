@@ -4,7 +4,7 @@ import { useUserStore } from '../../stores/user';
 import { defineAsyncComponent, ref } from 'vue';
 import DeckList from './shared/DeckList.vue';
 import AssignedCourseList from './shared/AssignedCourseList.vue';
-import DataLoaderWrapper from '@/components/wrappers/DataLoaderWrapper.vue';
+import NoteList from './shared/NoteList.vue';
 import UserCourseList from './shared/UserCourseList.vue';
 import { 
     Tabs, 
@@ -42,6 +42,7 @@ const Header = defineAsyncComponent(() =>
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="decks">
+                <NoteList/>
                 <DeckList></DeckList>
             </TabsContent>
             <TabsContent value="courses">

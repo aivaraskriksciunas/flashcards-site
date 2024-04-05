@@ -6,7 +6,7 @@ use App\Exceptions\Import\DeckImportException;
 use App\Models\Deck;
 use App\Models\Flashcard;
 
-class QuizletImport extends SetImporter {
+class WordlistImport extends SetImporter {
 
     /**
      * Take a string and convert it into a list of Flashcards

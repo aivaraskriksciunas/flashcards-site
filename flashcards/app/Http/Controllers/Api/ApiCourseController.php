@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Courses\Api\AssignCourseToUser;
 use App\Http\Requests\Courses\Api\CreateCourse;
 use App\Http\Requests\Courses\Api\SetCoursePageOrder;
+use App\Http\Requests\Courses\Api\UpdateCourse;
 use App\Http\Resources\Courses\CourseDetailResource;
 use App\Http\Resources\Courses\CourseResource;
 use App\Http\Resources\Organization\OrganizationMemberResource;
@@ -24,7 +25,6 @@ class ApiCourseController extends Controller
         private CourseService $courseService
     )
     { 
-        $this->authorizeResource( Course::class );
     }
 
     /**
@@ -61,6 +61,7 @@ class ApiCourseController extends Controller
      */
     public function store( CreateCourse $request )
     {
+        $this->authorize( 'store', Course::class );
         $course = new Course( $request->validated() );
         $request->user()->courses()->save( $course );
 
@@ -75,6 +76,7 @@ class ApiCourseController extends Controller
      */
     public function show( Course $course )
     {
+        $this->authorize( 'view', $course );
         return new CourseDetailResource( $course );
     }
 
@@ -114,13 +116,7 @@ class ApiCourseController extends Controller
     {
         $this->authorize( 'update', $course );
         $dt = new DataTable( sortable:[ 'name' ] );
-        $members = $request->user()->organization->users()
-            ->whereNotIn('id', function ( $query ) use ( $course ) {
-                $query->select( 'user_id' )
-                    ->from( 'assigned_user_courses' )
-                    ->where( 'course_id', $course->id );
-            })
-            ->whereNot( 'id', $request->user()->id );
+        $members = $this->courseService->getAssignableUsers( $request->user(), $course );
 
         return OrganizationMemberResource::collection( 
             $dt->applyUserFilters( $members, $request )->getPaginated()
@@ -162,9 +158,12 @@ class ApiCourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update( UpdateCourse $request, Course $course )
     {
-        //
+        $this->authorize( 'update', $course );
+        $course->update( $request->validated() );
+        
+        return new CourseResource( $course );
     }
 
     /**

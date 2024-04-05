@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\CoursePageType;
+use App\Enums\CourseVisibility;
 use App\Models\Course;
 use App\Models\CoursePage;
 use App\Models\User;
@@ -30,22 +31,6 @@ class CourseTest extends TestCase
         $this->assertDatabaseCount( 'courses', 1 );
         $this->assertCount( 1, $user->courses()->get(), 'Course should be attributed to the user' );
         $this->assertEquals( $title, Course::first()->title, 'Course title should be set correctly' );
-    }
-
-    public function test_retrieves_user_course_list()
-    {
-        $user = User::factory()->create();
-        $courses = Course::factory()->for( $user )->count( 5 )->create();
-        $other_courses = Course::factory()->for(
-            User::factory()->create()
-        )->count( 10 )->create();
-
-        $response = $this->actingAs( $user )
-            ->getJson( route( 'api.courses.index' ) );
-        
-        $response->assertSuccessful();
-        $json = $response->json();
-        $this->assertCount( 5, $json, 'Should return only user\'s courses.' );
     }
 
     public function test_can_create_course_page()

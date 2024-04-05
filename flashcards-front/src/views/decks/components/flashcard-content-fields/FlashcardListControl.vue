@@ -40,7 +40,8 @@ if ( list.value.length == 0 ) addItem()
     <div class="flex items-center" v-for="( item, index ) of list" :key="item.key">
         <TextField 
             class="flex-1 mr-1" 
-            placeholder="Enter text here" 
+            placeholder="Enter text here"
+            name="" 
             :value="item.value" 
             @change="val => list[index].value = val"></TextField>
         <PlainIconButton variant="destructive" class='mb-2' @click="list.splice( index, 1 )">

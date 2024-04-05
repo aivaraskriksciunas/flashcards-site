@@ -5,29 +5,58 @@ import Footer from './components/Footer.vue';
 import Card from '@/components/ui/Card.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import SlimContainer from '@/components/ui/SlimContainer.vue';
-import { ChevronsUpDown, PlaySquare } from 'lucide-vue-next';
+import { ChevronsUpDown, PlaySquare, Lock } from 'lucide-vue-next';
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import CourseSummary from './components/CourseSummary.vue';
+import { useCourseStore } from './stores/course-store';
+import { storeToRefs } from 'pinia';
 
 const route = useRoute()
 const router = useRouter()
-const course = ref( null )
+const store = useCourseStore();
+const { course } = storeToRefs( store )
+
 const onLoad = ( data ) => {
     course.value = data
 }
 
 const contentExpanded = ref( window.innerWidth >= 768 )
 
-const currentPage = ref( -1 )
-const nextPage = () => {
-
+const goToPage = ( page ) => {
+    if ( !page.is_unlocked ) return;
+    router.push({ name: 'view-course-page', params: { page_id: page.id } })
 }
+
+const currentPageIndex = computed( () => {
+    if ( route.params.page_id == null ) return -1;
+    return course.value.pages.findIndex( p => p.id == route.params.page_id )
+})
+
+const nextPage = () => {
+    let index = currentPageIndex.value;
+    if ( index >= course.value.pages.length - 1 ) return;
+
+    let nextPage = course.value.pages[index + 1]
+    if ( !nextPage.is_unlocked ) return;
+    router.push({ name: 'view-course-page', params: { page_id: nextPage.id } })
+}
+
+const nextPageUnlocked = computed( () => {
+    let index = currentPageIndex.value;
+    if ( index >= course.value.pages.length - 1 ) return false;
+    
+    return course.value.pages[index + 1].is_unlocked
+})
+
+const hasNextPage = computed( () => {
+    return currentPageIndex.value < course.value.pages.length - 1
+})
 
 </script>
 
@@ -59,18 +88,21 @@ const nextPage = () => {
                         </CollapsibleTrigger>
                     </div>
                     <CollapsibleContent>
-                        <router-link 
+                        <Button 
                             v-for="page of course.pages" 
                             :key="page.id" 
-                            :to="{ name: 'view-course-page', params: { page_id: page.id } }"
-                            class="block">
-                            <Button variant="ghost" class="flex items-center w-full justify-start">
-                                <PlaySquare size="16" color="rgb( var( --muted-foreground ) )" class="flex-shrink-0 mr-2"/>
-                                <div class="text-left flex-shrink">
-                                    {{ page.title }}
-                                </div>
-                            </Button>
-                        </router-link>
+                            variant="ghost" 
+                            class="flex items-center w-full justify-start"
+                            :class="{ 'border border-border text-base text-primary': page.id == route.params.page_id }"
+                            :disabled="!page.is_unlocked"
+                            @click="() => goToPage( page )">
+                            <PlaySquare v-if="page.is_unlocked" size="16" color="rgb( var( --muted-foreground ) )" class="flex-shrink-0 mr-2"/>
+                            <Lock v-else size="16" color="rgb( var( --muted-foreground ) )" class="flex-shrink-0 mr-2"/>
+
+                            <div class="text-left flex-shrink">
+                                {{ page.title }}
+                            </div>
+                        </Button>
                     </CollapsibleContent>
                 </Collapsible>
             </div>
@@ -86,8 +118,30 @@ const nextPage = () => {
                         </router-view>
                     </SlimContainer>
                 </Card>
-                <div class="flex mt-2">
-                    <Button class="w-full" @click="nextPage">Begin course</Button>
+                <div class="flex mt-2" v-if="currentPageIndex == -1">
+                    <Button class="w-full" 
+                        @click="nextPage">
+                        Begin course
+                    </Button>
+                </div>
+                
+                <div class="flex mt-2" v-if="currentPageIndex >= 0 && hasNextPage">
+                    <Button variant="secondary">
+                        Previous
+                    </Button>
+                    <div class="flex-grow"></div>
+                    <Button 
+                        size="lg" 
+                        @click="nextPage" 
+                        :disabled='!nextPageUnlocked'>
+                        Next page
+                    </Button>
+                </div>
+
+                <div class="flex mt-2" v-if="!hasNextPage">
+                    <Button class="w-full" @click="router.push({ name: 'home' })">
+                        Finish course
+                    </Button>
                 </div>
             </div>
         </div>

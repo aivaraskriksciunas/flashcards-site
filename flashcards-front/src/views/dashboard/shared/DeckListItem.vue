@@ -1,4 +1,5 @@
 <script setup>
+import Badge from '@/components/ui/badge/Badge.vue';
 import Card from '../../../components/ui/Card.vue';
 
 const { deck } = defineProps({
@@ -16,6 +17,7 @@ const { deck } = defineProps({
         </router-link>
         <div class="deck-details">
             <p>Cards: {{ deck.card_count }}</p>
+            <Badge variant="outline" v-if="deck.has_draft" class="draft-badge ml-auto">Draft</Badge>
         </div>
     </Card>
 </template>
@@ -33,6 +35,12 @@ const { deck } = defineProps({
 .deck-details {
     font-size: 0.9em;
     font-weight: 300;
+    display: flex;
+}
+
+.draft-badge {
+    font-size: 0.9em;
+    padding: 4px 16px;
 }
 
 </style>

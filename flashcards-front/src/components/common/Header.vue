@@ -2,7 +2,6 @@
 
 const props = defineProps({
     level: {
-        type: Number,
         default: 1,
     }
 })
@@ -11,7 +10,7 @@ const props = defineProps({
 
 <template>
     
-<div class="header lg:flex items-center mb-3">
+<div class="header flex items-center mb-3 flex-wrap">
     <h1 v-if="props.level == 1" class="flex-grow">
         <slot></slot>
     </h1>
@@ -26,3 +25,11 @@ const props = defineProps({
 </div>
 
 </template>
+
+<style>
+.header h1,
+.header h2,
+.header h3 {
+    margin-bottom: 0;
+}
+</style>

@@ -11,28 +11,6 @@ use App\Models\User;
 class CourseService 
 {
     /**
-     * Retrieves any courses for the user (created by, assigned to, organization public courses)
-     *
-     * @param User $user
-     * @return void
-     */
-    public function getUserCourses( User $user )
-    {
-        $user_courses = $user->courses()->limit( 5 )->get();
-        $assigned_courses = $user->assignedCourses()
-            ->withPivot([ 'created_at' ])
-            ->orderByPivot( 'created_at', 'DESC' )
-            ->get();
-        $organization_courses = $this->getOrganizationVisibleCourses( $user );
-
-        return [
-            'user_courses' => CourseResource::collection( $user_courses ),
-            'assigned_courses' => CourseResource::collection( $assigned_courses ),
-            // 'organization_courses' => CourseResource::collection( $organization_courses ),
-        ];
-    }
-
-    /**
      * Undocumented function
      *
      * @param User $user
@@ -43,6 +21,19 @@ class CourseService
         return $user->assignedCourses()
             ->withPivot([ 'created_at' ])
             ->orderByPivot( 'created_at', 'DESC' );
+    }
+
+    public function getAssignableUsers( User $user, Course $course )
+    {
+        if ( !$user->organization ) return collect( [] );
+
+        return $user->organization->users()
+            ->whereNotIn('id', function ( $query ) use ( $course ) {
+                $query->select( 'user_id' )
+                    ->from( 'assigned_user_courses' )
+                    ->where( 'course_id', $course->id );
+            })
+            ->whereNot( 'id', $user->id );
     }
 
     /**

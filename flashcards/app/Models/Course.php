@@ -13,11 +13,12 @@ class Course extends Model
     use HasFactory, HasUlids, HasActivityLogging;
 
     protected $fillable = [
-        'title'
+        'title', 'visibility', 'is_unlocked',
     ];
 
     protected $casts = [
         'visibility' => CourseVisibility::class,
+        'is_unlocked' => 'boolean',
     ];
 
     public function user() {

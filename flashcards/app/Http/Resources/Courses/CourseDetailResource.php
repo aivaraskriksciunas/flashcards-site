@@ -18,6 +18,8 @@ class CourseDetailResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'pages' => CoursePageResource::collection( $this->coursePages()->orderBy( 'order', 'ASC' )->get() ),
+            'visibility' => $this->visibility,
+            'is_unlocked' => $this->is_unlocked,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

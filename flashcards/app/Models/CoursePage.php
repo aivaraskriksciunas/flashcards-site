@@ -34,6 +34,10 @@ class CoursePage extends Model
         return $this->hasMany( CoursePageItem::class, 'course_page_id' );
     }
 
+    public function courseProgress() {
+        return $this->hasMany( CourseProgress::class );
+    }
+
     /**
      * Creates a page from the provided attribute array
      * If order is not set, sets this page as the last in the course

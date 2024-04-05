@@ -42,6 +42,11 @@ const router = createRouter({
                     name: 'create-deck',
                     component: () => import( '../views/decks/CreateDeck.vue' )
                 },
+                { 
+                    path: '/decks/new/from-notes',
+                    name: 'create-deck-from-notes',
+                    component: () => import( '../views/decks/CreateDeckFromNotes.vue' )
+                },
                 {
                     path: '/decks/:id',
                     name: 'view-deck',
@@ -86,9 +91,9 @@ const router = createRouter({
                 },
 
                 {
-                    path: '/import/quizlet',
-                    name: 'import-quizlet',
-                    component: () => import( '../views/importing/ImportQuizlet.vue' ),
+                    path: '/import/wordlist',
+                    name: 'import-wordlist',
+                    component: () => import( '../views/importing/ImportWordList.vue' ),
                 },
                 {
                     path: '/import/anki',

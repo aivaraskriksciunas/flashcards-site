@@ -9,13 +9,20 @@ import {
 } from '@/components/ui/select';
 import { Palette } from 'lucide-vue-next';
 import { useUserSettingStore } from "../../stores/user-settings";
+import { ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 
 const userSettings = useUserSettingStore();
+const theme = ref( userSettings.colorTheme )
+
+watch( theme, ( newTheme ) => {
+    userSettings.setColorTheme( newTheme )
+} )
 
 </script>
 
 <template>
-    <Select :model-value="userSettings.colorTheme">
+    <Select v-model="theme">
         <SelectTrigger>
             <div class="flex items-center">
                 <Palette size="16" class="mr-2" />
@@ -24,10 +31,10 @@ const userSettings = useUserSettingStore();
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
-                <SelectItem value="light" @click="userSettings.setColorTheme( 'light' )">
+                <SelectItem value="light">
                     Light
                 </SelectItem>
-                <SelectItem value="dark" @click="userSettings.setColorTheme( 'dark' )">
+                <SelectItem value="dark">
                     Dark
                 </SelectItem>
             </SelectGroup>

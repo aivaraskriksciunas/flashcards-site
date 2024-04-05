@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->string( 'visibility', 15 )->default( 'private' );
+            $table->boolean( 'is_unlocked' )
+                ->default( false )
+                ->after( 'visibility' )
+                ->comment( 'Whether or not users can view any page in the course.' );
         });
     }
 
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn( 'visibility' );
+            $table->dropColumn( 'is_unlocked' );
         });
     }
 };

@@ -25,7 +25,7 @@ return [
 
         'courses' => [
             'count' => 3,
-            'topics' => 10,
+            'pages' => 20,
             'items' => 20,
         ],
 

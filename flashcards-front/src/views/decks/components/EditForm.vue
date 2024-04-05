@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
     Plus,
     Trash2
@@ -13,6 +13,16 @@ import PlainIconButton from '../../../components/ui/PlainIconButton.vue';
 import { Button } from '@/components/ui/button';
 import FlashcardContentFields from './flashcard-content-fields/FlashcardContentFields.vue';
 import FlashcardContentTypeSelect from './flashcard-content-fields/FlashcardContentTypeSelect.vue';
+import debounce from 'lodash/debounce'
+import axios from 'axios';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 
 const props = defineProps({
     deck: {
@@ -23,6 +33,7 @@ const props = defineProps({
 const cards = ref([])
 const addCardButton = ref( null )
 const emit = defineEmits([ 'save' ])
+const draft = ref( null )
 
 if ( props.deck && props.deck.cards ) {
     for ( let card of props.deck.cards ) {
@@ -35,14 +46,14 @@ if ( props.deck && props.deck.cards ) {
             question: card.question,
             answer: card.answer,
             comment: card.comment == '' ? null : card.comment,
-            questionType: card.question_type ?? 'text',
-            answerType: card.answer_type ?? 'text'
+            question_type: card.question_type ?? 'text',
+            answer_type: card.answer_type ?? 'text'
         })
     }
 }
 
 let url = '/api/decks', method = 'POST';
-if ( props.deck ) {
+if ( props.deck && props.deck.id ) {
     url = `/api/decks/${props.deck.id}`
     method = 'PATCH'
 }
@@ -57,8 +68,8 @@ const addCard = () => {
         id: null,
         question: '',
         answer: '',
-        questionType: 'text',
-        answerType: 'text',
+        question_type: 'text',
+        answer_type: 'text',
     })
 }
 
@@ -78,10 +89,34 @@ const onDeckSave = ( data ) => {
     emit( 'save', data );
 }
 
+const onFormChange = debounce( ( data ) => {
+    if ( !props.deck || !props.deck.id ) return;
+
+    // Store draft
+    axios.post( `/api/decks/${props.deck.id}/draft`, data )
+}, 4000 )
+
+onMounted( async () => {
+    if ( !props.deck || !props.deck.id ) return;
+
+    try {
+        let data = await axios.get( `/api/decks/${props.deck.id}/draft` )
+        draft.value = data.data
+    }
+    catch ( e ) {}
+})
+
+const openDraft = () => {
+    if ( !draft.value.cards ) return;
+
+    cards.value = draft.value.cards 
+    draft.value = null
+}
+
 </script>
 
 <template>
-    <AjaxForm :action="url" :method="method" :show-status-message="true" @success="onDeckSave">
+    <AjaxForm :action="url" :method="method" :show-status-message="true" @success="onDeckSave" @change="onFormChange">
         <TextField class="mb-8" :value="props.deck?.name ?? ''" name="name" placeholder="">Deck name:</TextField>
 
         <TransitionGroup name="card-list" @after-enter="scrollToView">
@@ -91,15 +126,15 @@ const onDeckSave = ( data ) => {
                         <div class="card-title">#{{ index + 1 }}</div>
 
                         <div class="flex-1">
-                            <FlashcardContentTypeSelect v-model="cards[index].answerType"/>
+                            <FlashcardContentTypeSelect v-model="cards[index].answer_type"/>
                         </div>
 
                         <PlainIconButton @click="() => removeCard( index )" variant="destructive">
                             <Trash2/>
                         </PlainIconButton>
                     </div>
-
-                    <FlashcardContentFields :card="card" :index="index" :answerType="card.answerType"/>
+                    
+                    <FlashcardContentFields :card="card" :index="index" :answerType="card.answer_type"/>
                     
                     <div class="flex justify-center text-sm" v-if="card.comment == null">
                         <PlainButton @click="() => addComment( index )">
@@ -127,6 +162,25 @@ const onDeckSave = ( data ) => {
             <Button variant="pillOutline" @click="addCard" class="w-full mb-4">New card</Button>
         </div>
     </AjaxForm>
+
+    <Dialog :open="draft != null && draft.cards">
+        <DialogContent class="sm:max-w-[425px]">
+        <DialogHeader>
+            <DialogTitle>Unsaved draft found</DialogTitle>
+            <DialogDescription>
+                There is an unsaved draft for this deck. Do you want to load it?
+            </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+            <Button variant="outline" @click="draft = null">
+                No 
+            </Button>
+            <Button @click="openDraft">
+                Yes, load draft
+            </Button>
+        </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>
 
 <style scoped>
