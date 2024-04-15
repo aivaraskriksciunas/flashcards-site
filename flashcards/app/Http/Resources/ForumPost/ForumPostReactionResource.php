@@ -15,23 +15,28 @@ class ForumPostReactionResource extends JsonResource
      */
     public function toArray($request)
     {
-        $userReaction = $this->reactions
-            ->where( 'user_id', $request->user()->id )
-            ->first();
-
-        if ( !$userReaction ) 
-        {
-            $userReaction = null;
-        }
-        else 
-        {
-            $userReaction = $userReaction->type->value;
-        }
+        $userReaction = $this->getUserReaction( $request );
 
         return [
             'upvotes' => $this->countReactions( ForumReactions::Upvote ),
             'downvotes' => $this->countReactions( ForumReactions::Downvote ),
             'user_reaction' => $userReaction,
         ];
+    }
+
+    private function getUserReaction( $request )
+    {
+        if ( !$request->user() ) return null;
+
+        $userReaction = $this->reactions
+            ->where( 'user_id', $request->user()->id )
+            ->first();
+
+        if ( !$userReaction ) 
+        {
+            return null;
+        }
+        
+        return $userReaction->type->value;
     }
 }

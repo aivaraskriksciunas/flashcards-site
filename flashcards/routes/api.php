@@ -44,6 +44,18 @@ Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ])->name( 'verify.email' );
 Route::post( '/invitations/{invitation}/accept', [ ApiInvitationController::class, 'accept' ] )->name( 'invitation.accept' );
 
+
+/**
+ * Forum
+ */
+Route::get( '/forum-posts/list/{forumTopic}', [ ApiForumPostController::class, 'getPostList' ] );
+Route::get( '/forum-posts/list', [ ApiForumPostController::class, 'getPostList' ] );
+Route::get( '/forum-posts/{forum_post}', [ ApiForumPostController::class, 'show' ] )
+    ->name( 'forum-posts.show' );
+Route::get( '/forum-topics', [ ApiForumPostController::class, 'getTopicList' ]);
+Route::get( '/forum-topics/{forumTopic}', [ ApiForumPostController::class, 'getForumTopic' ]);
+
+    
 /**
  * Routes for authenticated users
  */
@@ -105,16 +117,11 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
     /**
      * Forum
      */
-    Route::get( 'forum-posts/list/{forumTopic}', [ ApiForumPostController::class, 'getPostList' ] );
-    Route::get( 'forum-posts/list/', [ ApiForumPostController::class, 'getPostList' ] );
+    Route::post( 'forum-posts', [ ApiForumPostController::class, 'store' ] )
+        ->middleware( 'limit-forum-posts' )
+        ->name( 'forum-posts.store' );
     Route::post( 'forum-posts/react/{forumPost}', [ ApiForumPostController::class, 'reactToForumPost' ])
         ->name( 'react-to-forum-post' );
-    Route::apiResource( 'forum-posts', ApiForumPostController::class )
-        ->except([ 'index', 'store' ]);
-    Route::post( 'forum-posts', [ ApiForumPostController::class, 'store' ] )
-        ->middleware( 'limit-forum-posts' );
-
-    Route::get( '/forum-topics', [ ApiForumPostController::class, 'getTopicList' ]);
 
     /**
      * Forum comments
@@ -178,3 +185,4 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
 Route::get( '/decks/{deck}', [ ApiDeckController::class, 'get' ] )
     ->middleware( 'can:view,deck' )
     ->name( 'decks.get' );
+

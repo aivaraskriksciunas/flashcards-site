@@ -6,3 +6,4 @@ logs
 .env
 pmaproxy.sh
 # wagtail
+forum

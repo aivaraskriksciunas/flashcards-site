@@ -16,13 +16,16 @@ app.use(router)
 // Set axios defaults
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
 axios.defaults.withCredentials = true
+axios.defaults.withXSRFToken = true
+axios.defaults.xsrfCookieName = 'XSRF-TOKEN'
+axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN'
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.defaults.headers.common['Accept'] = 'application/json'
 
 let api_key = Cookies.get( 'api_key' )
 if ( api_key ) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${api_key}`;
-    Cookies.set( 'api_key', api_key, { expires: 40, sameSite: 'strict' } );
+    Cookies.set( 'api_key', api_key, { expires: 40, domain: window.location.hostname } );
 }
 
 app.mount('#app')

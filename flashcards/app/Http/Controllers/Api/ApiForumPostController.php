@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForumPost\Api\ReactToForumPost;
 use App\Http\Requests\ForumPost\Api\StoreForumPost;
@@ -12,8 +13,10 @@ use App\Http\Resources\ForumPost\ForumPostReactionResource;
 use App\Models\ForumPost;
 use App\Models\ForumTopic;
 use App\Http\Resources\ForumTopic\ForumTopicResource;
+use App\Services\DataTable\DataTable;
 use App\Services\ForumReactions\ForumReactions;
 use App\Services\ForumReactions\ForumReactionService;
+
 
 class ApiForumPostController extends Controller
 {
@@ -74,11 +77,19 @@ class ApiForumPostController extends Controller
      *
      * @return void
      */
-    public function getTopicList() 
+    public function getTopicList( Request $request ) 
     {
+        $dt = new DataTable([ 'title' ], searchable:[ 'title' ], max_page_size:100 );
+        $dt->applyUserFilters( ForumTopic::orderBy( 'title' ), $request );
+
         return ForumTopicResource::collection( 
-            ForumTopic::orderBy( 'title' )->get()
+            $dt->getQuery()->get()
         );
+    }
+
+    public function getForumTopic( ForumTopic $forumTopic )
+    {
+        return new ForumTopicResource( $forumTopic );
     }
 
     public function getPostList( ?ForumTopic $forumTopic )

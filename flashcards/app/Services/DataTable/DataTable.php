@@ -26,6 +26,7 @@ class DataTable
      */
     public function __construct(
         private array $sortable = [],
+        private array $searchable = [],
         private int $max_page_size = 50,
     )
     {
@@ -37,11 +38,13 @@ class DataTable
      *
      * @param Builder $query
      * @param Request $request
-     * @return Builder
+     * @return DataTable
      */
     public function applyUserFilters( Builder|Relation $query, Request $request ) : DataTable
     {
         $this->query = $query;
+
+        $this->search( $request );
 
         $this->sort( $request );
 
@@ -59,6 +62,22 @@ class DataTable
     {
         return $this->query->paginate( $this->per_page, page:$this->page )
             ->withQueryString();
+    }
+
+    private function search( Request $request )
+    {
+        $search = $request->query( 'search', '' );
+        $searchable = $this->searchable;
+
+        if ( count( $searchable ) == 0 ) return;
+
+        // Filter by search fields
+        $this->query->where( function ( $query ) use ( $search, $searchable ) {
+            foreach ( $searchable as $col ) 
+            {
+                $query->orWhere( $col, 'like', "$search%" );
+            }
+        });
     }
 
     private function sort( Request $request )

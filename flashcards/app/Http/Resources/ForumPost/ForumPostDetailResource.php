@@ -18,7 +18,7 @@ class ForumPostDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'slug' => $this->slug,
             'title' => $this->title,
             'content' => $this->content,
             'user' => new UserResource( $this->user ),
