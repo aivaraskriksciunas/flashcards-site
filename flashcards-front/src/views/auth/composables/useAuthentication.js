@@ -19,7 +19,7 @@ export default function useAuthentication() {
     }
 
     const setToken = ( token ) => {
-        jsCookie.set( 'api_key', token, { expires: 40, sameSite: 'strict' } )
+        jsCookie.set( 'api_key', token, { expires: 40, sameSite: 'strict', domain: 'aktulibre.eu' } )
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
 

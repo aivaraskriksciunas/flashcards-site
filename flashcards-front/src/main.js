@@ -25,7 +25,7 @@ axios.defaults.headers.common['Accept'] = 'application/json'
 let api_key = Cookies.get( 'api_key' )
 if ( api_key ) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${api_key}`;
-    Cookies.set( 'api_key', api_key, { expires: 40, domain: window.location.hostname } );
+    Cookies.set( 'api_key', api_key, { expires: 40, domain: 'aktulibre.eu' } );
 }
 
 app.mount('#app')
