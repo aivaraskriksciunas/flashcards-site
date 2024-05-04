@@ -36,6 +36,10 @@ class Course extends Model
             ->using( AssignedUserCourse::class );
     }
 
+    public function attachments() {
+        return $this->morphMany( ForumAttachment::class, 'attachable' );
+    }
+
     /**
      * Creates a page from the provided attribute array
      * If order is not set, sets this page as the last in the course

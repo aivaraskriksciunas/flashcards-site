@@ -15,6 +15,7 @@ use App\Services\DeckSummaryService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
+use App\Services\DataTable\DataTable;
 
 class ApiDeckController extends Controller
 {
@@ -31,7 +32,9 @@ class ApiDeckController extends Controller
      */
     public function index( Request $request ) 
     {
-        return DeckResource::collection( $request->user()->decks()->get() );
+        $dt = new DataTable( sortable:[ 'name' ], searchable:[ 'name' ] );
+        $dt->applyUserFilters( $request->user()->decks(), $request );
+        return DeckResource::collection( $dt->getPaginated() );
     }
 
     /**

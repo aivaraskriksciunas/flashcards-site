@@ -19,6 +19,8 @@ class DeckResource extends JsonResource
             'name' => $this->name,
             'card_count' => $this->get_card_count(),
             'has_draft' => $this->getDraft() != null,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 

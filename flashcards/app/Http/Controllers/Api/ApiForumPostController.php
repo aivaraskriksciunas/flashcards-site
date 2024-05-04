@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ForumPostAttachmentType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForumPost\Api\ReactToForumPost;
@@ -13,10 +14,13 @@ use App\Http\Resources\ForumPost\ForumPostReactionResource;
 use App\Models\ForumPost;
 use App\Models\ForumTopic;
 use App\Http\Resources\ForumTopic\ForumTopicResource;
+use App\Models\Course;
+use App\Models\Deck;
+use App\Models\ForumAttachment;
 use App\Services\DataTable\DataTable;
 use App\Services\ForumReactions\ForumReactions;
 use App\Services\ForumReactions\ForumReactionService;
-
+use Illuminate\Foundation\Http\FormRequest;
 
 class ApiForumPostController extends Controller
 {
@@ -33,6 +37,8 @@ class ApiForumPostController extends Controller
         $post = new ForumPost( $request->validated() );
         $post->forumTopic()->associate( $topic );
         $request->user()->forumPosts()->save( $post );
+
+        $this->saveForumPostAttachments( $request, $post );
 
         return $post;
     }
@@ -114,5 +120,39 @@ class ApiForumPostController extends Controller
 
         $service->registerReaction( $forumPost, $request->user(), $reactionType );
         return new ForumPostReactionResource( $forumPost );
+    }
+
+
+    private function saveForumPostAttachments( FormRequest $request, ForumPost $post )
+    {
+        foreach ( $request->validated( 'attachments', [] ) as $attachment )
+        {
+            $attachable = null;
+
+            // Check that this attachment has all the necessary fields
+            if ( $attachment['type'] == ForumPostAttachmentType::Deck->value )
+            {
+                $attachable = Deck::where( 'user_id', $request->user()->id )
+                    ->where( 'id', $attachment['id'] )
+                    ->first();
+            }
+            else if ( $attachment['type'] == ForumPostAttachmentType::Course->value )
+            {
+                $attachable = Course::where( 'user_id', $request->user()->id )
+                    ->where( 'id', $attachment['id'] )
+                    ->first();
+            }
+
+            if ( $attachable == null ) continue;
+
+            // Check if this item wasn't already attached
+            $has_attachment = $attachable->attachments()->where( 'forum_post_id', $post->id )->exists();
+            if ( $has_attachment ) continue;
+
+            $obj = new ForumAttachment([ 'title' => $attachment['title'] ]);
+            $obj->forumPost()->associate( $post );
+            $obj->attachable()->associate( $attachable );
+            $obj->save();
+        }   
     }
 }

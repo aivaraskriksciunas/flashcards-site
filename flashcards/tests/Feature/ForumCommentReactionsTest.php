@@ -71,7 +71,7 @@ class ForumCommentReactionsTest extends TestCase
         $comment = $this->createForumComment();
 
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $comment->id ), [
+        ->postJson( route( 'api.react-to-forum-comment', $comment->id ), [
             'reaction' => 'aaa'
         ]);
         

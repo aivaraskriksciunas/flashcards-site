@@ -42,6 +42,11 @@ class ForumPost extends Model
         return $this->hasMany( ForumComment::class );
     }
 
+    public function attachments()
+    {
+        return $this->hasMany( ForumAttachment::class );
+    }
+
     public function makeSlug()
     {
         $title_slug = Str::of( $this->title )->slug( '-' )->limit( 80 );

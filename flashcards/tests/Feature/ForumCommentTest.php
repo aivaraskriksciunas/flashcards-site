@@ -20,7 +20,7 @@ class ForumCommentTest extends TestCase
         $post = $this->createForumPost();
 
         $response = $this->postJson( 
-            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->id ] ),
+            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->slug ] ),
             [ 'content' => 'Long text' ]
         );
         $response->assertUnauthorized();
@@ -34,7 +34,7 @@ class ForumCommentTest extends TestCase
         $post = $this->createForumPost();
 
         $response = $this->actingAs( $user )->postJson(
-            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->id ] ),
+            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->slug ] ),
             [ 'content' => $this->faker->paragraph() ]
         );
 
@@ -49,13 +49,13 @@ class ForumCommentTest extends TestCase
         $post = $this->createForumPost();
 
         $response = $this->actingAs( $user )->postJson(
-            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->id ] ),
+            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->slug ] ),
             [ 'content' => '' ]
         );
 
         $response->assertUnprocessable();
         $response = $this->actingAs( $user )->postJson(
-            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->id ] ),
+            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->slug ] ),
             [  ]
         );
 
@@ -71,7 +71,7 @@ class ForumCommentTest extends TestCase
         for ( $i = 0; $i < $post_limit; $i++ )
         {
             $response = $this->actingAs( $user )->postJson(
-                route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->id ] ),
+                route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->slug ] ),
                 [ 'content' => $this->faker->paragraph() ]
             );
 
@@ -80,12 +80,12 @@ class ForumCommentTest extends TestCase
 
         // Response should fail
         $response = $this->actingAs( $user )->postJson(
-            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->id ] ),
+            route( 'api.forum-posts.comments.store', [ 'forum_post' => $post->slug ] ),
             [ 'content' => $this->faker->paragraph() ]
         );
         $response->assertForbidden();
 
-        $this->assertDatabaseCount( 'forum_posts', $post_limit );
+        $this->assertDatabaseCount( 'forum_comments', $post_limit );
     }
 
     private function createForumPost()

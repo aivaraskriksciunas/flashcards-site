@@ -49,7 +49,7 @@ class CoursePolicyBase
      * @param Course $course
      * @return Organization
      */
-    protected function getOrganization( Course $course ): Organization 
+    protected function getOrganization( Course $course ): Organization|null 
     {
         return $course->user->organization;
     }

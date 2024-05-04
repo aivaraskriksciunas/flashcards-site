@@ -1,6 +1,6 @@
 import { useRoute, useRouter } from "vue-router";
 import axios from 'axios';
-import jsCookie from 'js-cookie';
+import { setApiCookie } from "@/utils";
 
 export default function useAuthentication() {
 
@@ -19,7 +19,7 @@ export default function useAuthentication() {
     }
 
     const setToken = ( token ) => {
-        jsCookie.set( 'api_key', token, { expires: 40, sameSite: 'strict', domain: 'aktulibre.eu' } )
+        setApiCookie( token )
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
 

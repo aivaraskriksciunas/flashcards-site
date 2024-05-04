@@ -41,6 +41,10 @@ class Deck extends Model
             ->withPivot( 'created_at', 'last_view_at' );
     }
 
+    public function attachments() {
+        return $this->morphMany( ForumAttachment::class, 'attachable' );
+    }
+
     /**
      * Stores request in redis to be used as a draft
      *
@@ -77,6 +81,10 @@ class Deck extends Model
     }
 
     private function getRedisDraftKey() {
+        if ( !request()->user() ) {
+            return null;
+        }
+        
         $user_id = request()->user()->id;
         return "draft:$user_id:{$this->id}";
     }

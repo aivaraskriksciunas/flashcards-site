@@ -87,9 +87,27 @@ class CoursePolicy extends CoursePolicyBase
             return Response::allow();
         }
 
-        return $course->visibility != CourseVisibility::Private && $this->isManagerOfSameOrg( $user, $course ) ?
-            Response::allow() : 
-            Response::denyAsNotFound();
+        // If this is a private course, don't allow
+        if ( $course->visibility == CourseVisibility::Private )
+        {
+            return Response::denyAsNotFound();
+        }
+
+        // Check if belongs to the same organization
+        if ( $this->isManagerOfSameOrg( $user, $course ) )
+        {
+            // User can edit it if visibility is set to org admin and user is admin
+            if ( $user->isOrgAdmin() ) 
+            {
+                return Response::allow();
+            }
+            else if ( $course->visibility != CourseVisibility::OrgAdmin && $user->isOrgManager() )
+            {
+                return Response::allow();
+            }
+        }
+
+        return Response::denyAsNotFound();
     }
 
     public function delete( User $user, Course $course )

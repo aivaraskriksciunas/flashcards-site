@@ -20,7 +20,7 @@ class IsValidOrgAdmin
     public function handle(Request $request, Closure $next)
     {
         // An organization admin is valid when it has an organization assigned to it
-        if ( $request->user()->account_type !== UserType::ORG_ADMIN ) {
+        if ( !$request->user()->isOrgAdmin() ) {
             return $next( $request );
         }
 

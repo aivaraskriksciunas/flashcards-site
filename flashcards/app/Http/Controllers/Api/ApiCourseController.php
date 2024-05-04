@@ -35,7 +35,7 @@ class ApiCourseController extends Controller
      */
     public function getUserCourses( Request $request )
     {
-        $dt = new DataTable( sortable:[ 'title' ] );
+        $dt = new DataTable( sortable:[ 'title' ], searchable:[ 'title' ] );
         $dt->applyUserFilters( $request->user()->courses(), $request );
         return CourseResource::collection( $dt->getPaginated() );
     }
@@ -61,7 +61,7 @@ class ApiCourseController extends Controller
      */
     public function store( CreateCourse $request )
     {
-        $this->authorize( 'store', Course::class );
+        $this->authorize( 'create', Course::class );
         $course = new Course( $request->validated() );
         $request->user()->courses()->save( $course );
 

@@ -19,7 +19,7 @@ class ForumReactionsTest extends TestCase
     {
         $post = $this->createForumPost();
 
-        $response = $this->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        $response = $this->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'upvote'
         ]);
         
@@ -32,7 +32,7 @@ class ForumReactionsTest extends TestCase
         $post = $this->createForumPost();
 
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'upvote'
         ]);
         
@@ -51,7 +51,7 @@ class ForumReactionsTest extends TestCase
         $post = $this->createForumPost();
 
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'downvote'
         ]);
         
@@ -70,7 +70,7 @@ class ForumReactionsTest extends TestCase
         $post = $this->createForumPost();
 
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'aaa'
         ]);
         
@@ -85,7 +85,7 @@ class ForumReactionsTest extends TestCase
 
         // First vote
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'upvote'
         ]);
         $response->assertSuccessful();
@@ -97,7 +97,7 @@ class ForumReactionsTest extends TestCase
 
         // Second vote
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'downvote'
         ]);
         $response->assertSuccessful();
@@ -113,7 +113,7 @@ class ForumReactionsTest extends TestCase
 
         // First vote
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'upvote'
         ]);
         $response->assertSuccessful();
@@ -121,7 +121,7 @@ class ForumReactionsTest extends TestCase
 
         // Second vote
         $response = $this->actingAs( $user )
-        ->postJson( route( 'api.react-to-forum-post', $post->id ), [
+        ->postJson( route( 'api.react-to-forum-post', $post->slug ), [
             'reaction' => 'upvote'
         ]);
         $response->assertSuccessful();

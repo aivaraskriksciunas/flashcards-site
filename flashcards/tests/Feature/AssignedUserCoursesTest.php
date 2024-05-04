@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\CourseVisibility;
 use App\Models\Course;
 use App\Models\Organization;
 use App\Models\User;
@@ -15,6 +16,7 @@ class AssignedUserCoursesTest extends TestCase
 
     private Organization $organization;
     private User $orgAdmin;
+    private User $orgAdmin2;
     private User $orgManager;
     private User $member;
     private Course $course;
@@ -62,7 +64,10 @@ class AssignedUserCoursesTest extends TestCase
         $member2 = User::factory()->for( $this->organization )->orgMember()->create();
         $member3 = User::factory()->for( $this->organization )->orgMember()->create();
 
-        $response = $this->actingAs( $this->orgAdmin )
+        $this->course->visibility = CourseVisibility::OrgEveryone;
+        $this->course->save();
+
+        $response = $this->actingAs( $this->orgAdmin2 )
             ->post( route( 'api.courses.assigned.add', $this->course ), [ 'user_ids' => [ $this->member->id ] ] );
         $response->assertSuccessful();
 
@@ -73,7 +78,16 @@ class AssignedUserCoursesTest extends TestCase
         $response = $this->actingAs( $this->member )
             ->post( route( 'api.courses.assigned.add', $this->course ), [ 'user_ids' => [ $member3->id ] ] );
         $response->assertNotFound();
-        
+
+        // If the visibility is only for org admins, lower users should not be able to modify it
+        $this->course->visibility = CourseVisibility::OrgAdmin;
+        $this->course->save();
+
+        $response = $this->actingAs( $this->orgManager )
+            ->post( route( 'api.courses.assigned.add', $this->course ), [ 'user_ids' => [ $member3->id ] ] );
+        $response->assertNotFound();
+
+
         $this->course->refresh();
         $this->assertCount( 2, $this->course->assignedUsers );
     }
@@ -83,6 +97,7 @@ class AssignedUserCoursesTest extends TestCase
         // Seed database
         $this->organization = Organization::factory()->create();
         $this->orgAdmin = User::factory()->for( $this->organization )->orgAdmin()->create();
+        $this->orgAdmin2 = User::factory()->for( $this->organization )->orgAdmin()->create();
         $this->orgManager = User::factory()->for( $this->organization )->orgManager()->create();
         $this->member = User::factory()->for( $this->organization )->orgMember()->create();
         $this->course = Course::factory()->for( $this->orgAdmin )->create();

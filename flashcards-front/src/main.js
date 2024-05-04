@@ -7,6 +7,7 @@ import router from './router'
 
 import './assets/base.css'
 import Cookies from 'js-cookie'
+import { setApiCookie } from './utils'
 
 const app = createApp(App)
 
@@ -25,7 +26,7 @@ axios.defaults.headers.common['Accept'] = 'application/json'
 let api_key = Cookies.get( 'api_key' )
 if ( api_key ) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${api_key}`;
-    Cookies.set( 'api_key', api_key, { expires: 40, domain: 'aktulibre.eu' } );
+    setApiCookie( api_key );
 }
 
 app.mount('#app')

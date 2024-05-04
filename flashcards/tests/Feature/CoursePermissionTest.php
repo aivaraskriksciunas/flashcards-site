@@ -36,7 +36,7 @@ class CoursePermissionTest extends TestCase
 
     public function test_cannot_update_course(): void
     {
-        // $this->doRequest( 'api.courses.update', Course::factory()->make()->toArray() );
+        $this->doRequest( 'api.courses.update', Course::factory()->make()->toArray() );
     }
 
     public function test_cannot_delete_course() 
@@ -47,6 +47,100 @@ class CoursePermissionTest extends TestCase
     public function test_cannot_reorder_pages() 
     {
         $this->doRequest( 'api.courses.set-page-order', [ 'pages' => [ $this->page->id ] ] );
+    }
+
+    public function test_course_update_permissions_for_organizations(): void
+    {
+        $org = Organization::factory()->create();
+        $owner = User::factory()->for( $org )->create();
+        $this->course->user()->associate( $owner );
+        $this->course->save();
+        
+        $orgadmin = User::factory()->for( $org )->orgAdmin()->create();
+        $orgmanager = User::factory()->for( $org )->orgManager()->create();
+        $orgmember = User::factory()->for( $org )->create();
+
+        $this->course->update([ 'visibility' => CourseVisibility::Private ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgAdmin ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner, $orgadmin ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgManager ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgmember, $this->other ],
+            success_users:[ $owner, $orgadmin, $orgmanager ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgEveryone ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgmember, $this->other ],
+            success_users:[ $owner, $orgadmin, $orgmanager ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::Public ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgmember, $this->other ],
+            success_users:[ $owner, $orgadmin, $orgmanager ],
+            data:Course::factory()->make()->toArray(),
+        );
+    }
+
+    public function test_course_update_permissions(): void
+    {
+        $org = Organization::factory()->create();
+        $owner = User::factory()->create();
+        $this->course->user()->associate( $owner );
+        $this->course->save();
+        
+        $orgadmin = User::factory()->for( $org )->orgAdmin()->create();
+        $orgmanager = User::factory()->for( $org )->orgManager()->create();
+        $orgmember = User::factory()->for( $org )->create();
+
+        $this->course->update([ 'visibility' => CourseVisibility::Private ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgAdmin ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgManager ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::OrgEveryone ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ],
+            data:Course::factory()->make()->toArray(),
+        );
+
+        $this->course->update([ 'visibility' => CourseVisibility::Public ]);
+        $this->runValidation( 'api.courses.update', 
+            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
+            success_users:[ $owner ],
+            data:Course::factory()->make()->toArray(),
+        );
     }
 
     /**
