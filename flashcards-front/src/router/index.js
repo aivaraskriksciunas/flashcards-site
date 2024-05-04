@@ -75,22 +75,6 @@ const router = createRouter({
                 },
 
                 {
-                    path: '/forum/:topic?',
-                    name: 'forum',
-                    component: () => import( '../views/forum/Forum.vue' ),
-                },
-                {
-                    path: '/forum/:topic/new',
-                    name: 'create-forum-post',
-                    component: () => import( '../views/forum/CreatePost.vue' ),
-                },
-                { 
-                    path: '/forum/post/:id',
-                    name: 'view-forum-post',
-                    component: () => import( '../views/forum/Post.vue' ),
-                },
-
-                {
                     path: '/import/wordlist',
                     name: 'import-wordlist',
                     component: () => import( '../views/importing/ImportWordList.vue' ),

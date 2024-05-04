@@ -55,9 +55,9 @@ router.afterEach( ( from, to, failure ) => {
             <router-link v-if="userStore.isOrgManager()" :to="{name: 'org-members'}">
                 <div class="sidebar-link">Members</div>
             </router-link>
-            <router-link :to="{name: 'forum'}">
+            <a href="https://forum.aktulibre.eu">
                 <div class='sidebar-link'>Forum</div>
-            </router-link>
+            </a>
         </div>
 
         <div class="sidebar-header">
