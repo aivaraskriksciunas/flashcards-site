@@ -94,7 +94,7 @@ const onFormChange = debounce( ( data ) => {
 
     // Store draft
     axios.post( `/api/decks/${props.deck.id}/draft`, data )
-}, 4000 )
+}, 1500 )
 
 onMounted( async () => {
     if ( !props.deck || !props.deck.id ) return;
