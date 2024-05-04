@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Models\Utils\HasActivityLogging;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Redis;
 
 class Deck extends Model
 {
-    use HasFactory, HasActivityLogging;
+    use HasFactory, SoftDeletes, HasActivityLogging;
 
     protected $fillable = [
         'name'

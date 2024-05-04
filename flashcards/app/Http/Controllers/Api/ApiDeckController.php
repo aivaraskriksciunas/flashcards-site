@@ -33,7 +33,13 @@ class ApiDeckController extends Controller
     public function index( Request $request ) 
     {
         $dt = new DataTable( sortable:[ 'name' ], searchable:[ 'name' ] );
-        $dt->applyUserFilters( $request->user()->decks(), $request );
+        $dt->applyUserFilters( 
+            $request->user()
+                ->getLibrary()
+                ->decks()
+                ->where( 'user_id', $request->user()->id ), 
+                $request 
+            );
         return DeckResource::collection( $dt->getPaginated() );
     }
 
@@ -180,7 +186,7 @@ class ApiDeckController extends Controller
             ->detach([ $deck->id ]);
 
         // If user is the owner, delete deck
-        if ( $deck->user == $request->user )
+        if ( $deck->user == $request->user() )
         {
             $deck->delete();
         }
