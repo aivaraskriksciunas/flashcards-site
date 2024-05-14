@@ -39,10 +39,10 @@ class CoursePermissionTest extends TestCase
         $this->doRequest( 'api.courses.update', Course::factory()->make()->toArray() );
     }
 
-    public function test_cannot_delete_course() 
-    {
-        // $this->doRequest( 'api.courses.destroy' );
-    }
+    // public function test_cannot_delete_course() 
+    // {
+    //     // $this->doRequest( 'api.courses.destroy' );
+    // }
 
     public function test_cannot_reorder_pages() 
     {
@@ -199,10 +199,10 @@ class CoursePermissionTest extends TestCase
         $this->doRequest( 'api.courses.course_pages.update', CoursePage::factory()->make()->toArray() );
     }
 
-    public function test_cannot_delete_course_page(): void
-    {
-        // $this->doRequest( 'api.courses.course_pages.destroy' );
-    }
+    // public function test_cannot_delete_course_page(): void
+    // {
+    //     // $this->doRequest( 'api.courses.course_pages.destroy' );
+    // }
 
     public function test_cannot_reorder_course_page_items() 
     {

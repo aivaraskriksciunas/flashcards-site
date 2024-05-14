@@ -115,12 +115,13 @@ const router = createRouter({
                             name: 'edit-course-page',
                             component: () => import( '../views/courses/EditCoursePage.vue' ),
                         }
-                    ]
+                    ],
                 },
                 {
                     path: '/members',
                     name: 'org-members',
                     component: () => import( '../views/org-members/ShowMembers.vue' ),
+                    beforeEnter: [ isOrgManager ],
                 }
             ]
         },
@@ -167,7 +168,7 @@ const router = createRouter({
                     meta: { allowGuest: true }
                 },
                 {
-                    path: '/invitation/:invitation_code',
+                    path: '/invitation/accept/:invitation_code',
                     name: 'view-invitation',
                     component: () => import( '../views/auth/Invitation.vue' ),
                     meta: { allowGuest: true },
