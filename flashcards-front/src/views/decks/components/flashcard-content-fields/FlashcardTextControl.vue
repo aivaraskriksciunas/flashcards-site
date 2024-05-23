@@ -14,6 +14,7 @@ const model = defineModel()
 <template>
     <TextareaField 
         class="deck-item-control" 
+        name=""
         :value="model"
         @change="val => model = val" 
         :placeholder="props.placeholder">

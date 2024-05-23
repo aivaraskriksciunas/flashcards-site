@@ -32,10 +32,19 @@ export default function useGoogleLogin() {
 
     
     const initializeGoogleLogin = () => {
-        google.accounts.id.initialize({
-            client_id: import.meta.env.VITE_GOOGLE_PUBLIC_KEY,
-            callback: GoogleLoginCallback
-        });
+        let interval = setInterval(() => {
+            if ( google == null ) {
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: import.meta.env.VITE_GOOGLE_PUBLIC_KEY,
+                callback: GoogleLoginCallback
+            });
+
+            clearInterval( interval );
+        }, 500 )
+        
     }
 
     return {

@@ -10,7 +10,7 @@ const route = useRoute()
 
 const redirectUser = () => {
     if ( route.query.r ) {
-        router.push({ to: route.query.r, replace: true })
+        router.push({ path: route.query.r, replace: true })
     }
     else {
         router.push({ name: 'home', replace: true })

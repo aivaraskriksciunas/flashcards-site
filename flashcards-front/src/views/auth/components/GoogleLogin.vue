@@ -7,15 +7,25 @@ const buttonContainer = ref( null )
 initializeGoogleLogin()
 
 onMounted(() => {
-    google.accounts.id.renderButton(
-        document.getElementById( "googleSignIn" ),
-        { 
-            theme: "outline", 
-            size: "large",
-            text: "signin_with",
-            width: buttonContainer.value.scrollWidth,
+    let interval = setInterval(() => {
+        if ( google == null ) {
+            // Google Identity has not loaded yet
+            return;
         }
-    );
+
+        google.accounts.id.renderButton(
+            document.getElementById( "googleSignIn" ),
+            { 
+                theme: "outline", 
+                size: "large",
+                text: "signin_with",
+                width: buttonContainer.value.scrollWidth,
+            }
+        );
+
+        clearInterval( interval );
+    }, 500 )
+    
 })
 
 </script>

@@ -93,7 +93,7 @@ const onFormChange = debounce( ( data ) => {
     if ( !props.deck || !props.deck.id ) return;
 
     // Store draft
-    axios.post( `/api/decks/${props.deck.id}/draft`, data )
+    axios.post( `/api/decks/${props.deck.id}/draft`, data ).catch(() => {})
 }, 1500 )
 
 onMounted( async () => {
@@ -108,9 +108,17 @@ onMounted( async () => {
 
 const openDraft = () => {
     if ( !draft.value.cards ) return;
-
+    
     cards.value = draft.value.cards 
     draft.value = null
+
+    // Ensure all cards have a listItemId
+    cards.value.forEach( ( val, index ) => {
+        if ( val.listItemId == null ) {
+            cards.value[index].listItemId = Symbol()
+        }
+    });
+    console.log( cards.value )
 }
 
 </script>
@@ -123,7 +131,7 @@ const openDraft = () => {
             <div v-for="( card, index ) in cards" :key="card.listItemId" class="card">
                 <Card class="deck-item-form">
                     <div class="card-header flex content-center">
-                        <div class="card-title">#{{ index + 1 }}</div>
+                        <div class="card-title">#{{ +index + 1 }}</div>
 
                         <div class="flex-1">
                             <FlashcardContentTypeSelect v-model="cards[index].answer_type"/>
@@ -163,7 +171,7 @@ const openDraft = () => {
         </div>
     </AjaxForm>
 
-    <Dialog :open="draft != null && draft.cards">
+    <Dialog :open="draft != null && draft.cards != null">
         <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
             <DialogTitle>Unsaved draft found</DialogTitle>

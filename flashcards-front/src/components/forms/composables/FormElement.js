@@ -1,4 +1,4 @@
-import { ref, inject, onUnmounted } from "vue"
+import { ref, inject, onUnmounted, onMounted } from "vue"
 import { FormDiscovery, FormDeregister } from '../../../keys'
 
 export function useFormElement( name, model ) {
@@ -16,7 +16,10 @@ export function useFormElement( name, model ) {
     const register = inject( FormDiscovery )
     const deregister = inject( FormDeregister )
     if ( register != null ) {
-        register( name, elementModifier )
+        onMounted( () => {
+            register( name, elementModifier )
+        })
+        
     }
 
     if ( deregister != null ) {
