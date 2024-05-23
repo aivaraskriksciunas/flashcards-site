@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\ApiForumPostController;
 use App\Http\Controllers\Api\ApiImportController;
 use App\Http\Controllers\Api\ApiInvitationController;
 use App\Http\Controllers\Api\ApiOrganizationController;
+use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Middleware\Invitations\EnsureInvitationIsValid;
 use Google\Service\ApigeeRegistry\ApiDeployment;
 
@@ -43,6 +44,8 @@ Route::post( '/google-login', [ ApiAuthController::class, 'googleLogin' ]);
 Route::post( '/google-link', [ ApiAuthController::class, 'linkGoogleAccount' ]);
 Route::get( '/verify/{verification_code}', [ ApiAuthController::class, 'verifyAccount' ])->name( 'verify.email' );
 Route::post( '/invitations/{invitation}/accept', [ ApiInvitationController::class, 'accept' ] )->name( 'invitation.accept' );
+Route::post( '/forgot-password', [ PasswordResetController::class, 'createResetLink' ])->name( 'forgot-password' );
+Route::post( '/reset-password/{password_reset}', [ PasswordResetController::class, 'resetPassword' ])->name( 'reset-password' );
 
 
 /**

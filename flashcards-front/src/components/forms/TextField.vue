@@ -67,7 +67,9 @@ const onChange = ( ev ) => {
             :disabled="props.disabled"
             @change="onChange">
 
-        <small v-if="props.note">{{ props.note }}</small>
+        <small>
+            <slot name='note'>{{ props.note }}</slot>
+        </small>
 
         <FieldErrors :errors="error"></FieldErrors>
     </div>
@@ -79,7 +81,7 @@ const onChange = ( ev ) => {
     display: flex;
     flex-direction: column;
     font-size: 1em;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 label {

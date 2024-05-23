@@ -2,19 +2,18 @@
 
 namespace App\Providers;
 
+use App\Models\PasswordReset;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 use App\Services\DeckService;
-use App\Services\DeckSummaryService;
 use App\Services\Mail\MailjetTransport;
-use App\Services\NotificationService;
 use App\Services\QuizGeneration\CardRaters\CardRater;
 use App\Services\QuizGeneration\CardRaters\ProgressBasedCardRater;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -58,6 +57,12 @@ class AppServiceProvider extends ServiceProvider
                 $config['api_key'],
                 $config['secret_key']
             );
+        });
+
+        Route::bind( 'password_reset', function ( string $value ) {
+            return PasswordReset::where( 'code', $value )
+                ->where( 'expires_at', '>', Carbon::now() )
+                ->firstOrFail();
         });
     }
 }

@@ -15,8 +15,16 @@ const { onLoginSuccessCallback } = useAuthentication()
 
     <AjaxForm action="/api/login" @success="onLoginSuccessCallback">
         <TextField type="email" name="email">Email:</TextField>
-        <TextField type="password" name="password">Password:</TextField>
+        <TextField type="password" name="password">
+            Password:
+            <template #note>
+                <router-link :to="{ name: 'forgot-password' }">Forgot password?</router-link>
+            </template>    
+        </TextField>
     </AjaxForm>
 
-    <small>Don't have an account? <router-link :to="{ name: 'register' }">Register</router-link></small>
+    <small>
+        Don't have an account? <router-link :to="{ name: 'register' }">Register</router-link>. 
+        <br>
+    </small>
 </template>

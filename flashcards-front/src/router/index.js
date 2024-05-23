@@ -183,6 +183,18 @@ const router = createRouter({
                     name: 'register-org',
                     component: () => import( '../views/auth/RegisterOrganization.vue' ),
                 },
+                {
+                    path: '/forgot-password',
+                    name: 'forgot-password',
+                    component: () => import( '../views/auth/ForgotPassword.vue' ),
+                    meta: { allowGuest: true }
+                },
+                {
+                    path: '/reset-password/:reset_code',
+                    name: 'reset-password',
+                    component: () => import( '../views/auth/ResetPassword.vue' ),
+                    meta: { allowGuest: true }
+                },
             ]
         },
     ]

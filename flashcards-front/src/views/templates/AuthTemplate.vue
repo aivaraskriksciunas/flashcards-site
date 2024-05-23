@@ -45,8 +45,8 @@ import StatusMessages from '../../components/common/StatusMessages.vue';
 .auth-form-container label {
     font-weight: 500;
     display: block;
-    margin-bottom: 6px;
-    font-size: 1.2em;
+    margin-bottom: 4px;
+    font-size: 1.1em;
 }
 
 .auth-form-container input[type=text],
@@ -59,7 +59,7 @@ import StatusMessages from '../../components/common/StatusMessages.vue';
     box-shadow: 0 0 6px rgba( 50, 50, 50, 0.1 );
     padding: 0.6em 1.2em;
     width: 100%;
-    margin-bottom: 24px;
+    margin-bottom: 6px;
     border-bottom: 1px solid rgba( 200, 200, 200, 1 );
 }
 
