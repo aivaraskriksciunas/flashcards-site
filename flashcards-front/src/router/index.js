@@ -206,8 +206,8 @@ const router = createRouter({
 router.beforeEach( async ( to ) => {
     const { isLoggedIn, refreshUserInfo } = useUserStore();
 
-    // Allow navigation if logged in or unprotected route
-    if ( isLoggedIn || to.meta.allowGuest === true ) {
+    // Allow navigation if logged in
+    if ( isLoggedIn ) {
         return;
     }
 
@@ -216,6 +216,11 @@ router.beforeEach( async ( to ) => {
         await refreshUserInfo()
     }
     catch ( e ) {
+        // Allow navigation if route is unprotected
+        if ( to.meta.allowGuest === true ) {
+            return
+        }
+
         return { name: 'login', query: { r: to.fullPath } }
     }
 })

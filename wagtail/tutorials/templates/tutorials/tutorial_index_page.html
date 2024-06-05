@@ -1,0 +1,22 @@
+{% extends 'blog-base.html' %}
+
+{% block title %}Help and tutorials{% endblock %}
+
+{% block blog-content %}
+    <div class="space-lg"></div>
+    <h1 class="space-sm">Help and tutorials</h1>
+    <p class="space-lg">Ran into issues? Find help on how to use Aktulibre here.</p>
+
+    <div class="tutorial-topic-list space-lg">
+        {% for topic in topics %}
+            <a href="{{ topic.get_url }}" class="tutorial-topic">
+                {{ topic.title }}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if posts %}
+        <h2 class="space-md">Other articles</h2>
+        {% include 'tutorials/components/tutorial_list.html' %}
+    {% endif %}
+{% endblock %}

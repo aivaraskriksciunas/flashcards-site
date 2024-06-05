@@ -8,37 +8,37 @@
 body {
     font-family: 'Roboto';
     font-weight: 300;
-    color: #fafafa;
-    background-color: #171214;
+    color: #F1F1F1;
+    background-color: #303030;
 }
 
 #_page_content {
-    background-color: #242424;
+    background-color: #404040;
     border-radius: 10px;
     box-shadow: 0 3px 20px rgba( 0, 0, 0, 0.2 );
     padding: 2.5em 3em;
 }
 
 .navbar {
-    background-color: #242424;
+    background-color: #2B2B2B;
 }
 
 #_page_menu {
     padding: 1em;
-    color: #DDDDDD;
+    color: #F1F1F1;
 
     #_menu_title {
         text-transform: uppercase;
         font-weight: 500;
         font-size: 1.7em;
-        color: rgba( 255, 255, 255, 0.5 );
+        color: #F1F1F1;
         margin-bottom : 0.6em;
     }
 
     ._menu_item {
         display: block;
         padding: 15px 0;
-        color: rgba( 255, 255, 255, 0.9 );
+        color: #F1F1F1;
         font-size: 1.1em;
         text-decoration: none;
         font-weight: 300;

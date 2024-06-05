@@ -1,0 +1,54 @@
+
+.tutorial-topic {
+    width: 100%;
+    background-color: white;
+    border-bottom: 3px solid rgb( var( --color-primary ) );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 64px;
+    border-radius: 5px;
+}
+
+.tutorial-topic-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 24px;
+    row-gap: 24px;
+}
+
+@media ( min-width: 800px ) {
+    .tutorial-topic-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 24px;
+        row-gap: 24px;
+    }
+
+    .tutorial-topic {
+        width: 100%;
+    }
+}
+
+.tutorial-post {
+    border-bottom: 1px solid #f6f6f6;
+}
+
+.tutorial-post:last-child {
+    border-bottom: none;
+}
+
+.tutorial-title {
+    font-weight: 500;
+    font-size: 1.3em;
+}
+
+.tutorial-date {
+    font-size: 0.9em;
+    font-weight: 300;
+    color: #666;
+}
+
+.tutorial-excerpt {
+
+}

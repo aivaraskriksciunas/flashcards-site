@@ -13,7 +13,7 @@ use App\Models\Flashcard;
 
 class DeckTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * A basic feature test example.
@@ -341,4 +341,94 @@ class DeckTest extends TestCase
             ] 
         )->assertUnprocessable();
     }  
+
+    public function test_deletes_deck()
+    {
+        $owner = User::factory()->create();
+        $deck = Deck::factory()->for( $owner )->create();
+        $cards = Flashcard::factory()->for( $deck )->createMany( 10 );
+
+        $response = $this->actingAs( $owner )->deleteJson(
+            route( 'api.decks.delete', $deck )
+        );
+        $response->assertSuccessful();
+
+        $deck->refresh();
+        $this->assertNotNull( $deck->deleted_at, 'Should be marked as deleted' );
+    }
+
+    public function test_nonowner_does_not_delete_deck()
+    {
+        $owner = User::factory()->create();
+        $user = User::factory()->create();
+        $deck = Deck::factory()->for( $owner )->create();
+        $cards = Flashcard::factory()->for( $deck )->createMany( 10 );
+
+        $response = $this->actingAs( $user )->deleteJson(
+            route( 'api.decks.delete', $deck )
+        );
+        $response->assertNotFound();
+
+        $deck->refresh();
+        $this->assertNull( $deck->deleted_at, 'Should not be marked as deleted' );
+
+        $response = $this->deleteJson(
+            route( 'api.decks.delete', $deck )
+        );
+        $response->assertNotFound();
+
+        $deck->refresh();
+        $this->assertNull( $deck->deleted_at, 'Should not be marked as deleted' );
+    }
+
+    public function test_adds_to_library()
+    {
+        $owner = User::factory()->create();
+        $user = User::factory()->create();
+
+        $deck = Deck::factory()->for( $owner )->create();
+        $cards = Flashcard::factory()->for( $deck )->createMany( 10 );
+
+        $response = $this->actingAs( $user )->postJson(
+            route( 'api.decks.add-to-library', $deck )
+        );
+        $response->assertSuccessful();
+
+        $deck->refresh();
+        $this->assertEquals( 1, $user->getLibrary()->decks->count(), 'Deck should be added to library' );
+        $this->assertEquals( $owner->id, $deck->user_id, 'Owner should not have changed' );
+
+        // Check what happens when you add twice
+        $response = $this->actingAs( $user )->postJson(
+            route( 'api.decks.add-to-library', $deck )
+        );
+        $response->assertSuccessful();
+
+        $this->assertEquals( 0, $user->getLibrary()->decks->count(), 'Deck should have been removed' );
+    }
+
+    public function test_creates_copy()
+    {
+        $owner = User::factory()->create();
+        $user = User::factory()->create();
+
+        $deck = Deck::factory()->for( $owner )->create();
+        $card_amount = $this->faker->numberBetween( 10, 20 );
+        $cards = Flashcard::factory()->for( $deck )->createMany( $card_amount );
+
+        $response = $this->actingAs( $user )->postJson(
+            route( 'api.decks.copy', $deck )
+        );
+        $response->assertSuccessful();
+
+        $deck->refresh();
+        $this->assertEquals( $owner->id, $deck->user_id, 'Owner should not have changed' );
+        $this->assertCount( $card_amount, $deck->cards, 'Number of cards should remain the same' );
+
+        $this->assertEquals( 1, $user->decks()->count(), 'User should have another deck' );
+
+        $copied_deck = $user->decks->first();
+        $this->assertCount( $card_amount, $copied_deck->cards, 'All cards should be copied' );
+        $this->assertCount( 1, $user->getLibrary()->decks, 'Deck should be added to library' );
+    }
 }

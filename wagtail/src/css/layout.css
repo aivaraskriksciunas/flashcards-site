@@ -1,18 +1,24 @@
 
-.container-slim {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+.top-container {
+    
 }
 
-@media ( min-width: 640px ) {
-    .container-slim {
-        max-width: 640px;
-    } 
+.space-xs {
+    margin-bottom: 4px;
 }
 
-@media ( min-width: 1024px ) {
-    .container-slim {
-        max-width: 768px;
-    }
+.space-sm {
+    margin-bottom: 8px;
+}
+
+.space-md {
+    margin-bottom: 16px;
+}
+
+.space-lg {
+    margin-bottom: 40px;
+}
+
+.space-xl {
+    margin-bottom: 180px;
 }

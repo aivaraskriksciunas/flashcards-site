@@ -1,21 +1,26 @@
 
 header {
-    position: absolute;
     width: 100%;
+    padding: 0 2em;
+    position: fixed;
+    background-color: white;
+    z-index: 10;
 }
 
 .navbar-container {
     display: flex;
     max-height: var( --navbar-height );
-    padding: 16px 1rem;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 1em 0;
 }
 
 .navbar-logo {
     display: flex;
+    align-items: center;
 }
 
 .navbar-logo img {
-    max-height: 100%;
+    max-height: 32px;
 }
 
 .navbar-menu {

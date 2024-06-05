@@ -28,7 +28,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     "home",
     "textdocs",
-    "search",
+    "blog",
+    "tutorials",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtail.contrib.search_promotions",
     "wagtail",
     "modelcluster",
     "taggit",
@@ -154,7 +156,6 @@ MEDIA_URL = "/media/"
 
 
 # Wagtail settings
-
 WAGTAIL_SITE_NAME = "aktulibre"
 
 # Search

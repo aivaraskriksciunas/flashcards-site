@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources\Deck;
 
+use App\Http\Resources\WithPermissions;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DeckDetailResource extends JsonResource
 {
+    use WithPermissions;
     /**
      * Transform the resource into an array.
      *
@@ -21,6 +23,10 @@ class DeckDetailResource extends JsonResource
                 $request->query( 'quiz-mode' ), 
                 $request->query( 'choose', false ) 
             ),
+            'in_library' => $this->when( $request->user() != null, function () use ( $request ) {
+                return $this->isInLibrary( $request->user() );
+            } ),
+            'permissions' => $this->getPermissions( $this ),
         ];
     }
 

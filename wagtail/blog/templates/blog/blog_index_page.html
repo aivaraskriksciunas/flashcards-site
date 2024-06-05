@@ -1,0 +1,23 @@
+{% extends 'blog.html' %}
+{% load wagtailcore_tags %}
+
+{% block title %}Aktulibre blog{% endblock %}
+
+{% block blog-content %}
+    <div class="blog-list">
+        <h2 class="space-md">Latest posts</h2>
+
+        {% for post in posts %}
+            <a href="{{ post.get_url }}" class="blog-list-item">
+                <div >
+                    <h3 class="blog-list-item__title">{{ post.title }}</h3>
+                    {% if post.intro %}
+                        {{ post.intro | safe }}
+                    {% else %}
+
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'blog-base.html' %}
+
+{% block title %}Help | {{ page.title }}{% endblock %}
+
+{% block blog-content %}
+    <div class="space-lg"></div>
+    <h1 class="space-sm">{{ page.title }} help</h1>
+
+    {% if posts %}
+        {% include 'tutorials/components/tutorial_list.html' %}
+    {% else %}
+        There are currently no posts here.
+    {% endif %}
+{% endblock %}

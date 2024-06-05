@@ -12,6 +12,16 @@
     </x-slot:actions>
 </x-page-title>
 
+<div class='filters mb-2'>
+    <form action='' method='get' class='d-flex'>
+        <div class='form-group'>
+            <input type='text' name='search' placeholder='search' class='form-control'>
+        </div>
+        <div class='flex-grow-1'></div>
+        <input type='submit' value='Search' class='btn btn-primary btn-sm'>
+    </form>
+</div>
+
 <div class='list-group mb-3'>
     @foreach ( $users as $user )
 

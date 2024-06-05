@@ -1,29 +1,19 @@
 
+.divider {
+    width: 100%;
+    display: inline-block;
+    border-bottom: 1px solid #e6e6e6;
+}
+
 .btn-pill {
-    @apply bg-primary;
 
     color: white;
     padding: 8px 12px;
     border-radius: 1000px;
+    display: inline-block;
 }
 
 .btn-pill:hover {
-    @apply bg-secondary;
-    color: white;
-    cursor: pointer;
-}
-
-.btn-pill-outline {
-    @apply border-primary text-primary;
-
-    border-radius: 1000px;
-    border-width: 2px;
-    padding: 6px 12px;
-}
-
-.btn-pill-outline:hover {
-    @apply bg-primary;
-
     color: white;
     cursor: pointer;
 }
@@ -32,6 +22,32 @@
     @apply text-xl;
 
     padding: 12px 24px;
+}
+
+.btn-primary {
+    background-color: rgb( var(  --color-primary ) );
+    color: white;
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
+}
+
+.btn-primary:active {
+    opacity: 0.75;
+}
+
+.btn-secondary {
+    background-color: var( --color-accent );
+    color: white;
+}
+
+.btn-secondary:hover {
+    opacity: 0.85;
+}
+
+.btn-secondary:active {
+    opacity: 0.75;
 }
 
 .box-shadow { 

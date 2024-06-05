@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use App\Models\Utils\HasActivityLogging;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 
 class Deck extends Model
 {
-    use HasFactory, SoftDeletes, HasActivityLogging;
+    use HasFactory, SoftDeletes, HasActivityLogging, HasUlids;
 
     protected $fillable = [
         'name'
@@ -88,5 +90,30 @@ class Deck extends Model
         
         $user_id = request()->user()->id;
         return "draft:$user_id:{$this->id}";
+    }
+
+    /**
+     * Overrides the default resolution functionality provided by HasUlids
+     * This functinality allows mixed keys in the database, not strictly ulid format
+     *
+     */
+    public function resolveRouteBindingQuery($query, $value, $field = null)
+    {
+        return parent::resolveRouteBindingQuery($query, $value, $field);
+    }
+    
+    /**
+     * Checks if the deck is already in the provided library
+     *
+     * @param User|Library $library library to check. If passed user, will first get the users library.
+     * @return boolean
+     */
+    public function isInLibrary( User|Library $library ): bool
+    {
+        if ( $library instanceof User ) {
+            $library = $library->getLibrary();
+        }
+
+        return $library->decks()->where( 'id', $this->id )->exists();
     }
 }

@@ -9,21 +9,41 @@
 @import './components.css';
 @import './layout.css';
 @import './typography.css';
+@import './blog.css';
+@import './tutorial.css';
 
 body {
     --color-white: 255 255 255;
-    --color-bg: 245 245 245;
     --color-primary: 10 101 20;
     --color-secondary: 59 193 74;
+    --color-accent: #845AEA;
 
-    --navbar-height: 60px;
+    --navbar-height: 96px;
+    --content-padding: 2rem;
 
-    background-color: var( --color-bg );
+    background-color: var( --color-white );
     font-family: 'Rubik', sans-serif;
     font-size: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-#mainContentContainer {
+#page-content-wrapper {
     padding-top: var( --navbar-height ); 
+}
+
+.bg-gray {
+    background-color: #f5f5f5;
+}
+
+.content {
+    width: 100%;
+    max-width: 1200px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: var( --content-padding );
+    padding-left: var( --content-padding );
+    margin-left: auto;
+    margin-right: auto;
 }
 

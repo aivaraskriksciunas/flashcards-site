@@ -1,15 +1,99 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 
 {% block content %}
 
-    <div class="container">
+    <div class="content">
 
-        {% include 'template_parts/welcome_section.html' %}
-        
+        <div class="space-lg"></div>
+
+        <div class='welcome-section' >
+            <div class="welcome-section__main">
+                <div class='welcome-section__header space-md'>
+                    {{ page.hero_heading }}
+                </div>  
+
+                <div class='welcome-section__subtitle space-lg'>
+                    {{ page.hero_subtitle }}
+                </div>
+
+                <div class='welcome-section__actions space-lg'>
+                    <a href='https://app.aktulibre.eu' class='btn-pill btn-lg btn-primary space-md'>Open Aktulibre</a>
+                    <a href="#forTeachers">For teachers and organizations</a>
+                </div>
+            </div>
+            <div class='welcome-section__image-large'>
+                {% image page.hero_image original %}
+            </div>
+        </div>
     </div>
+
+    <div class='space-xl'>
+        <div class='welcome-section__image'>
+            {% image page.hero_image original %}
+        </div>
+    </div>
+
+    <div class="content space-xl">
+        <div class="space-lg feature-showcase">
+            <div class="feature-showcase__text">
+                <h2 class="space-sm">1. Create</h2>
+                <p class="presentation-text space-md">Organize your material into decks of questions and answers</p>
+            </div>
+            <div class="feature-showcase__image">
+                <img src="{% static 'images/create.png' %}">
+            </div>
+        </div>
+
+        <div class="space-lg feature-showcase">
+            <div class="feature-showcase__text">
+                <h2 class="space-sm">2. Revise</h2>
+                <p class="presentation-text space-md">Revise your decks using your preferred revision method.</p>
+            </div>
+            <div class="feature-showcase__image">
+                <img src="{% static 'images/revise.png' %}">
+            </div>
+        </div>
+
+        <div class="space-xl feature-showcase">
+            <div class="feature-showcase__text">
+                <h2 class="space-sm">3. Share</h2>
+                <p class="presentation-text space-md">Feeling generous? Share your decks on the forum and help others learn.</p>
+            </div>
+            <div class="feature-showcase__image">
+                <img src="{% static 'images/share.png' %}">
+            </div>
+        </div>
+
+        <div class="space-lg feature-showcase">
+            <div class="feature-showcase__text">
+                <h2 class="space-sm">Ready to try it out?</h2>
+                <p class="presentation-text space-md">Open a free account and start learning now. </p>
+                <a href='https://app.aktulibre.eu/register' class='btn-pill btn-lg btn-primary space-md'>Register</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="forTeachers">
+        <div class="content">
+
+            <div class="for-teachers__text">
+                <h1 class="space-md">Aktulibre for teachers and organizations</h1>
+                <p class='presentation-text space-lg'>
+                    Are you a teacher or a company organizing internal trainings for your employees? Use Aktulibre to create courses, share them with your students and track their progress.
+                </p>
+                <a href="https://app.aktulibre.eu/register?as=org" class="space-lg btn-pill btn-secondary btn-lg">Register</a>
+            </div>
+                
+            <div class='for-teachers__image' style="background-image: url({% static 'images/for-organizations.jpg' %})">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+        
 
 {% endblock content %}

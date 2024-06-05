@@ -179,6 +179,8 @@ class ApiDeckController extends Controller
      */
     public function delete( Request $request, Deck $deck )
     {
+        $this->authorize( 'delete', $deck );
+
         // Remove deck from library
         $request->user()
             ->getLibrary()
@@ -186,12 +188,44 @@ class ApiDeckController extends Controller
             ->detach([ $deck->id ]);
 
         // If user is the owner, delete deck
-        if ( $deck->user == $request->user() )
-        {
-            $deck->delete();
-        }
+        $deck->delete();
 
         return response( '', 204 );
+    }
+
+    /**
+     * Allows user to add deck to their library
+     *
+     * @param Request $request
+     * @param Deck $deck
+     * @return void
+     */
+    public function addToLibrary( Request $request, Deck $deck )
+    {
+        $this->authorize( 'view', $deck );
+
+        $library = $request->user()->getLibrary();
+
+        $library->decks()->toggle([ $deck->id ]);
+
+        return new DeckResource( $deck );
+    }
+
+    /**
+     * Creates a copy of the deck with all its cards
+     *
+     * @param Request $request
+     * @param Deck $deck
+     * @return void
+     */
+    public function copy( Request $request, Deck $deck )
+    {
+        $this->authorize( 'view', $deck );
+
+        $cloned = $this->deckService->cloneDeck( $request->user(), $deck );
+        $request->user()->getLibrary()->decks()->attach([ $cloned->id ]);
+
+        return new DeckResource( $cloned );
     }
 
     /**

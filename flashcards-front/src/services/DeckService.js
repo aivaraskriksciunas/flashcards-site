@@ -9,3 +9,11 @@ export const reportQuizItemProgress = ( quizItemId, isCorrect ) => {
 export const deleteDeck = ( deckId ) => {
     return axios.delete( `api/decks/${deckId}` );
 }
+
+export const addDeckToLibrary = ( deckId ) => {
+    return axios.post( `api/decks/${deckId}/add-to-library` )
+}
+
+export const copyDeck = ( deckId ) => {
+    return axios.post( `api/decks/${deckId}/copy` )
+}

@@ -6,18 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\User\CreateUser;
 use App\Http\Requests\User\UpdateUser;
+use App\Services\DataTable\DataTable;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index( Request $request )
     {
-        $users = User::paginate( 25 );
+        $datatable = new DataTable([ 'name', 'email' ], [ 'name', 'email' ]);
+        $datatable->applyUserFilters( User::query(), $request );
 
         return view( 'user.index', [
-            'users' => $users,
+            'users' => $datatable->getPaginated(),
         ]);
     }
 

@@ -60,4 +60,11 @@ class DeckPolicy
             Response::allow() :
             Response::denyAsNotFound();
     }
+
+    public function delete( User $user, Deck $deck ) : Response 
+    {
+        return $deck->user_id === $user->id ?
+            Response::allow() :
+            Response::denyAsNotFound();
+    }
 }

@@ -1,0 +1,17 @@
+
+
+<div class="blog-container tutorial-list">
+    {% for tutorial in posts %}
+        <div class="tutorial-post {% if not forloop.last %}space-md{% endif %}">
+
+            <div class="tutorial-title">
+                <a href="{{ tutorial.get_url }}">
+                    {{ tutorial.title }}
+                </a>
+            </div>
+            <div class="tutorial-date space-md">
+                Posted on {{ tutorial.last_published_at | date:'F j, Y' }}
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -103,6 +103,22 @@ class PasswordResetTest extends TestCase
         $this->assertDatabaseEmpty( 'password_resets' );
     }
 
+    public function test_no_emails_sent_to_nonusers()
+    {
+        Mail::fake();
+
+        // 1. Create password reset
+        $response = $this->actingAs( $this->user )->postJson( 
+            route( 'api.forgot-password' ),
+            [ 'email' => $this->faker()->email() ]
+        );
+
+        $response->assertSuccessful();
+        $this->assertDatabaseCount( 'password_resets', 0 );
+
+        Mail::assertNothingSent();
+    }
+
     protected function afterRefreshingDatabase()
     {
         // Seed database

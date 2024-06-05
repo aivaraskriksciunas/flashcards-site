@@ -2,6 +2,7 @@
 import { RouterView, useRouter } from 'vue-router'
 import ServerConnectionWrapper from './components/wrappers/ServerConnectionWrapper.vue';
 import axios from 'axios';
+import StatusMessages from '@/components/common/StatusMessages.vue';
 
 const router = useRouter()
 
@@ -9,7 +10,7 @@ axios.interceptors.response.use(
     response => response,
     ( error ) => {
         
-        if ( error.response.status === 401 ) {
+        if ( error.response.status === 401 && error.config.url != '/api/user' ) {
             router.push({ name: 'login' });
         }
 
@@ -28,6 +29,8 @@ axios.interceptors.response.use(
     <ServerConnectionWrapper>
         <RouterView />
     </ServerConnectionWrapper>
+    
+    <StatusMessages/>
 </template>
 
 <style scoped>

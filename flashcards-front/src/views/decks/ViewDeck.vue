@@ -5,30 +5,12 @@ import { useUserStore } from "../../stores/user";
 import DataLoaderWrapper from '../../components/wrappers/DataLoaderWrapper.vue'
 import Card from "../../components/ui/Card.vue";
 import DeckPreview from "./components/DeckPreview.vue";
-import { Pencil, MoreVertical, Trash2 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import SlimContainer from "../../components/ui/SlimContainer.vue";
 import DeckSummary from "./components/DeckSummary.vue";
 import SelectField from "../../components/forms/SelectField.vue";
 import { useUserSettingStore } from '../../stores/user-settings';
-import { 
-    DropdownMenu, 
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
-import { deleteDeck } from '../../services/DeckService';
-import { useStatusMessageService, MESSAGE_TYPE } from '../../services/StatusMessageService';
-import {
-    AlertDialog,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+
 import { 
     Sheet,
     SheetContent,
@@ -39,7 +21,9 @@ import {
     SheetDescription,
     SheetFooter,
 } from '@/components/ui/sheet';
-import { Loader2, Settings } from "lucide-vue-next";
+import { Settings } from "lucide-vue-next";
+import DeckOptionsDropdown from './components/view-deck/DeckOptionsDropdown.vue';
+import DeckShortcutOptions from './components/view-deck/DeckShortcutOptions.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -52,7 +36,6 @@ const onLoad = ( data ) => {
 } 
 
 const { isLoggedIn } = useUserStore()
-const { addStatusMessage } = useStatusMessageService()
 
 const quizModes = [
     { value: 'qa', label: 'Question-Answer' },
@@ -80,25 +63,6 @@ const onRevisionSizeChange = ( val ) => {
     settings.setPreferredQuizSize( deckId, val )
 }
 
-const confirmDeleteModalOpen = ref( false )
-const deleteDeckLoading = ref( false )
-const onDeleteDeck = async () => {
-    deleteDeckLoading.value = true;
-
-    try {
-        await deleteDeck( deck.value.id );
-        addStatusMessage( "Deck deleted", `Your deck "${deck.value.name}" has been deleted.`, MESSAGE_TYPE.SUCCESS );
-        router.push({ name: 'home' });
-    }
-    catch ( err ) {
-        addStatusMessage( "An error occurred", `We could not delete your deck "${deck.value.name}". Please refresh the page and try again later.`, MESSAGE_TYPE.ERROR );
-    }
-    finally {
-        deleteDeckLoading.value = false;
-        confirmDeleteModalOpen.value = false;
-    }
-}
-
 </script>
 
 <template>
@@ -110,24 +74,10 @@ const onDeleteDeck = async () => {
             <div class='deck-title'>
                 <h1>{{ deck.name }}</h1>
             </div>
-            <router-link v-if="isLoggedIn" :to="{ name: 'edit-deck', params: { id: deck.id } }">
-                <Button variant="ghost" size="sm" class="text-muted-foreground">
-                    <Pencil class="w-4 h-4 mr-2" color="rgb( var( --muted-foreground ) )"/>
-                    Edit
-                </Button>
-            </router-link>
-            <DropdownMenu>
-                <DropdownMenuTrigger>
-                    <Button variant="ghost" size="icon">
-                        <MoreVertical />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem @click="confirmDeleteModalOpen = true" class="text-destructive">
-                        <Trash2 class="mr-2" size="16"/> Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            
+            <DeckShortcutOptions :deck="deck"/>
+
+            <DeckOptionsDropdown :deck="deck"/>
         </div>
 
         <div v-if="deck.cards.length">
@@ -186,24 +136,6 @@ const onDeleteDeck = async () => {
         </div>
         
     </SlimContainer>
-
-    <AlertDialog :open="confirmDeleteModalOpen">
-        <AlertDialogTrigger>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>Confirm delete</AlertDialogTitle>
-                <AlertDialogDescription>Are you sure you want to delete this deck?</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel @click="confirmDeleteModalOpen = false">Cancel</AlertDialogCancel>
-                <Button variant="destructive" @click="onDeleteDeck" :disabled="deleteDeckLoading">
-                    <Loader2 v-if="deleteDeckLoading" class="h-4 w-4 mr-2 animate-spin"></Loader2>
-                    Delete
-                </Button>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
     
 </DataLoaderWrapper>
 

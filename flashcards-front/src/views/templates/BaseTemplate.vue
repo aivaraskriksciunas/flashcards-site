@@ -2,7 +2,6 @@
 import { RouterView } from 'vue-router'
 import Navbar from '../../components/common/Navbar.vue';
 import Sidebar from '../../components/common/Sidebar.vue';
-import StatusMessages from '../../components/common/StatusMessages.vue';
 import UnverifiedUserWarning from './components/UnverifiedUserWarning.vue';
 
 </script>
@@ -17,7 +16,6 @@ import UnverifiedUserWarning from './components/UnverifiedUserWarning.vue';
             <Navbar/>
 
             <div class="container">
-                <StatusMessages/>
                 <RouterView/>
             </div>
         </div>

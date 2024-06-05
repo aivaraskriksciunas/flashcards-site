@@ -61,6 +61,28 @@ class DeckService
         Flashcard::destroy( array_keys( $cards_to_update ) );
     }
 
+    /**
+     * Creates a copy of the given deck and attributes it to the user
+     *
+     * @param User $user 
+     * @param Deck $deck
+     * @return Deck
+     */
+    public function cloneDeck( User $user, Deck $deck ): Deck
+    {
+        $copy = $deck->replicate([ 'created_at', 'updated_at' ]);
+        $copy->user()->associate( $user );
+        $copy->save();
+
+        foreach ( $deck->cards as $card )
+        {
+            $copied_card = $card->replicate([ 'created_at', 'updated_at' ]);
+            $copy->cards()->save( $copied_card );
+        }
+
+        return $copy;
+    }
+
     private function getDeckCardList( Deck $deck ) 
     {
         $list = [];

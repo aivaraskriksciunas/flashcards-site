@@ -98,6 +98,8 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
         ->middleware( 'can:update,deck')
         ->name( 'decks.update' );
     Route::delete( '/decks/{deck}', [ ApiDeckController::class, 'delete' ] )->name( 'decks.delete' );
+    Route::post( '/decks/{deck}/add-to-library', [ ApiDeckController::class, 'addToLibrary' ])->name( 'decks.add-to-library' );
+    Route::post( '/decks/{deck}/copy', [ ApiDeckController::class, 'copy' ])->name( 'decks.copy' );
     Route::get( '/decks/{deck}/summary', [ ApiDeckController::class, 'get_deck_summary' ] );
     Route::post( '/decks/{deck}/draft', [ ApiDeckController::class, 'store_draft' ] )->name( 'decks.draft.create' );
     Route::get( '/decks/{deck}/draft', [ ApiDeckController::class, 'get_draft' ] )->name( 'decks.draft.show' );
