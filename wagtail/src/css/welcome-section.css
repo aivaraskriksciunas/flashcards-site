@@ -64,11 +64,15 @@
 }
 
 .feature-showcase__image {
-    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
-    border-radius: 5px;
     overflow: hidden;
     margin: 0 auto;
     max-width: 85%;
+    padding: 8px;
+}
+
+.feature-showcase__image img {
+    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+    border-radius: 5px;
 }
 
 @media( min-width: 800px ) {
@@ -99,9 +103,10 @@
 .for-teachers__image {
     display: flex;
     align-items: center;
-    max-height: 30vh;
+    min-height: 30vh;
     border-radius: 5px;
     overflow: hidden;
+    background-size: cover;
 }
 
 @media( min-width: 800px ) {
@@ -117,7 +122,6 @@
     .for-teachers__image {
         max-height: 100vh;
         width: 25%;
-        background-size: cover;
         margin: -3em 0 -3em 2em;
     }
 }

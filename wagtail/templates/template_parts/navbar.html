@@ -1,6 +1,8 @@
-{% load static wagtailcore_tags wagtailuserbar %}
+{% load static wagtailcore_tags navigation_tags %}
 
 <header class="site-navbar">
+    {% get_site_root as site_root %}
+
     <div class="navbar-container">
         <div class="navbar-logo flex-1">
             <a href='/'>
@@ -9,9 +11,41 @@
         </div>
 
         <nav class="navbar-menu">
-            <a class="navbar-actions btn-pill btn-primary" href='https://app.aktulibre.eu' >
+            <div class="navbar-collapse">
+                {% for menuitem in site_root.get_children.live.in_menu %}
+
+                    {# Add the child pages of your HomePage that have their `Show in menu` checked #}
+                    <a href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+
+                {% endfor %}
+            </div>
+
+            <a id="open-aktulibre-link" class="navbar-actions btn-pill btn-primary" href='https://app.aktulibre.eu' >
                 Open Aktulibre
             </a>
+        </nav>
+
+        <nav class="navbar-hamburger">
+            <div id="mobileMenuButton" class="navbar-hamburger__btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </div>
+            <div id="mobileMenuCloseButton" class="navbar-hamburger__btn" style="display: none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </div>
+
+            <div id="mobileMenuCover" class="mobile-menu-cover" style="display: none"></div>
+            <div id="mobileMenu" class="mobile-menu" style="display: none">
+                {% for menuitem in site_root.get_children.live.in_menu %}
+                    <div class="mobile-menu-item">
+                        <a href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+                    </div>
+                {% endfor %}
+
+                <a class="navbar-actions btn-pill btn-primary" href='https://app.aktulibre.eu' >
+                    Open Aktulibre
+                </a>
+
+            </div>
         </nav>
     </div>
 </header>

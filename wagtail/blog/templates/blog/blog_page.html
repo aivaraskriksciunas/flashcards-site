@@ -5,7 +5,7 @@
     <article class="blog-page">
         <h1 class="blog-page-title space-md">{{ page.title }}</h1>
 
-        <div class="blog-page-info space-lg">
+        <div class="blog-page-info {% if page.tags.count %}space-md{% else %}space-lg{% endif %}">
             <div class="blog-page-info__item blog-page-info__author">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 {{ page.owner.get_full_name }}</div>
@@ -15,9 +15,17 @@
             </div>
         </div>
 
+        {% if page.tags.count %}
+            <div class="blog-page-tags space-lg">
+                {% for tag in page.tags.all %}
+                    <a href="{% pageurl page.get_blog_index_page %}?tag={{ tag|urlencode }}" class="blog-page-tag">{{ tag | capfirst }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% if page.intro %}
             <div class="blog-page-preamble space-lg">
-                {{ page.intro | safe }}
+                {{ page.intro | richtext }}
                 <div class="preamble-border"></div>
             </div>
         {% endif %}
