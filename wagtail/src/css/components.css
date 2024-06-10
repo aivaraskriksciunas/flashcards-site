@@ -53,3 +53,24 @@
 .box-shadow { 
     box-shadow: 6px 6px 8px rgba( 50, 50, 50, 0.1 );
 }
+
+
+.paragraph-image-block {
+    text-align: center;
+}
+
+.paragraph-image-block img {
+    margin: 0 auto 4px;
+}
+
+.paragraph-image-block__title {
+    color: #333;
+    font-weight: 300;
+    font-size: 0.8em;
+}
+
+.paragrpah-image-block__source {
+    color: #666;
+    font-weight: 300;
+    font-size: 0.7em;
+}

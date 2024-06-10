@@ -1,5 +1,9 @@
 import axios from 'axios'
 
+export const createEmptyDeck = ( name ) => {
+    return axios.post( '/api/decks', { name } )
+}
+
 export const reportQuizItemProgress = ( quizItemId, isCorrect ) => {
     return axios.post( `/api/quiz/item/${quizItemId}/progress`, { 
         is_correct: isCorrect 

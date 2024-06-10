@@ -1,0 +1,25 @@
+{% load wagtailimages_tags %}
+
+<div class="paragraph-image-block space-md">
+    {% image value.image max-1000x600 as image %}
+
+    <img src="{{ image.url }}" width="{{ image.width }}" height="{{ image.height }}" alt="{{ value.alt }}">
+    
+    <div class="paragraph-image-block__title">
+        {{ value.title }}
+    </div>
+    <div class="paragrpah-image-block__source">
+        {% if value.source_url %}
+            Source: 
+            <a href="{{ value.source_url }}" target="_blank">
+                {% if value.source %}
+                    {{ value.source }}
+                {% else %}
+                    {{ value.source_url }}
+                {% endif %}
+            </a>
+        {% elif value.source %}
+            Source: {{ value.source }}
+        {% endif %}
+    </div>
+</div>

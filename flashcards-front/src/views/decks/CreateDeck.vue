@@ -1,18 +1,21 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import Header from '../../components/common/Header.vue'
-import EditForm from './components/EditForm.vue'
+import { createEmptyDeck } from '@/services/DeckService';
+import { useStatusMessageService, MESSAGE_TYPE } from '@/services/StatusMessageService';
 
 const router = useRouter();
+const statusMessages = useStatusMessageService()
 
-const onDeckCreate = ( deck ) => {
-    router.push({ name: 'edit-deck', params: { id: deck.id } })
-}
+createEmptyDeck( 'Untitled deck' )
+.then( ( res ) => {
+    router.push({ name: 'edit-deck', params: { id: res.data.id } })
+})
+.catch( () => {
+    statusMessages.addStatusMessage( 'Error', 'Could not create an empty new deck. Please refresh the page and try again.', MESSAGE_TYPE.ERROR )
+})
 
 </script>
 
 <template>
-    <Header>New deck</Header>
-
-    <EditForm @save="onDeckCreate"></EditForm>
+    Creating new deck...
 </template>

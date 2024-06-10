@@ -2,7 +2,7 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.images.blocks import ImageChooserBlock
+from base.blocks import ParagraphImageBlock
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -38,7 +38,7 @@ class BlogPage( Page ):
     body = StreamField([
         ( 'section_heading', blocks.CharBlock() ),
         ( 'paragraph', blocks.RichTextBlock()),
-        ( 'image', ImageChooserBlock() ),
+        ( 'image', ParagraphImageBlock() ),
     ], use_json_field = True )
 
     date_created = models.DateTimeField( auto_now_add = True )

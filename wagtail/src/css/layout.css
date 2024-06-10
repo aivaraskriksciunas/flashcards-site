@@ -3,6 +3,29 @@
     
 }
 
+.content {
+    width: 100%;
+    max-width: 1200px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: var( --content-padding );
+    padding-left: var( --content-padding );
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reduced-margin-content {
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+@media ( min-width: 800px ) {
+    .reduced-margin-content {
+        padding-right: var( --content-padding );
+        padding-left: var( --content-padding );
+    }
+}
+
 .space-xs {
     margin-bottom: 4px;
 }
