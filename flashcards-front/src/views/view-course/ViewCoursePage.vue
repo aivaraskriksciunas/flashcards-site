@@ -12,15 +12,14 @@ const store = useCourseStore();
 const page = ref( null )
 const onLoad = ( data ) => {
     page.value = data
-    store.reportProgress( page.value )
+    store.reportProgress( route.params.access_link, page.value )
 }
-
 
 </script>
 
 <template>
 <DataLoaderWrapper 
-    :url="`/api/courses/${route.params.id}/course_pages/${route.params.page_id}`" 
+    :url="`/api/courses/view/${route.params.access_link}/course_pages/${route.params.page_id}`" 
     @load="onLoad" 
     :key="route.params.page_id">
     <h1 class="text-center mb-2">{{ page.title }}</h1>

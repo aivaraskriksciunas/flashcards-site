@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Courses;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Courses\Api\AssignCourseToUser;
 use App\Http\Requests\Courses\Api\CreateCourse;
 use App\Http\Requests\Courses\Api\SetCoursePageOrder;
 use App\Http\Requests\Courses\Api\UpdateCourse;
-use App\Http\Resources\Courses\CourseDetailResource;
+use App\Http\Resources\Courses\AssignedCourseResource;
+use App\Http\Resources\Courses\CourseDetailPrivateResource;
 use App\Http\Resources\Courses\CourseResource;
 use App\Http\Resources\Organization\OrganizationMemberResource;
 use App\Http\Resources\User\UserDetailResource;
@@ -48,7 +49,7 @@ class ApiCourseController extends Controller
      */
     public function getAssignedUserCourses( Request $request )
     {
-        return CourseResource::collection( 
+        return AssignedCourseResource::collection( 
             $this->courseService->getUserAssignedCourses( $request->user() )->limit( 5 )->get()
         );
     }
@@ -77,7 +78,7 @@ class ApiCourseController extends Controller
     public function show( Course $course )
     {
         $this->authorize( 'view', $course );
-        return new CourseDetailResource( $course );
+        return new CourseDetailPrivateResource( $course );
     }
 
     /**
@@ -91,7 +92,22 @@ class ApiCourseController extends Controller
     {
         $this->authorize( 'update', $course );
         $course->setPageOrder( $request->input( 'pages', [] ) );
-        return new CourseDetailResource( $course->refresh() );
+        return new CourseDetailPrivateResource( $course->refresh() );
+    }
+
+    /**
+     * Endpoint to retrieve the users who have the course assigned to them
+     *
+     * @param Request $request
+     * @param Course $course
+     * @return void
+     */
+    public function getCourseStudents( Request $request, Course $course )
+    {
+        $this->authorize( 'update', $course );
+        $dt = new DataTable( sortable:[ 'name' ] );
+        $dt->applyUserFilters( $course->courseStudents(), $request );
+        return UserResource::collection( $dt->getPaginated() );
     }
 
     /**

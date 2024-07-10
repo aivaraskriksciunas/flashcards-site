@@ -9,4 +9,6 @@ enum UserType : string
     case ORG_ADMIN = 'orgadmin';
     case ORG_MANAGER = 'orgmanager';
     case ORG_MEMBER = 'orgmember';
+    case ANONYMOUS = 'anonymous';
+    case UNDEFINED = 'undefined';
 }

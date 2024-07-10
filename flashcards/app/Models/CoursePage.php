@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\CoursePageType;
-use App\Models\Utils\HasActivityLogging;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,8 +33,8 @@ class CoursePage extends Model
         return $this->hasMany( CoursePageItem::class, 'course_page_id' );
     }
 
-    public function courseProgress() {
-        return $this->hasMany( CourseProgress::class );
+    public function courseSessionPages() {
+        return $this->hasMany( CourseSessionPage::class );
     }
 
     /**

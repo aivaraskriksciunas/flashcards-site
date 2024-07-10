@@ -2,6 +2,7 @@
 
 namespace App\Services\Authentication;
 
+use App\Enums\UserType;
 use App\Exceptions\Auth\GoogleAccountAlreadyExists;
 use App\Exceptions\Auth\InvalidGoogleToken;
 use Google_Client;
@@ -41,6 +42,7 @@ class GoogleAuthenticator extends BaseAuthenticator {
         $user->google_id = $google_id;
         $user->name = $payload['name'];
         $user->email = $payload['email'];
+        $user->account_type = UserType::UNDEFINED;
         $user->save();
 
         $this->authenticateUser( $user ); 

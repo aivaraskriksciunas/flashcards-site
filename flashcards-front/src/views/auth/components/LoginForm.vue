@@ -24,7 +24,7 @@ const { onLoginSuccessCallback } = useAuthentication()
     </AjaxForm>
 
     <small>
-        Don't have an account? <router-link :to="{ name: 'register' }">Register</router-link>. 
+        Don't have an account? <router-link :to="{ name: 'account-type' }">Register</router-link>. 
         <br>
     </small>
 </template>

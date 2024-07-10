@@ -6,6 +6,7 @@ use App\Http\Resources\ForumComment\ForumCommentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User\UserResource;
 use App\Http\Resources\ForumTopic\ForumTopicResource;
+use App\Http\Resources\Permissions\ObjectPermissionResource;
 
 class ForumPostDetailResource extends JsonResource
 {
@@ -28,6 +29,7 @@ class ForumPostDetailResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'human_created_at' => $this->created_at->diffForHumans(),
+            'permissions' => new ObjectPermissionResource( $this->resource ),
         ];
     }
 }

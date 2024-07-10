@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources\Courses;
 
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CourseDetailResource extends JsonResource
+class AssignedCourseResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,13 +16,14 @@ class CourseDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'link' => $this->getAccessLinkForAssignedUsers()->link,
             'title' => $this->title,
-            'pages' => CoursePageResource::collection( $this->coursePages()->orderBy( 'order', 'ASC' )->get() ),
-            'visibility' => $this->visibility,
-            'is_unlocked' => $this->is_unlocked,
+            'user' => new UserResource( $this->user ),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'assigned_at' => $this->when( $this->pivot, function () {
+                return $this->pivot->created_at;
+            }),
         ];
     }
 }

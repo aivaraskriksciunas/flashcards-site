@@ -3,10 +3,15 @@
 namespace Tests\Feature;
 
 use App\Enums\UserType;
+use App\Models\Deck;
+use App\Models\Flashcard;
+use App\Models\Quiz;
+use App\Models\QuizItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class UserTest extends TestCase

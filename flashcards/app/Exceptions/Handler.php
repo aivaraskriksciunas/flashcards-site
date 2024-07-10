@@ -9,6 +9,8 @@ use App\Exceptions\Auth\GoogleAccountAlreadyExists;
 use App\Exceptions\Auth\InvalidGoogleToken;
 use App\Exceptions\Auth\IncorrectCredentials;
 use App\Exceptions\Auth\InvalidCaptcha;
+use App\Exceptions\CourseAccessLink\AccountRequired;
+use App\Exceptions\CourseAccessLink\AnonymousAccountRequired;
 use App\Exceptions\Forum\ForumCommentRateLimitReached;
 use App\Exceptions\Forum\ForumPostRateLimitReached;
 use App\Exceptions\Import\DeckImportException;
@@ -39,6 +41,8 @@ class Handler extends ExceptionHandler
         AccountLimitReached::class,
         UnsupportedAction::class,
         AccountAlreadyInOrganization::class,
+        AccountRequired::class,
+        AnonymousAccountRequired::class,
     ];
 
     /**

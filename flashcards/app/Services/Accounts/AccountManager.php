@@ -72,6 +72,23 @@ class AccountManager
     }
 
     /**
+     * Creates a temporary anonymous account. It is a single use account.
+     *
+     * @param string $name Name of the user
+     * @return User anonymous user without email or password
+     */
+    public function registerAnonymousAccount( string $name ) : User
+    {
+        $user = new User();
+        $user->name = $name;
+        $user->account_type = UserType::ANONYMOUS;
+        $user->is_valid = true;
+        $user->save();
+
+        return $user;
+    }
+
+    /**
      * Adds a student account for an existing account
      *
      * @param User $user

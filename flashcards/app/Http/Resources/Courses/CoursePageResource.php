@@ -19,7 +19,7 @@ class CoursePageResource extends JsonResource
             'title' => $this->title,
             'type' => $this->type,
             'order' => $this->order,
-            'is_unlocked' => $request->user()->can( 'view', $this->resource ),
+            'is_unlocked' => $request->user() ? $request->user()->can( 'view', $this->resource ) : true,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

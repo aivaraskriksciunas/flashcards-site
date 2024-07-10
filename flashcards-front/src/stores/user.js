@@ -52,6 +52,11 @@ export const useUserStore = defineStore( 'user', () => {
         return user.value.account_type === 'admin';
     }
 
+    const isUndefinedAccountType = () => {
+        if ( !isLoggedIn.value ) return false;
+        return user.value.account_type === 'undefined';
+    }
+
     return { 
         user, 
         isLoggedIn, 
@@ -64,5 +69,6 @@ export const useUserStore = defineStore( 'user', () => {
         isOrgAdmin,
         isAdmin,
         isOrgManager,
+        isUndefinedAccountType,
     }
 } )

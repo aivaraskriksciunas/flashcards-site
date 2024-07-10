@@ -118,14 +118,20 @@ const openDraft = () => {
             cards.value[index].listItemId = Symbol()
         }
     });
-    console.log( cards.value )
 }
 
 </script>
 
 <template>
     <AjaxForm :action="url" :method="method" :show-status-message="true" @success="onDeckSave" @change="onFormChange">
-        <TextField class="mb-8" :value="props.deck?.name ?? ''" name="name" placeholder="">Deck name:</TextField>
+        <TextField 
+            :value="props.deck?.name ?? ''" 
+            name="name" 
+            placeholder="" 
+            :select-all-on-focus="cards.length <= 5"
+            class="mb-8">
+            Deck name:
+        </TextField>
 
         <TransitionGroup name="card-list" @after-enter="scrollToView">
             <div v-for="( card, index ) in cards" :key="card.listItemId" class="card">

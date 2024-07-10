@@ -13,6 +13,15 @@ class ForumPostPolicy
 {
     use HandlesAuthorization;
 
+    public function before( User $user, string $ability ): bool|null
+    {
+        if ( $user->isAdmin() ) {
+            return true;
+        }
+    
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      *
@@ -31,7 +40,7 @@ class ForumPostPolicy
      * @param  \App\Models\ForumPost  $forumPost
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, ForumPost $forumPost)
+    public function view( User $user, ForumPost $forumPost )
     {
         //
     }
@@ -68,7 +77,7 @@ class ForumPostPolicy
      */
     public function delete(User $user, ForumPost $forumPost)
     {
-        //
+        return $forumPost->user->id == $user->id;
     }
 
     /**

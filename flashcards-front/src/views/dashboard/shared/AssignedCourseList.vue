@@ -18,9 +18,9 @@ const courses = ref([])
         <div v-if="courses.length">
             <Header :level="3" class="section-header">Your assignments</Header>
             <Card class="mb-12" >
-                <div v-for="course of courses" :key="course.id" class="course-list-item md:flex">
+                <div v-for="course of courses" :key="course.link" class="course-list-item md:flex">
                     <div>
-                        <router-link :to="{ name: 'view-course', params: { id: course.id } }">
+                        <router-link :to="{ name: 'view-course', params: { access_link: course.link } }">
                             <Button variant="default" size="icon">
                                 <Play size="16"/>
                             </Button>

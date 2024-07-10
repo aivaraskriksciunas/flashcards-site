@@ -15,7 +15,6 @@ import DropdownMenuLabel from '@/components/ui/dropdown-menu/DropdownMenuLabel.v
 
 <template>
     <Header>
-        Your decks
         <template v-slot:actions>
             <div class="flex">
                 <router-link :to="{ name: 'create-deck' }" class="hidden sm:block">

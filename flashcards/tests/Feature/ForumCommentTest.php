@@ -88,6 +88,50 @@ class ForumCommentTest extends TestCase
         $this->assertDatabaseCount( 'forum_comments', $post_limit );
     }
 
+    public function test_owner_can_delete_comment()
+    {
+        $user = User::factory()->create();
+        $post = $this->createForumPost();
+        $comment = ForumComment::factory()->for( $user )->for( $post )->create();
+
+        $response = $this->actingAs( $user )->deleteJson( 
+            route( 'api.comments.destroy', $comment )
+        );
+
+        $response->assertNoContent();
+        $this->assertSoftDeleted( 'forum_comments', [ 'id' => $comment->id ] );
+    }
+
+    public function test_admin_can_delete_comment()
+    {
+        $admin = User::factory()->admin()->create();
+        $user = User::factory()->create();
+        $post = $this->createForumPost();
+        $comment = ForumComment::factory()->for( $user )->for( $post )->create();
+
+        $response = $this->actingAs( $admin )->deleteJson( 
+            route( 'api.comments.destroy', $comment )
+        );
+
+        $response->assertNoContent();
+        $this->assertSoftDeleted( 'forum_comments', [ 'id' => $comment->id ] );
+    }
+
+    public function test_non_owner_cannot_delete()
+    {
+        $non_owner = User::factory()->create();
+        $user = User::factory()->create();
+        $post = $this->createForumPost();
+        $comment = ForumComment::factory()->for( $user )->for( $post )->create();
+
+        $response = $this->actingAs( $non_owner )->deleteJson( 
+            route( 'api.comments.destroy', $comment )
+        );
+
+        $response->assertForbidden();
+        $this->assertNotSoftDeleted( 'forum_comments', [ 'id' => $comment->id ] );
+    }
+
     private function createForumPost()
     {
         $user = User::factory()->create();

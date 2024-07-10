@@ -1,5 +1,4 @@
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
 import { useAuthenticationState, AUTH_STATES } from './stores/authenticationState.js'
 import LinkGoogleAccount from './components/LinkGoogleAccount.vue'
 import LoginForm from './components/LoginForm.vue'

@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Course;
 use App\Models\CoursePage;
-use App\Models\CourseProgress;
+use App\Models\CourseSession;
 use App\Models\User;
 use App\Services\AccountLimiter\AccountLimiter;
 use App\Services\AccountLimiter\LimiterAction;
@@ -35,10 +35,15 @@ class CoursePagePolicy extends CoursePolicyBase
         return Response::allow();
     }
 
-    public function view( User $user, CoursePage $coursePage )
+    public function view( ?User $user, CoursePage $coursePage )
     {
         // We only need to check if this is a locked course,
         // other permissions should be checked by the course policy
+
+        if ( !$user ) {
+            // Allow to anonymous users by default, more permissions should be handled in other policies
+            return Response::allow();
+        }
 
         if ( $this->isOwner( $user, $coursePage->course ) ) {
             return Response::allow();
@@ -58,8 +63,11 @@ class CoursePagePolicy extends CoursePolicyBase
         
         if ( !$prev_page ) return Response::allow(); // Maybe this is the first page
 
-        // User has visited the previous page, so they can see this page
-        if ( $prev_page->courseProgress()->first() ) return Response::allow();
+        // Check if user has visited the previous page
+        $session = CourseSession::getUserCourseSession( $user, $coursePage->course );
+        if ( $session->courseSessionPages()->where( 'course_page_id', $prev_page->id )->exists() ) {
+            return Response::allow();
+        }
 
         return Response::deny();
     }

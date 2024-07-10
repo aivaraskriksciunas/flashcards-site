@@ -18,8 +18,8 @@ class UserDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'email' => $this->email ?? $this->parentAccount->email,
-            'name' => $this->name ?? $this->parentAccount->name,
+            'email' => $this->email,
+            'name' => $this->name,
             'is_valid' => $this->is_valid,
             'account_type' => $this->account_type,
             'last_login' => $this->last_login,

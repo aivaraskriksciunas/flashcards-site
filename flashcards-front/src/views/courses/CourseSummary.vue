@@ -9,8 +9,8 @@ import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 import AssignedMemberList from './components/AssignedMemberList.vue'
 import { useUserStore } from '@/stores/user';
-import { storeToRefs } from 'pinia';
 import { Link } from 'lucide-vue-next'
+import CourseAccessLinkList from './components/CourseAccessLinkList.vue'
 
 const router = useRouter();
 const route = useRoute();
@@ -23,17 +23,24 @@ const course = ref( null )
 <template>
     <DataLoaderWrapper :url="`/api/courses/${route.params.id}`" @load="( c ) => course = c">
         <Header>{{ course.title }}</Header>
-        <div class="md:flex">
-            <div class="md:w-2/3">
+        <div class="md:flex gap-4">
+            <div class="md:w-1/2">
                 <Card class="mb-4">
-                    <Header :level="2">Students</Header>
+                    <Header :level="2">
+                        Students
+
+                        <template #actions>
+                            <router-link v-if="isOrgManager()" :to="{ name: 'course-assign-members'}">
+                                <Button><Link size="16" class="mr-2" />Assign students</Button>
+                            </router-link>
+                        </template>
+                    </Header>
                     <AssignedMemberList :course="course"/>
                 </Card>
             </div>
-            <div class="md:w-1/3 px-4">
-                <router-link :to="{ name: 'course-assign-members'}">
-                    <Button><Link size="16" class="mr-2" />Invite</Button>
-                </router-link>
+
+            <div class="md:w-1/2">
+                <CourseAccessLinkList :course="course"/>
             </div>
         </div>
         

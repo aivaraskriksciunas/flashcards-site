@@ -17,6 +17,7 @@ class CourseResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'link' => $this->resource->getPublicAccessLink()->link,
             'title' => $this->title,
             'user' => new UserResource( $this->user ),
             'created_at' => $this->created_at,

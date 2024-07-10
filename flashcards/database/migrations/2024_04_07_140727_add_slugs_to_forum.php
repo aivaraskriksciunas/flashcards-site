@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string( 'slug', 200 )->after( 'title' );
         });
 
-        ForumPost::chunk( 200, function ( Collection $posts ) {
+        ForumPost::withTrashed()->chunk( 200, function ( Collection $posts ) {
             foreach ( $posts as $post ) {
                 $post->slug = $post->makeSlug();
                 $post->save();

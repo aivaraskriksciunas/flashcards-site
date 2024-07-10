@@ -11,12 +11,14 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laravel\Sanctum\HasApiTokens;
+use PDO;
 
 class User extends Model implements AuthenticatableContract
 {
-    use Authenticatable, Authorizable, HasFactory, HasApiTokens;
+    use Authenticatable, Authorizable, HasFactory, HasApiTokens, SoftDeletes;
 
     const USER_ADMIN = 'admin';
     const USER_STUDENT = 'student';
@@ -31,6 +33,7 @@ class User extends Model implements AuthenticatableContract
     const GOOGLE_LOGIN_TOKEN = 'google-token';
     const SWITCH_ACCOUNT_LOGIN_TOKEN = 'switch-token';
     const INVITATION_LOGIN_TOKEN = 'invitation-token';
+    const ANONYMOUS_USER_TOKEN = 'anonymous-token';
 
     protected $fillable = [
         'name', 'email', 'password', 'account_type',
@@ -112,12 +115,20 @@ class User extends Model implements AuthenticatableContract
         return $this->account_type === UserType::STUDENT;
     }
 
+    public function isAnonymous() {
+        return $this->account_type === UserType::ANONYMOUS;
+    }
+
     public function userLogs() {
         return $this->hasMany( UserLog::class );
     }
 
     public function courses() {
         return $this->hasMany( Course::class );
+    }
+
+    public function courseSessions() {
+        return $this->hasMany( CourseSession::class );
     }
 
     public function assignedCourses() {
@@ -137,6 +148,36 @@ class User extends Model implements AuthenticatableContract
                 return $value;
             },
             set: fn( bool $value ) => $value,
+        );
+    }
+
+
+    public function email() : Attribute 
+    {
+        return Attribute::make(
+            get: function ( string|null $email ) {
+                // Get this email or the email of the parent account
+                if ( $email ) return $email;
+
+                if ( $this->parentAccount ) return $this->parentAccount->email;
+
+                return null;
+            },
+            set: fn( string $email ) => $email
+        );
+    }
+
+    public function name() : Attribute 
+    {
+        return Attribute::make(
+            get: function ( string $name ) {
+                if ( $name ) return $name;
+
+                if ( $this->parentAccount ) return $this->parentAccount->name;
+
+                return null;
+            },
+            set: fn( string $name ) => $name
         );
     }
 

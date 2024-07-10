@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\ForumTopic;
+use App\Models\ForumPost;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -10,7 +11,7 @@ use Tests\TestCase;
 
 class ForumPostTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     
     public function test_creates_forum_post()
     {
@@ -56,7 +57,7 @@ class ForumPostTest extends TestCase
     public function test_cannot_post_empty_forum_topic() 
     {
         $user = User::factory()->create();
-
+        
         $response = $this->actingAs( $user )->postJson( '/api/forum-posts', [
             'title' => 'Post title',
             'content' => 'Long forum post content',
@@ -68,13 +69,13 @@ class ForumPostTest extends TestCase
 
     public function test_cannot_post_nonexistant_forum_topic() 
     {
-        $user = User::factory()->create();
         ForumTopic::factory( 10 )->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs( $user )->postJson( '/api/forum-posts', [
             'title' => 'Post title',
             'content' => 'Long forum post content',
-            'forum_topic' => 10,
+            'forum_topic' => 20,
         ]);
 
         $response->assertUnprocessable();
@@ -107,5 +108,93 @@ class ForumPostTest extends TestCase
         $response->assertForbidden();
 
         $this->assertDatabaseCount( 'forum_posts', $post_limit );
+    }
+
+    public function test_owner_can_delete_post()
+    {
+        $user = User::factory()->create();
+        $topic = ForumTopic::factory()->create();
+        $post = ForumPost::factory()->for( $topic )->for( $user )->create();
+
+        $response = $this->actingAs( $user )->deleteJson( 
+            route( 'api.forum-posts.delete', $post )
+        );
+
+        $response->assertNoContent();
+        $this->assertSoftDeleted( 'forum_posts', [ 'id' => $post->id ] );
+    }
+
+    public function test_admin_can_delete_post()
+    {
+        $admin = User::factory()->admin()->create();
+        $user = User::factory()->create();
+        $topic = ForumTopic::factory()->create();
+        $post = ForumPost::factory()->for( $topic )->for( $user )->create();
+
+        $response = $this->actingAs( $admin )->deleteJson( 
+            route( 'api.forum-posts.delete', $post )
+        );
+
+        $response->assertNoContent();
+        $post->refresh();
+        $this->assertSoftDeleted( 'forum_posts', [ 'id' => $post->id ] );
+    }
+
+    public function test_non_owner_cannot_delete()
+    {
+        $admin = User::factory()->create();
+        $user = User::factory()->create();
+        $topic = ForumTopic::factory()->create();
+        $post = ForumPost::factory()->for( $topic )->for( $user )->create();
+
+        $response = $this->actingAs( $admin )->deleteJson( 
+            route( 'api.forum-posts.delete', $post )
+        );
+
+        $response->assertForbidden();
+        $post->refresh();
+        $this->assertNotSoftDeleted( 'forum_posts', [ 'id' => $post->id ] );
+    }
+
+    public function test_creates_unique_slugs()
+    {
+        $user = User::factory()->create();
+        $topic = ForumTopic::factory()->create();
+
+        // Create first forum post
+        $response = $this->actingAs( $user )->postJson( '/api/forum-posts', [
+            'title' => 'Post title',
+            'content' => 'Long forum post content',
+            'forum_topic' => $topic->slug,
+        ]);
+
+        $response->assertSuccessful();
+
+        // Make a second forum post
+        $response = $this->actingAs( $user )->postJson( '/api/forum-posts', [
+            'title' => 'Post title',
+            'content' => 'Long long forum post content',
+            'forum_topic' => $topic->slug,
+        ]);
+
+        $response->assertSuccessful();
+
+        $this->assertDatabaseCount( 'forum_posts', 2 );
+        $this->assertCount( 0, ForumPost::all()->pluck( 'slug' )->duplicates(), 'Should contain no duplicates' );
+
+        // Delete forum posts
+        ForumPost::all()->each( fn ( $a ) => $a->delete() );
+
+        // Make a third forum post
+        $response = $this->actingAs( $user )->postJson( '/api/forum-posts', [
+            'title' => 'Post title',
+            'content' => 'Long long forum post content',
+            'forum_topic' => $topic->slug,
+        ]);
+
+        $response->assertSuccessful();
+
+        $this->assertDatabaseCount( 'forum_posts', 3 );
+        $this->assertCount( 0, ForumPost::all()->pluck( 'slug' )->duplicates(), 'Should contain no duplicates' );
     }
 }

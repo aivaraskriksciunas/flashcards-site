@@ -1,11 +1,12 @@
 <script setup>
 import { useFormElement } from "./composables/FormElement";
 import FieldErrors from "./_FieldErrors.vue";
+import { Checkbox } from "../ui/checkbox";
 
 /**
  * Element Properties
  */
- const props = defineProps({
+const props = defineProps({
     name: {
         type: String,
         required: true,
@@ -16,15 +17,18 @@ import FieldErrors from "./_FieldErrors.vue";
     }
 })
 
-const { data, error } = useFormElement( props.name );
+const model = defineModel()
+const { data, error } = useFormElement( props.name, model );
 
-data.value = props.value ? true : false;
+if ( model.value == null ) {
+    data.value = props.value ? true : false
+}
 
 </script>
 
 <template>
     <div class="checkbox-input">
-        <input class='form-control' v-model="data" type='checkbox' :name='props.name' :id="`${props.name}-checkbox`">
+        <Checkbox :checked="data" @update:checked="v => data = v" :id="`${props.name}-checkbox`" class="mr-2"/>
         <label :for="`${props.name}-checkbox`"><slot></slot></label>
     </div>
     <FieldErrors :errors="error"></FieldErrors>
@@ -34,7 +38,7 @@ data.value = props.value ? true : false;
 .checkbox-input {
     display: flex;
     align-items: center;
-    margin: 8px 0;
+    margin: 16px 0;
 }
 
 .checkbox-input input[type=checkbox] {

@@ -12,6 +12,7 @@ use App\Services\ForumReactions\ForumReactionService;
 use App\Services\ForumReactions\ForumReactions;
 use App\Http\Requests\ForumPost\Api\ReactToForumPost;
 use App\Http\Resources\ForumPost\ForumPostReactionResource;
+use Illuminate\Support\Facades\Response;
 
 class ApiForumCommentController extends Controller
 {
@@ -64,14 +65,26 @@ class ApiForumCommentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete forum post comment
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( Request $request, ForumComment $comment )
     {
-        //
+        $this->authorize( 'delete', $comment );
+
+        $reason = null;
+        if ( $request->user()->id == $comment->user_id ) {
+            $reason = 'author';
+        }
+        else if ( $request->user()->isAdmin() ) {
+            $reason = 'admin';
+        }
+
+        $comment->delete_reason = $reason;
+        $comment->save();
+        $comment->delete();
+
+        return Response::noContent();
     }
 
     public function reactToForumComment( ForumReactionService $service, ReactToForumPost $request, ForumComment $forumComment )

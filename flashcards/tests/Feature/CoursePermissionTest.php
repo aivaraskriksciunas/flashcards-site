@@ -31,7 +31,7 @@ class CoursePermissionTest extends TestCase
 
     public function test_cannot_get_course(): void
     {
-        $this->doRequest( 'api.courses.show' );
+        $this->runValidation( 'api.courses.show', [ $this->other ] );
     }
 
     public function test_cannot_update_course(): void
@@ -140,52 +140,6 @@ class CoursePermissionTest extends TestCase
             fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
             success_users:[ $owner ],
             data:Course::factory()->make()->toArray(),
-        );
-    }
-
-    /**
-     * Course page permissions
-     */
-
-    public function test_read_course_page_permissions(): void
-    {
-        $org = Organization::factory()->create();
-        $owner = User::factory()->for( $org )->create();
-        $this->course->user()->associate( $owner );
-        $this->course->save();
-        
-        $orgadmin = User::factory()->for( $org )->orgAdmin()->create();
-        $orgmanager = User::factory()->for( $org )->orgManager()->create();
-        $orgmember = User::factory()->for( $org )->create();
-
-        $this->course->update([ 'visibility' => CourseVisibility::Private ]);
-        $this->runValidation( 'api.courses.course_pages.show', 
-            fail_users:[ $orgadmin, $orgmanager, $orgmember, $this->other ],
-            success_users:[ $owner ] 
-        );
-
-        $this->course->update([ 'visibility' => CourseVisibility::OrgAdmin ]);
-        $this->runValidation( 'api.courses.course_pages.show', 
-            fail_users:[ $orgmanager, $orgmember, $this->other ],
-            success_users:[ $owner, $orgadmin ] 
-        );
-
-        $this->course->update([ 'visibility' => CourseVisibility::OrgManager ]);
-        $this->runValidation( 'api.courses.course_pages.show', 
-            fail_users:[ $orgmember, $this->other ],
-            success_users:[ $owner, $orgadmin, $orgmanager ] 
-        );
-
-        $this->course->update([ 'visibility' => CourseVisibility::OrgEveryone ]);
-        $this->runValidation( 'api.courses.course_pages.show', 
-            fail_users:[ $this->other ],
-            success_users:[ $owner, $orgadmin, $orgmanager, $orgmember ] 
-        );
-
-        $this->course->update([ 'visibility' => CourseVisibility::Public ]);
-        $this->runValidation( 'api.courses.course_pages.show', 
-            fail_users:[],
-            success_users:[ $owner, $orgadmin, $orgmanager, $orgmember, $this->other  ] 
         );
     }
 

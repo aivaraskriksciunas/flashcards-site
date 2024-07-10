@@ -127,7 +127,7 @@ const router = createRouter({
         },
 
         {
-            path: '/course/:id',
+            path: '/course/:access_link',
             name: 'view-course',
             component: () => import( '../views/view-course/ViewCourse.vue' ),
             children: [
@@ -137,6 +137,7 @@ const router = createRouter({
                     component: () => import( '../views/view-course/ViewCoursePage.vue' ),
                 },
             ],
+            meta: { allowGuest: true },
         },
         
         {
@@ -150,10 +151,22 @@ const router = createRouter({
                     meta: { allowGuest: true }
                 },
                 {
+                    path: '/register/account-type',
+                    name: 'account-type',
+                    component: () => import( '../views/auth/AccountTypeSelection.vue' ),
+                    meta: { allowGuest: true },
+                },
+                {
                     path: '/login',
                     name: 'login',
                     component: LoginView,
                     meta: { allowGuest: true }
+                },
+                {
+                    path: '/login/anonymous/:access_link',
+                    name: 'login-anonymous',
+                    component: () => import( '../views/view-course/CreateAnonymousAccount.vue' ),
+                    meta: { allowGuest: true },
                 },
                 {
                     path: '/logout',

@@ -22,7 +22,7 @@ class Deck extends Model
 
     protected static function booted(): void
     {
-        static::saved(function ( Deck $deck ) {
+        static::saved( function ( Deck $deck ) {
             $deck->removeDraft();
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Courses;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Courses\Api\CreateCoursePage;
@@ -11,13 +11,19 @@ use App\Http\Requests\Courses\Api\SetCoursePageItemOrder;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\CoursePage;
-use App\Models\CourseProgress;
 
 class ApiCoursePageController extends Controller
 {
     public function __construct()
     {
         $this->middleware( 'can:view,course' );     
+    }
+
+    public function show( Course $course, CoursePage $course_page )
+    {
+        $this->authorize( 'update', $course );
+
+        return new CoursePageDetailResource( $course_page );
     }
 
     public function store( CreateCoursePage $request, Course $course )
@@ -37,34 +43,10 @@ class ApiCoursePageController extends Controller
         return new CoursePageDetailResource( $course_page );
     }
 
-    public function show( Course $course, CoursePage $course_page )
-    {
-        $this->authorize( 'view', $course );
-        $this->authorize( 'view', $course_page );
-
-        return new CoursePageDetailResource( $course_page );
-    }
-
     public function setCoursePageItemOrder( SetCoursePageItemOrder $request, Course $course, CoursePage $course_page )
     {
         $this->authorize( 'update', $course );
         $course_page->setPageItemOrder( $request->validated( 'items' ) );
-        return new CoursePageDetailResource( $course_page );
-    }
-
-    public function storeUserCourseProgress( Request $request, Course $course, CoursePage $course_page )
-    {
-        $this->authorize( 'view', $course );
-        $this->authorize( 'view', $course_page );
-
-        if ( !$course_page->courseProgress()->where( 'user_id', $request->user()->id )->exists() )
-        {
-            $progress = new CourseProgress();
-            $progress->coursePage()->associate( $course_page );
-            $progress->user()->associate( $request->user() );
-            $progress->save();
-        }
-
         return new CoursePageDetailResource( $course_page );
     }
 }

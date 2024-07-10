@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'limit-forum-comments' => \App\Http\Middleware\Forum\LimitForumComments::class,
         'captcha' => \App\Http\Middleware\Auth\HasValidCaptcha::class,
         'is-valid-org-admin' => \App\Http\Middleware\Auth\IsValidOrgAdmin::class,
+        'is-valid-account-type' => \App\Http\Middleware\Auth\IsValidAccountType::class,
     ];
 }

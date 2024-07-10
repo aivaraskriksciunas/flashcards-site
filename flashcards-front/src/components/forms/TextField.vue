@@ -33,10 +33,14 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false,
+    },
+    selectAllOnFocus: {
+        type: Boolean,
+        default: false,
     }
 })
 
-const emits = defineEmits([ 'change' ])
+const emits = defineEmits([ 'change', 'focus' ])
 
 const model = defineModel()
 const { data, error } = useFormElement( props.name, model )
@@ -47,6 +51,12 @@ if ( props.value ) {
 
 const onChange = ( ev ) => {
     emits( 'change', data.value )
+}
+
+const onFocus = ( ev ) => {
+    if ( props.selectAllOnFocus ) {
+        ev.target.select()
+    }
 }
 
 </script>
@@ -65,7 +75,8 @@ const onChange = ( ev ) => {
             :placeholder="props.placeholder"
             :autocomplete="props.autocomplete"
             :disabled="props.disabled"
-            @change="onChange">
+            @change="onChange"
+            @focus="onFocus">
 
         <small>
             <slot name='note'>{{ props.note }}</slot>
@@ -75,7 +86,7 @@ const onChange = ( ev ) => {
     </div>
 </template>
 
-<style scoped>
+<style>
 
 .form-group {
     display: flex;

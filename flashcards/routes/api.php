@@ -4,9 +4,10 @@ use App\Http\Controllers\Api\ApiAccountsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
-use App\Http\Controllers\Api\ApiCourseController;
-use App\Http\Controllers\Api\ApiCoursePageController;
-use App\Http\Controllers\Api\ApiCoursePageItemController;
+use App\Http\Controllers\Api\Courses\ApiCourseAccessLinkController;
+use App\Http\Controllers\Api\Courses\ApiCourseController;
+use App\Http\Controllers\Api\Courses\ApiCoursePageController;
+use App\Http\Controllers\Api\Courses\ApiCoursePageItemController;
 use App\Http\Controllers\Api\ApiDeckController;
 use App\Http\Controllers\Api\ApiForumCommentController;
 use App\Http\Controllers\Api\ApiLibraryController;
@@ -15,9 +16,11 @@ use App\Http\Controllers\Api\ApiForumPostController;
 use App\Http\Controllers\Api\ApiImportController;
 use App\Http\Controllers\Api\ApiInvitationController;
 use App\Http\Controllers\Api\ApiOrganizationController;
+use App\Http\Controllers\Api\Courses\ApiCourseViewController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Middleware\CourseAccessLinks\EnsureCourseAccessLinkIsValid;
+use App\Http\Middleware\CourseAccessLinks\EnsureValidCourseSession;
 use App\Http\Middleware\Invitations\EnsureInvitationIsValid;
-use Google\Service\ApigeeRegistry\ApiDeployment;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +61,26 @@ Route::get( '/forum-posts/{forum_post}', [ ApiForumPostController::class, 'show'
 Route::get( '/forum-topics', [ ApiForumPostController::class, 'getTopicList' ]);
 Route::get( '/forum-topics/{forumTopic}', [ ApiForumPostController::class, 'getForumTopic' ]);
 
-    
+
+/**
+ *  Courses public access (with access links)
+ */
+Route::middleware([ EnsureCourseAccessLinkIsValid::class ])->group( function() {
+    Route::get( 'courses/view/{access_link}', [ ApiCourseViewController::class, 'showCourse' ])
+        ->name( 'courses.access-link.show' );
+    Route::get( 'courses/view/{access_link}/course_pages/{course_page}', [ ApiCourseViewController::class, 'showCoursePage' ])
+        ->name( 'courses.access-link.course_pages.show' );
+
+    Route::get( 'courses/view/{access_link}/session', [ ApiCourseViewController::class, 'getCourseSession' ])
+        ->name( 'courses.access-link.session' );
+    Route::post( 'courses/view/{access_link}/progress/{course_session}/{course_page}', [ ApiCourseViewController::class, 'storeUserCourseProgress' ])
+        ->name( 'courses.access-link.progress' )
+        ->middleware( EnsureValidCourseSession::class );
+
+    Route::post( 'courses/view/{access_link}/anonymous', [ ApiCourseViewController::class, 'createAnonymousAccount' ])
+        ->name( 'courses.access-link.anonymous-account.create' );
+});
+ 
 /**
  * Routes for authenticated users
  */
@@ -71,6 +93,7 @@ Route::middleware([ 'auth:sanctum' ])->group( function() {
     Route::get( '/account/switch/{user}', [ ApiAuthController::class, 'switchAccount' ])
         ->name( 'accounts.switch' );
     Route::patch( '/accounts', [ ApiAccountsController::class, 'update' ] )->name( 'accounts.update' );
+    Route::patch( '/accounts/set-type', [ ApiAccountsController::class, 'setAccountType' ])->name( 'accounts.set-type' );
     Route::post( '/register/org', [ ApiOrganizationController::class, 'register' ])
         ->name( 'register.organization' );
 
@@ -81,7 +104,7 @@ Route::middleware([ 'auth:sanctum' ])->group( function() {
 /**
  * Routes for authenticated and verified users
  */
-Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->group( function() {
+Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin', 'is-valid-account-type' ])->group( function() {
 
     /**
      * Account management
@@ -127,6 +150,7 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
         ->name( 'forum-posts.store' );
     Route::post( 'forum-posts/react/{forumPost}', [ ApiForumPostController::class, 'reactToForumPost' ])
         ->name( 'react-to-forum-post' );
+    Route::delete( 'forum-post/{forumPost}', [ ApiForumPostController::class, 'destroy' ])->name( 'forum-posts.delete' );
 
     /**
      * Forum comments
@@ -166,15 +190,22 @@ Route::middleware([ 'auth:sanctum', 'is-verified', 'is-valid-org-admin' ])->grou
             [ ApiCoursePageController::class, 'setCoursePageItemOrder' ] 
         )->name( 'courses.course_pages.set-page-item-order' );
     Route::post( 'courses/{course}/assign', [ ApiCourseController::class, 'assignToOrgMember' ])->name( 'courses.assigned.add' );
+    Route::get( 'courses/{course}/students', [ ApiCourseController::class, 'getCourseStudents' ])->name( 'courses.students.list' );
     Route::get( 'courses/{course}/assigned', [ ApiCourseController::class, 'getAssignedUsers' ])->name( 'courses.assigned.list' );
     Route::get( 'courses/{course}/assignable', [ ApiCourseController::class, 'getAssignableUsers' ])->name( 'courses.assignable.list' );
-    Route::post( 'courses/{course}/course_pages/{course_page}/progress', [ ApiCoursePageController::class, 'storeUserCourseProgress' ])->name( 'courses.progress' );
-
+    
     /**
      * My course endpoints
      */
     Route::get( 'my-courses', [ ApiCourseController::class, 'getUserCourses' ] )->name( 'my-courses.list' );
     Route::get( 'my-courses/assigned', [ ApiCourseController::class, 'getAssignedUserCourses' ] )->name( 'my-courses.assigned.list' );
+
+    /**
+     * Course access links
+     */
+    Route::apiResource( 'courses.access-links', ApiCourseAccessLinkController::class )->scoped([
+        'access_link' => 'id'
+    ]);
 
     /**
      * Invitation endpoints

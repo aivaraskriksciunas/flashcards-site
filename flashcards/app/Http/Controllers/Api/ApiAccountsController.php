@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Account\Api\SetAccountType;
 use App\Http\Requests\Account\Api\UpdateAccount;
 use App\Http\Resources\User\UserResource;
 use App\Services\Accounts\AccountManager;
@@ -47,6 +49,18 @@ class ApiAccountsController extends Controller
             $user->is_valid = false;
             $user->save();
             ConfirmationEmailSender::send( $user );
+        }
+
+        return new UserResource( $user );
+    }
+
+    public function setAccountType( SetAccountType $request )
+    {
+        $user = $request->user();
+        if ( $user->account_type === UserType::UNDEFINED )
+        {
+            $user->account_type = $request->input( 'type' );
+            $user->save();
         }
 
         return new UserResource( $user );

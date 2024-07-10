@@ -6,15 +6,15 @@ use HTMLPurifier;
 use HTMLPurifier_Config;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Utils\HasActivityLogging;
-use App\Services\ForumReactions\ForumReactions;
 use App\Services\ForumReactions\Reactable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class ForumPost extends Model
 {
-    use HasFactory, Reactable, HasActivityLogging;
+    use HasFactory, Reactable, HasActivityLogging, SoftDeletes;
 
     protected $fillable = [
         'title', 'content'
@@ -52,8 +52,8 @@ class ForumPost extends Model
         $title_slug = Str::of( $this->title )->slug( '-' )->limit( 80 );
         $slug = $title_slug;
         
-        while ( ForumPost::where( 'slug', $slug )->exists() ) {
-            $slug = $title_slug . random_int( 10000, 100000 );
+        while ( ForumPost::withTrashed()->where( 'slug', $slug )->exists() ) {
+            $slug = $title_slug . '-' . random_int( 10000, 1000000 );
         }
 
         return $slug;

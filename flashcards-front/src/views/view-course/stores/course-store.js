@@ -6,13 +6,31 @@ import { useStatusMessageService, MESSAGE_TYPE } from '@/services/StatusMessageS
 export const useCourseStore = defineStore('view-course-store', () => {
     const course = ref( null )
     const isLoading = ref( false );
+    const sessionId = ref( null );
+    const sessionLoaded = ref( false );
     const statusMessage = useStatusMessageService()
 
-    const reportProgress = async ( page ) => {
-        if ( course.value == null || page == null ) return false;
+    const startSession = async ( access_link ) => {
+        if ( course.value == null ) return false;
 
         try {
-            await axios.post( `/api/courses/${course.value.id}/course_pages/${page.id}/progress` )
+            let res = await axios.get( `/api/courses/view/${access_link}/session` )
+            sessionId.value = res.data['id'];
+        }
+        catch ( e ) {
+            return false;
+        }
+    }
+
+    const reportProgress = async ( access_link, page ) => {
+        if ( sessionLoaded.value === false ) {
+            await startSession( access_link )
+        }
+
+        if ( course.value == null || page == null || sessionId.value == null ) return false;
+
+        try {
+            await axios.post( `/api/courses/view/${access_link}/progress/${sessionId.value}/${page.id}` )
         }
         catch ( e ) {
             return false;
@@ -36,5 +54,6 @@ export const useCourseStore = defineStore('view-course-store', () => {
         course, 
         isLoading, 
         reportProgress,
+        startSession,
     }
 })

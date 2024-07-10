@@ -38,11 +38,10 @@ class CoursePolicy extends CoursePolicyBase
 
     public function view( User $user, Course $course )
     {
+        // Only the owner or managers of the organization should be able to view the course
+        // For other purposes an access link should be used
+        
         if ( $this->isOwner( $user, $course ) ) {
-            return Response::allow();
-        }
-
-        else if ( $course->assignedUsers->contains( $user ) ) {
             return Response::allow();
         }
 
@@ -68,9 +67,7 @@ class CoursePolicy extends CoursePolicyBase
             return Response::allow();
         }
         
-        return $course->visibility == CourseVisibility::Public ? 
-            Response::allow() :
-            Response::denyAsNotFound();
+        return Response::denyAsNotFound();
     }
 
     public function create( User $user )

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\ForumComment;
 
 use App\Http\Resources\ForumPost\ForumPostReactionResource;
+use App\Http\Resources\Permissions\ObjectPermissionResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,6 +26,7 @@ class ForumCommentResource extends JsonResource
             'human_created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at,
             'human_updated_at' => $this->updated_at->diffForHumans(),
+            'permissions' => new ObjectPermissionResource( $this->resource ),
         ];
     }
 }

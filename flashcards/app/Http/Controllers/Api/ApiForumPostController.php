@@ -21,6 +21,7 @@ use App\Services\DataTable\DataTable;
 use App\Services\ForumReactions\ForumReactions;
 use App\Services\ForumReactions\ForumReactionService;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Response;
 
 class ApiForumPostController extends Controller
 {
@@ -72,9 +73,23 @@ class ApiForumPostController extends Controller
      * @param  \App\Models\ForumPost  $forumPost
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ForumPost $forumPost)
+    public function destroy( Request $request, ForumPost $forumPost )
     {
-        //
+        $this->authorize( 'delete', $forumPost );
+
+        $delete_reason = null;
+        if ( $request->user() == $forumPost->user() ) {
+            $delete_reason = 'author';
+        }
+        else if ( $request->user()->isAdmin() ) {
+            $delete_reason = 'admin';
+        }
+
+        $forumPost->delete_reason = $delete_reason;
+        $forumPost->save();
+        $forumPost->delete();
+
+        return Response::noContent();
     }
 
 

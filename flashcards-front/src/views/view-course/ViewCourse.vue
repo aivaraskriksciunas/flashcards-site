@@ -21,9 +21,19 @@ const route = useRoute()
 const router = useRouter()
 const store = useCourseStore();
 const { course } = storeToRefs( store )
+const isLoading = ref( false )
 
 const onLoad = ( data ) => {
     course.value = data
+}
+
+const onError = ( err ) => {
+    if ( err.response.data.required_action === 'login-anonymous' ) {
+        router.push({ name: 'login-anonymous', params: { access_link: route.params.access_link } })
+    }
+    else if ( err.response.data.required_action === 'login' ) {
+        router.push({ name: 'login', query: { r: route.fullPath }})
+    }
 }
 
 const contentExpanded = ref( window.innerWidth >= 768 )
@@ -65,7 +75,7 @@ const hasNextPage = computed( () => {
 <Navbar/>
 
 <div class="application-container">
-    <DataLoaderWrapper :url="`/api/courses/${route.params.id}`" @load="onLoad">
+    <DataLoaderWrapper :url="`/api/courses/view/${route.params.access_link}`" @load="onLoad" @error="onError">
         <div class="container flex">
             <div class="lg:w-2/12"></div>
             <div class="flex-grow">

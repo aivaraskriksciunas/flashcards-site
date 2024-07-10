@@ -191,7 +191,11 @@ provide( 'queryManager', queryManager )
 </div>
 
 <div v-if="!isLoading && data.length == 0">
-    <slot name="empty"></slot>
+    <slot name="empty">
+        <div class="p-4">
+            <i class="text-muted-foreground">There are no records to display.</i>
+        </div>
+    </slot>
 </div>
 
 <NumberPaginator 
